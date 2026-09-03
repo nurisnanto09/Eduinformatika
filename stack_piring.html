@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edukasi Stack: Tumpukan Piring</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .table-bg {
+            background-color: #fca5a5;
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 20px, #f87171 20px, #f87171 40px);
+            opacity: 0.1;
+        }
+        
+        .plate-anim {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .falling {
+            transform: translateY(-200px);
+            opacity: 0;
+        }
+        
+        .floating-up {
+            transform: translateY(-100px) scale(1.1);
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="bg-red-50 min-h-screen p-4 md:p-8 font-sans">
+    
+    <div class="w-full px-2 sm:px-4 xl:px-8 max-w-[1600px] mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-black text-red-900 mb-2">Edukasi Struktur Data: Stack</h1>
+            <p class="text-lg text-red-700 font-medium">Prinsip LIFO (Last In, First Out) Lewat Analogi Tumpukan Piring</p>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <div class="flex flex-wrap justify-center gap-2 sm:gap-4 mb-8">
+            <button onclick="openTab('simulasi')" id="tab-simulasi" class="px-6 py-3 rounded-full font-bold transition-all bg-blue-600 text-white shadow-md scale-105">🎮 Simulasi</button>
+            <button onclick="openTab('materi')" id="tab-materi" class="px-6 py-3 rounded-full font-bold transition-all bg-white text-gray-600 hover:bg-gray-100 border border-gray-200">📖 Materi</button>
+            <button onclick="openTab('latihan')" id="tab-latihan" class="px-6 py-3 rounded-full font-bold transition-all bg-white text-gray-600 hover:bg-gray-100 border border-gray-200">🧠 Latihan</button>
+        </div>
+
+        <!-- Tab Contents -->
+        <div id="content-simulasi" class="tab-content block">
+        <!-- Main Content -->
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col lg:flex-row border border-red-100">
+            
+            <!-- Left: Visualization Area -->
+            <div class="lg:w-2/3 p-6 md:p-10 border-b lg:border-b-0 lg:border-r border-gray-200 bg-red-50 relative flex flex-col items-center justify-end h-[32rem]">
+                
+                <!-- Table surface styling -->
+                <div class="absolute inset-0 table-bg pointer-events-none"></div>
+                
+                <!-- Physical Table Top -->
+                <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-stone-400 to-stone-200 border-t-8 border-stone-500 z-0"></div>
+                <div class="absolute bottom-16 left-1/2 -translate-x-1/2 w-64 sm:w-80 h-8 bg-black/10 rounded-[100%] blur-md z-0"></div>
+
+                <!-- Label -->
+                <div class="relative mb-6 mx-auto sm:mx-0 w-max z-20">
+                    <span class="inline-block bg-white/95 px-4 py-2 rounded-lg font-bold text-red-800 shadow-sm border border-red-200">
+                        Total Piring: <span id="plate-count" class="text-xl font-black">0</span> / 10
+                    </span>
+                </div>
+
+                <!-- Stack Container (Plates will be prepended here) -->
+                <!-- We use flex-col and justify-end so prepending adds to the top visually -->
+                <div id="container" class="w-full flex flex-col items-center justify-end relative z-10 pb-16">
+                    <!-- Plates go here -->
+                </div>
+            </div>
+
+            <!-- Right: Control & Explanations -->
+            <div class="lg:w-1/3 p-6 md:p-10 bg-white flex flex-col">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold text-xl">ℹ️</div>
+                    <h2 class="text-2xl font-bold text-gray-800">Status Proses</h2>
+                </div>
+                
+                <!-- Explanation Box -->
+                <div class="bg-red-50 p-6 rounded-2xl border border-red-100 shadow-inner flex-grow mb-8 relative min-h-[12rem] flex flex-col justify-center flex flex-col justify-center">
+                    <div class="absolute top-2 left-2 text-4xl text-red-200 font-serif leading-none">"</div>
+                    <p id="status-text" class="text-gray-700 text-lg leading-relaxed relative z-10">
+                        Klik tombol di bawah.
+                    </p>
+                </div>
+
+                <!-- Controls -->
+                <div class="flex flex-col gap-4 mt-auto">
+                    <button onclick="pushAction()" class="w-full py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl shadow-lg shadow-red-600/30 transition-transform active:scale-95 text-lg flex justify-center items-center gap-2">
+                        <span>Tambah Piring (Push)</span>
+                        <svg class="w-5 h-5 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path></svg>
+                    </button>
+                    
+                    <button onclick="popAction()" class="w-full py-4 bg-stone-700 hover:bg-stone-800 text-white font-bold rounded-xl shadow-lg shadow-stone-700/30 transition-transform active:scale-95 text-lg flex justify-center items-center gap-2">
+                        <span>Ambil Piring (Pop)</span>
+                        <svg class="w-5 h-5 -rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        
+        </div>
+
+        <div id="content-materi" class="tab-content hidden">
+        <!-- Concept Explanation -->
+        <div class="mt-8 bg-white p-6 rounded-2xl shadow-md border border-gray-200">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">💡 Konsep Dasar: Apa itu Stack (LIFO)?</h3>
+            <p class="text-gray-700 text-lg leading-relaxed"><b>Stack</b> (Tumpukan) adalah struktur data yang bekerja murni dengan hukum fisika gravitasi: <b>LIFO (Last In, First Out)</b>. "Yang terakhir masuk, justru dialah yang pertama kali keluar." <br><br>Sama persis seperti saat kita mencuci piring; piring bersih yang baru selesai dicuci pasti diletakkan bertumpuk dari bawah ke atas. Alhasil, piring <i>terakhir</i> yang kamu taruh di posisi paling puncak adalah piring yang <i>pertama kali</i> akan diambil oleh orang lain yang mau makan. Kamu mustahil bisa mengambil piring yang di paling bawah duluan tanpa membongkar seluruh piring yang menindihnya dari atas.<br><br><b>Contoh di Komputer:</b> Fitur "Undo" (Ctrl+Z) di Microsoft Word atau tombol "Back" di Browser. Halaman terakhir yang barusan kamu buka pasti akan menjadi halaman pertama yang ditutup saat kamu menekan tombol back!</p>
+        </div>
+        
+        </div>
+
+        
+        <div id="content-latihan" class="tab-content hidden">
+            <div class="mt-8 bg-stone-50 p-8 rounded-2xl shadow-md border border-stone-200">
+                <h3 class="text-2xl font-bold text-stone-900 mb-6">🧠 Uji Pemahaman (5 Soal)</h3>
+                
+                <div class="space-y-6">
+                    <!-- Q1 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">1. Apa singkatan dari prinsip utama struktur data Stack?</p>
+                        <select id="q1-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-stone-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">FIFO (First In, First Out)</option>
+                            <option value="B">LIFO (Last In, First Out)</option>
+                        </select>
+                        <p id="q1-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">2. Istilah standar untuk 'Menambah/Memasukkan' elemen ke dalam Stack adalah?</p>
+                        <select id="q2-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-stone-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">Push</option>
+                            <option value="B">Pop</option>
+                        </select>
+                        <p id="q2-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">3. Istilah standar untuk 'Mengambil/Mengeluarkan' elemen teratas Stack adalah?</p>
+                        <select id="q3-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-stone-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">Push</option>
+                            <option value="B">Pop</option>
+                        </select>
+                        <p id="q3-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">4. Jika kamu melakukan Push(A), Push(B), Push(C). Lalu memanggil Pop() 1 kali. Huruf apa yang keluar?</p>
+                        <select id="q4-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-stone-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">A</option>
+                            <option value="B">C</option>
+                        </select>
+                        <p id="q4-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">5. Manakah penerapan nyata dari Stack di komputer sehari-hari?</p>
+                        <select id="q5-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-stone-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">Antrean Download File</option>
+                            <option value="B">Fitur Undo (Ctrl+Z) dan Tombol Back Browser</option>
+                        </select>
+                        <p id="q5-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+                </div>
+                
+                <button onclick="checkAllQuiz()" class="mt-6 w-full bg-stone-600 hover:bg-stone-700 text-white font-bold px-6 py-4 rounded-xl transition-colors shadow-lg active:scale-95 text-lg">Cek Semua Jawaban</button>
+            </div>
+            
+            <script>
+                function checkAllQuiz() {
+                    const answers = ['B', 'A', 'B', 'B', 'B'];
+                    let score = 0;
+                    for(let i=1; i<=5; i++) {
+                        const ans = document.getElementById('q'+i+'-ans').value;
+                        const feedback = document.getElementById('q'+i+'-feedback');
+                        feedback.classList.remove('hidden', 'text-green-600', 'text-red-600', 'text-amber-600');
+                        
+                        if(ans === '') {
+                            feedback.innerHTML = "⚠️ Belum dijawab!";
+                            feedback.classList.add('text-amber-600');
+                        } else if (ans === answers[i-1]) {
+                            feedback.innerHTML = "✅ Benar!";
+                            feedback.classList.add('text-green-600');
+                            score++;
+                        } else {
+                            feedback.innerHTML = "❌ Salah, coba lagi.";
+                            feedback.classList.add('text-red-600');
+                        }
+                    }
+                    if(score === 5) alert("Luar biasa! Semua jawaban benar! 🎉");
+                }
+            </script>
+        </div>
+</div>
+        </div>
+    </div>
+
+    <script>
+        function openTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
+            document.querySelectorAll('button[id^="tab-"]').forEach(btn => {
+                btn.className = 'px-6 py-3 rounded-full font-bold transition-all bg-white text-gray-600 hover:bg-gray-100 border border-gray-200';
+            });
+            
+            document.getElementById('content-' + tabName).classList.remove('hidden');
+            document.getElementById('content-' + tabName).classList.add('block');
+            
+            let colorClass = 'bg-blue-600';
+            if(tabName === 'materi') colorClass = 'bg-amber-500';
+            if(tabName === 'latihan') colorClass = 'bg-green-600';
+            
+            const activeBtn = document.getElementById('tab-' + tabName);
+            activeBtn.className = `px-6 py-3 rounded-full font-bold transition-all text-white shadow-md scale-105 ${colorClass}`;
+        }
+    </script>
+    <script>
+        const container = document.getElementById('container');
+        const statusText = document.getElementById('status-text');
+        const countText = document.getElementById('plate-count');
+        
+        const MAX_PLATES = 10;
+        let currentPlates = 0;
+        let globalPlateId = 1; // ID ini tidak akan pernah dipakai ulang!
+        let isAnimating = false;
+
+        function updateCount() {
+            countText.textContent = currentPlates;
+        }
+
+        function pushAction() {
+            if (isAnimating) return;
+            
+            if (currentPlates >= MAX_PLATES) {
+                statusText.innerHTML = `<b>Peringatan!</b> Tumpukan sudah terlalu tinggi (mencapai batas maksimal ${MAX_PLATES} piring).<br><br>Bahaya, piringnya bisa rubuh jika ditambah lagi! Kamu harus mengambil piring (Pop) terlebih dahulu.`;
+                return;
+            }
+
+            isAnimating = true;
+            currentPlates++;
+            
+            // Ambil ID piring saat ini lalu naikkan untuk piring berikutnya
+            const thisPlateId = globalPlateId++;
+            
+            // Create Plate DOM
+            const plateWrapper = document.createElement('div');
+            // Use negative margin-bottom to make them overlap nicely, EXCEPT for the very bottom plate
+            plateWrapper.className = `plate-anim falling flex-shrink-0 z-[${currentPlates}] ${currentPlates > 1 ? '-mb-12 sm:-mb-14' : ''}`;
+            
+            const plate = document.createElement('div');
+            plate.className = 'w-48 h-12 sm:w-64 sm:h-16 bg-white border-2 border-stone-300 rounded-[100%] shadow-[0_8px_0_#d6d3d1,0_15px_15px_rgba(0,0,0,0.1)] flex items-center justify-center relative';
+            
+            // Inner rim of the plate for realism
+            const innerRim = document.createElement('div');
+            innerRim.className = 'w-32 h-6 sm:w-44 sm:h-8 border border-stone-200 rounded-[100%] shadow-inner bg-stone-50/50 flex items-center justify-center';
+            
+            // Text to show index number of plate
+            const textIdx = document.createElement('span');
+            textIdx.className = 'font-bold text-stone-400 text-xs sm:text-sm';
+            textIdx.textContent = `#${thisPlateId}`;
+            
+            innerRim.appendChild(textIdx);
+            plate.appendChild(innerRim);
+            plateWrapper.appendChild(plate);
+            
+            // Because flex-col displays top-down in DOM order, to make it stack upwards visually, 
+            // the newest plate (top) MUST be prepended as the FIRST element in the container.
+            container.prepend(plateWrapper);
+            
+            // Trigger reflow
+            plateWrapper.offsetHeight;
+            
+            // Animate fall
+            plateWrapper.classList.remove('falling');
+            
+            statusText.innerHTML = `Piring bersih baru <b>#${thisPlateId}</b> telah diletakkan di <b>posisi paling atas</b> meja (Proses <i>Push</i>).<br><br>Kini piring #${thisPlateId} adalah piring teratas di tumpukan!`;
+            updateCount();
+            
+            setTimeout(() => {
+                isAnimating = false;
+            }, 400);
+        }
+
+        function popAction() {
+            if (isAnimating) return;
+            
+            if (currentPlates === 0) {
+                statusText.innerHTML = `<b>Kosong!</b><br><br>Tidak ada satupun piring tersisa di meja prasmanan. Kamu tidak bisa mengambil piring (Pop). Silakan tambah piring baru terlebih dahulu!`;
+                return;
+            }
+
+            isAnimating = true;
+            
+            // Select the top plate (the first child in the container due to prepend)
+            const topPlate = container.firstElementChild;
+            const plateIdText = topPlate.querySelector('span').textContent;
+            
+            // Animate floating up and fading out
+            topPlate.classList.add('floating-up');
+            
+            statusText.innerHTML = `Seseorang mengambil piring <b>${plateIdText}</b> dari <b>posisi paling atas</b> (Proses <i>Pop</i>).<br><br>Perhatikan bahwa piring yang terakhir kali masuk tadi justru menjadi yang pertama kali keluar (LIFO)!`;
+            
+            setTimeout(() => {
+                topPlate.remove();
+                currentPlates--;
+                updateCount();
+                
+                // Remove overlap margin if the new base plate is the only one left
+                if(currentPlates === 1) {
+                    const onlyPlate = container.firstElementChild;
+                    onlyPlate.classList.remove('-mb-12', 'sm:-mb-14');
+                }
+
+                isAnimating = false;
+            }, 400);
+        }
+        
+        // Initial plates
+        setTimeout(() => {
+            pushAction();
+            setTimeout(() => pushAction(), 500);
+        }, 300);
+
+    </script>
+</body>
+</html>

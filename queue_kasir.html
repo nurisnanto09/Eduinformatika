@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edukasi Queue: Antrean Kasir</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .floor-bg {
+            background-color: #f0fdf4;
+            background-image: linear-gradient(90deg, transparent 50%, rgba(255,255,255,.5) 50%);
+            background-size: 100px 100px;
+        }
+        
+        .person-anim {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .walking-in {
+            transform: translateX(-100px);
+            opacity: 0;
+        }
+        
+        .walking-out {
+            transform: translateY(-50px) translateX(50px) scale(0.5);
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="bg-green-50 min-h-screen p-4 md:p-8 font-sans">
+    
+    <div class="w-full px-2 sm:px-4 xl:px-8 max-w-[1600px] mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-black text-green-900 mb-2">Edukasi Struktur Data: Queue</h1>
+            <p class="text-lg text-green-700 font-medium">Prinsip FIFO (First In, First Out) Lewat Analogi Antrean Kasir Minimarket</p>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <div class="flex flex-wrap justify-center gap-2 sm:gap-4 mb-8">
+            <button onclick="openTab('simulasi')" id="tab-simulasi" class="px-6 py-3 rounded-full font-bold transition-all bg-blue-600 text-white shadow-md scale-105">🎮 Simulasi</button>
+            <button onclick="openTab('materi')" id="tab-materi" class="px-6 py-3 rounded-full font-bold transition-all bg-white text-gray-600 hover:bg-gray-100 border border-gray-200">📖 Materi</button>
+            <button onclick="openTab('latihan')" id="tab-latihan" class="px-6 py-3 rounded-full font-bold transition-all bg-white text-gray-600 hover:bg-gray-100 border border-gray-200">🧠 Latihan</button>
+        </div>
+
+        <!-- Tab Contents -->
+        <div id="content-simulasi" class="tab-content block">
+        <!-- Main Content -->
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col lg:flex-row border border-green-100">
+            
+            <!-- Left: Visualization Area -->
+            <div class="lg:w-2/3 p-6 md:p-10 border-b lg:border-b-0 lg:border-r border-gray-200 bg-green-50 relative flex flex-col justify-end h-[32rem]">
+                
+                <!-- Floor -->
+                <div class="absolute inset-0 floor-bg pointer-events-none opacity-50"></div>
+                <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-300 to-gray-100 border-t-8 border-gray-300 z-0"></div>
+
+                <!-- Labels -->
+                <div class="relative mb-6 mx-auto sm:mx-0 w-max z-20">
+                    <span class="inline-block bg-white/95 px-4 py-2 rounded-lg font-bold text-green-800 shadow-sm border border-green-200">
+                        Total Antrean: <span id="queue-count" class="text-xl font-black">0</span> / 7
+                    </span>
+                </div>
+
+                <!-- Scene Layout -->
+                <div class="flex flex-row items-end w-full h-full relative z-10 pb-4">
+                    
+                    <!-- Queue Container -->
+                    <div id="container" class="flex flex-row items-end justify-end flex-grow h-full gap-2 sm:gap-4 px-4 relative">
+                        <!-- People will be PREPENDED here. Right-most is Front. Left-most is Back. -->
+                    </div>
+
+                    <!-- Cashier Counter (Fixed on the right) -->
+                    <div class="w-24 sm:w-32 h-40 bg-stone-700 rounded-t-xl border-t-8 border-l-8 border-stone-800 flex flex-col items-center justify-start pt-4 relative flex-shrink-0 z-20 shadow-[-10px_0_15px_rgba(0,0,0,0.1)]">
+                        <div class="text-3xl sm:text-4xl">👨‍💻</div>
+                        <div class="text-white font-bold text-xs sm:text-sm mt-2 text-center">KASIR</div>
+                        <!-- Cash register screen -->
+                        <div class="absolute top-2 -left-3 w-10 h-8 bg-black rounded border-2 border-stone-500 shadow-lg transform -rotate-12">
+                            <div class="w-full h-full bg-green-500 rounded-sm opacity-80 text-[0.5rem] text-white p-1">10.000</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Control & Explanations -->
+            <div class="lg:w-1/3 p-6 md:p-10 bg-white flex flex-col">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center font-bold text-xl">ℹ️</div>
+                    <h2 class="text-2xl font-bold text-gray-800">Status Proses</h2>
+                </div>
+                
+                <!-- Explanation Box -->
+                <div class="bg-green-50 p-6 rounded-2xl border border-green-100 shadow-inner flex-grow mb-8 relative min-h-[12rem] flex flex-col justify-center flex flex-col justify-center">
+                    <div class="absolute top-2 left-2 text-4xl text-green-200 font-serif leading-none">"</div>
+                    <p id="status-text" class="text-gray-700 text-lg leading-relaxed relative z-10">
+                        Klik tombol di bawah.
+                    </p>
+                </div>
+
+                <!-- Controls -->
+                <div class="flex flex-col gap-4 mt-auto">
+                    <button onclick="enqueueAction()" class="w-full py-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg shadow-green-600/30 transition-transform active:scale-95 text-lg flex justify-center items-center gap-2">
+                        <span>Orang Masuk (Enqueue)</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                    
+                    <button onclick="dequeueAction()" class="w-full py-4 bg-stone-700 hover:bg-stone-800 text-white font-bold rounded-xl shadow-lg shadow-stone-700/30 transition-transform active:scale-95 text-lg flex justify-center items-center gap-2">
+                        <span>Kasir Melayani (Dequeue)</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        
+        </div>
+
+        <div id="content-materi" class="tab-content hidden">
+        <!-- Concept Explanation -->
+        <div class="mt-8 bg-white p-6 rounded-2xl shadow-md border border-gray-200">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">💡 Konsep Dasar: Apa itu Queue (FIFO)?</h3>
+            <p class="text-gray-700 text-lg leading-relaxed"><b>Queue</b> (Antrean) adalah struktur data yang menjunjung tinggi keadilan sosial: <b>FIFO (First In, First Out)</b>. "Siapa yang datang pertama kali, dialah yang akan dilayani dan keluar paling awal." <br><br>Persis seperti budaya antre di kasir minimarket atau di bioskop. Orang yang baru datang (Enqueue) haram hukumnya menyerobot ke depan; ia harus dengan sabar berdiri di ujung paling belakang antrean. Sementara itu, kasir akan selalu melayani (Dequeue) orang yang berada di posisi paling depan barisan. Barisan kemudian akan otomatis bergeser maju mengisi kekosongan.<br><br><b>Contoh di Komputer:</b> Antrean dokumen yang dikirim ke Printer (Print Queue) dari berbagai komputer, atau antrean pesan beruntun di WhatsApp Anda yang terkirim satu per satu secara berurutan saat koneksi internet kembali menyala!</p>
+        </div>
+        
+        </div>
+
+        
+        <div id="content-latihan" class="tab-content hidden">
+            <div class="mt-8 bg-green-50 p-8 rounded-2xl shadow-md border border-green-200">
+                <h3 class="text-2xl font-bold text-green-900 mb-6">🧠 Uji Pemahaman (5 Soal)</h3>
+                
+                <div class="space-y-6">
+                    <!-- Q1 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">1. Apa singkatan dari prinsip utama struktur data Queue?</p>
+                        <select id="q1-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-green-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">FIFO (First In, First Out)</option>
+                            <option value="B">LIFO (Last In, First Out)</option>
+                        </select>
+                        <p id="q1-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">2. Istilah standar untuk 'Memasukkan' orang baru ke barisan belakang Queue adalah?</p>
+                        <select id="q2-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-green-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">Enqueue</option>
+                            <option value="B">Dequeue</option>
+                        </select>
+                        <p id="q2-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">3. Istilah standar untuk 'Melayani/Mengeluarkan' orang paling depan Queue adalah?</p>
+                        <select id="q3-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-green-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">Enqueue</option>
+                            <option value="B">Dequeue</option>
+                        </select>
+                        <p id="q3-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">4. Jika kamu Enqueue(A), Enqueue(B), Enqueue(C). Lalu memanggil Dequeue() 1 kali. Huruf apa yang keluar?</p>
+                        <select id="q4-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-green-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">A</option>
+                            <option value="B">C</option>
+                        </select>
+                        <p id="q4-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">5. Manakah penerapan nyata dari Queue di komputer sehari-hari?</p>
+                        <select id="q5-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-green-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">Fitur Undo (Ctrl+Z)</option>
+                            <option value="B">Antrean Dokumen di Printer (Print Queue)</option>
+                        </select>
+                        <p id="q5-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+                </div>
+                
+                <button onclick="checkAllQuiz()" class="mt-6 w-full bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-4 rounded-xl transition-colors shadow-lg active:scale-95 text-lg">Cek Semua Jawaban</button>
+            </div>
+            
+            <script>
+                function checkAllQuiz() {
+                    const answers = ['A', 'A', 'B', 'A', 'B'];
+                    let score = 0;
+                    for(let i=1; i<=5; i++) {
+                        const ans = document.getElementById('q'+i+'-ans').value;
+                        const feedback = document.getElementById('q'+i+'-feedback');
+                        feedback.classList.remove('hidden', 'text-green-600', 'text-red-600', 'text-amber-600');
+                        
+                        if(ans === '') {
+                            feedback.innerHTML = "⚠️ Belum dijawab!";
+                            feedback.classList.add('text-amber-600');
+                        } else if (ans === answers[i-1]) {
+                            feedback.innerHTML = "✅ Benar!";
+                            feedback.classList.add('text-green-600');
+                            score++;
+                        } else {
+                            feedback.innerHTML = "❌ Salah, coba lagi.";
+                            feedback.classList.add('text-red-600');
+                        }
+                    }
+                    if(score === 5) alert("Luar biasa! Semua jawaban benar! 🎉");
+                }
+            </script>
+        </div>
+</div>
+        </div>
+    </div>
+
+    <script>
+        function openTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
+            document.querySelectorAll('button[id^="tab-"]').forEach(btn => {
+                btn.className = 'px-6 py-3 rounded-full font-bold transition-all bg-white text-gray-600 hover:bg-gray-100 border border-gray-200';
+            });
+            
+            document.getElementById('content-' + tabName).classList.remove('hidden');
+            document.getElementById('content-' + tabName).classList.add('block');
+            
+            let colorClass = 'bg-blue-600';
+            if(tabName === 'materi') colorClass = 'bg-amber-500';
+            if(tabName === 'latihan') colorClass = 'bg-green-600';
+            
+            const activeBtn = document.getElementById('tab-' + tabName);
+            activeBtn.className = `px-6 py-3 rounded-full font-bold transition-all text-white shadow-md scale-105 ${colorClass}`;
+        }
+    </script>
+    <script>
+        const container = document.getElementById('container');
+        const statusText = document.getElementById('status-text');
+        const countText = document.getElementById('queue-count');
+        
+        const MAX_PEOPLE = 7;
+        let queueCount = 0;
+        let customerId = 1;
+        let isAnimating = false;
+
+        const avatars = ['🧑', '👩', '👨', '🧔', '👱‍♀️', '👴', '👵'];
+        const colors = ['bg-blue-500', 'bg-red-500', 'bg-yellow-400', 'bg-purple-500', 'bg-pink-500', 'bg-teal-500', 'bg-orange-500'];
+
+        function updateCount() {
+            countText.textContent = queueCount;
+        }
+
+        // Helper to get rects for FLIP animation
+        function getRects() {
+            const rects = new Map();
+            Array.from(container.children).forEach(child => {
+                rects.set(child.id, child.getBoundingClientRect());
+            });
+            return rects;
+        }
+
+        // Helper to play FLIP animation
+        function playFlip(oldRects) {
+            const newRects = getRects();
+            
+            Array.from(container.children).forEach(child => {
+                const oldRect = oldRects.get(child.id);
+                const newRect = newRects.get(child.id);
+                
+                if (oldRect && newRect) {
+                    const deltaX = oldRect.left - newRect.left;
+                    
+                    if (deltaX !== 0) {
+                        child.style.transition = 'none';
+                        child.style.transform = `translateX(${deltaX}px)`;
+                        
+                        // Force reflow
+                        child.offsetHeight;
+                        
+                        child.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                        child.style.transform = '';
+                    }
+                }
+            });
+        }
+
+        function enqueueAction() {
+            if (isAnimating) return;
+            
+            if (queueCount >= MAX_PEOPLE) {
+                statusText.innerHTML = `<b>Toko Penuh!</b> Antrean kasir sudah memanjang mencapai batas maksimal (${MAX_PEOPLE} orang).<br><br>Harap tunggu Kasir melayani (Dequeue) seseorang di depan agar antrean bisa maju.`;
+                return;
+            }
+
+            isAnimating = true;
+            
+            const oldRects = getRects();
+            
+            // Create Person DOM
+            const personWrapper = document.createElement('div');
+            personWrapper.id = `person-${customerId}`;
+            personWrapper.className = 'flex flex-col items-center justify-end flex-shrink-0 person-anim walking-in z-10 w-16 sm:w-20';
+            
+            const avatarIdx = Math.floor(Math.random() * avatars.length);
+            const colorClass = colors[Math.floor(Math.random() * colors.length)];
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'text-4xl sm:text-5xl drop-shadow-md mb-1 z-20';
+            avatar.textContent = avatars[avatarIdx];
+            
+            const body = document.createElement('div');
+            body.className = `w-12 h-20 sm:w-16 sm:h-24 ${colorClass} rounded-t-3xl border-4 border-stone-800 shadow-md relative flex flex-col items-center pt-2`;
+            
+            const nameTag = document.createElement('div');
+            nameTag.className = 'bg-white/90 text-stone-900 text-[0.65rem] sm:text-xs font-black px-1.5 py-0.5 rounded shadow-sm';
+            nameTag.textContent = `#${customerId}`;
+            
+            body.appendChild(nameTag);
+            personWrapper.appendChild(avatar);
+            personWrapper.appendChild(body);
+            
+            // To make queue visual build from right to left (towards cashier), 
+            // the new person joining the BACK of the line must be inserted at the LEFT.
+            // Since container is flex-row justify-end, prepending puts them on the far left.
+            container.prepend(personWrapper);
+            
+            // Force reflow
+            personWrapper.offsetHeight;
+            
+            // Animate FLIP for others sliding left to make room
+            playFlip(oldRects);
+            
+            // Animate person walking in
+            personWrapper.classList.remove('walking-in');
+            
+            statusText.innerHTML = `Seorang pelanggan baru (Pelanggan <b>#${customerId}</b>) masuk ke dalam toko (Proses <i>Enqueue</i>).<br><br>Sesuai aturan, ia dengan sopan berdiri menempati urutan <b>paling ujung belakang</b> antrean!`;
+            
+            queueCount++;
+            customerId++;
+            updateCount();
+            
+            setTimeout(() => {
+                isAnimating = false;
+            }, 400);
+        }
+
+        function dequeueAction() {
+            if (isAnimating) return;
+            
+            if (queueCount === 0) {
+                statusText.innerHTML = `<b>Kosong!</b><br><br>Tidak ada satupun pelanggan di antrean. Kasir sedang menganggur. Silakan masukkan orang ke dalam antrean (Enqueue) terlebih dahulu!`;
+                return;
+            }
+
+            isAnimating = true;
+            
+            const oldRects = getRects();
+            
+            // The person at the FRONT of the line is the RIGHT-MOST element (lastChild)
+            const frontPerson = container.lastElementChild;
+            const nameText = frontPerson.querySelector('div.text-\\[0\\.65rem\\]').textContent;
+            
+            // Animate checking out and leaving
+            frontPerson.classList.add('walking-out');
+            
+            statusText.innerHTML = `Kasir melayani Pelanggan <b>${nameText}</b> yang berada di <b>barisan paling depan</b> (Proses <i>Dequeue</i>).<br><br>Orang yang pertama kali antre adalah yang pertama kali dilayani dan keluar (FIFO)! Seluruh sisa antrean kini bergeser maju.`;
+            
+            setTimeout(() => {
+                frontPerson.remove();
+                
+                // FLIP remaining people sliding forward (to the right)
+                playFlip(oldRects);
+                
+                queueCount--;
+                updateCount();
+                
+                setTimeout(() => {
+                    isAnimating = false;
+                }, 400);
+            }, 400);
+        }
+        
+        // Initial people
+        setTimeout(() => {
+            enqueueAction();
+            setTimeout(() => {
+                enqueueAction();
+                setTimeout(() => enqueueAction(), 500);
+            }, 500);
+        }, 300);
+
+    </script>
+</body>
+</html>

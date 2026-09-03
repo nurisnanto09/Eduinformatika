@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edukasi Insertion Sort: Merapikan Kartu UNO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .person-part {
+            transition: all 0.3s ease-in-out;
+        }
+        .table-bg {
+            background-color: #1e293b; 
+            background-image: radial-gradient(circle, #0f172a 20%, transparent 20%), radial-gradient(circle, transparent 20%, #1e293b 20%, #1e293b 80%, transparent 80%, transparent);
+            background-size: 10px 10px;
+            background-position: 0 0, 5px 5px;
+        }
+        .uno-number-shadow {
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.8), -1px -1px 0 rgba(0,0,0,0.8), 1px -1px 0 rgba(0,0,0,0.8), -1px 1px 0 rgba(0,0,0,0.8);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen p-4 md:p-8 font-sans">
+    
+    <div class="w-full px-2 sm:px-4 xl:px-8 max-w-[1600px] mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-black text-red-600 mb-2" style="text-shadow: 1px 1px 0px #000;">Edukasi Insertion Sort</h1>
+            <p class="text-lg text-slate-700 font-bold">Merapikan Kartu UNO di Tangan Secara Berurutan (Langkah demi Langkah)</p>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <div class="flex flex-wrap justify-center gap-2 sm:gap-4 mb-8">
+            <button onclick="openTab('simulasi')" id="tab-simulasi" class="px-6 py-3 rounded-full font-bold transition-all bg-blue-600 text-white shadow-md scale-105">🎮 Simulasi</button>
+            <button onclick="openTab('materi')" id="tab-materi" class="px-6 py-3 rounded-full font-bold transition-all bg-white text-gray-600 hover:bg-gray-100 border border-gray-200">📖 Materi</button>
+            <button onclick="openTab('latihan')" id="tab-latihan" class="px-6 py-3 rounded-full font-bold transition-all bg-white text-gray-600 hover:bg-gray-100 border border-gray-200">🧠 Latihan</button>
+        </div>
+
+        <!-- Tab Contents -->
+        <div id="content-simulasi" class="tab-content block">
+        <!-- Main Content -->
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col lg:flex-row border border-slate-200">
+            
+            <!-- Left: Visualization Area (Table) -->
+            <div class="lg:w-2/3 p-6 md:p-10 border-b lg:border-b-0 lg:border-r border-gray-200 table-bg relative shadow-inner">
+                
+                <div class="absolute inset-3 sm:inset-4 border-2 border-slate-700/50 rounded-2xl pointer-events-none"></div>
+
+                <div class="absolute top-8 left-0 right-0 text-center pointer-events-none">
+                    <span class="text-slate-500 font-black text-2xl uppercase tracking-widest">Meja Permainan</span>
+                </div>
+
+                <div id="container" class="min-h-[22rem] w-full flex items-center justify-center gap-1 sm:gap-3 relative z-10 pt-4">
+                </div>
+
+                <div class="relative mt-12 mx-auto sm:mx-0 w-max bg-white/95 p-3 rounded-lg text-sm text-gray-700 shadow-xl border border-gray-200 z-20">
+                    <div class="flex items-center gap-2 mb-1.5"><div class="w-3 h-3 bg-white border border-gray-300 rounded-full"></div> Kartu di meja (Belum dirapikan)</div>
+                    <div class="flex items-center gap-2 mb-1.5"><div class="w-3 h-3 bg-green-200 border border-green-500 rounded-full"></div> Kelompok kartu di Tangan (Rapi)</div>
+                    <div class="flex items-center gap-2 mb-1.5"><div class="w-3 h-3 bg-blue-400 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.8)]"></div> Kartu baru yang diangkat</div>
+                    <div class="flex items-center gap-2"><div class="w-3 h-3 bg-yellow-300 rounded-full"></div> Sedang dibandingkan</div>
+                </div>
+            </div>
+
+            <!-- Right: Control & Explanations -->
+            <div class="lg:w-1/3 p-6 md:p-10 bg-white flex flex-col">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-bold text-xl">ℹ️</div>
+                    <h2 class="text-2xl font-bold text-gray-800">Status Proses</h2>
+                </div>
+                
+                <!-- Explanation Box -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-inner flex-grow mb-8 relative min-h-[12rem] flex flex-col justify-center flex flex-col justify-center">
+                    <div class="absolute top-2 left-2 text-4xl text-slate-300 font-serif leading-none">"</div>
+                    <p id="status-text" class="text-gray-700 text-lg leading-relaxed relative z-10">
+                        Selamat datang! Klik tombol <b>Mulai Langkah Pertama</b>. Kita akan mengangkat kartu UNO satu per satu dari meja permainan, lalu menyelipkannya pada urutan angka yang benar di kelompok tangan kiri.
+                    </p>
+                </div>
+
+                <!-- Controls -->
+                <div class="flex flex-col gap-4 mt-auto">
+                    <button id="btn-next" onclick="nextStep()" class="w-full py-4 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl shadow-lg shadow-red-500/30 transition-transform active:scale-95 text-lg flex justify-center items-center gap-2">
+                        <span>Mulai Langkah Pertama</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                    
+                    <button id="btn-reset" onclick="resetGame()" class="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-colors border border-gray-200">
+                        Bagi Kartu UNO Baru
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        
+        </div>
+
+        <div id="content-materi" class="tab-content hidden">
+        <!-- Concept Explanation -->
+        <div class="mt-8 bg-white p-6 rounded-2xl shadow-md border border-gray-200">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">💡 Konsep Dasar: Apa itu Insertion Sort?</h3>
+            <p class="text-gray-700 text-lg leading-relaxed"><b>Insertion Sort</b> meniru persis kebiasaan alamiah otak manusia saat mencoba mengurutkan sekumpulan kartu di tangan saat bermain UNO. Algoritma ini memecah data menjadi dua bagian imajiner: area yang "sudah urut" (tangan kiri) dan area yang "belum urut" (di atas meja). Prosesnya sederhana, ia mengambil satu kartu yang masih berantakan, menoleh ke arah sekumpulan kartu yang sudah rapi, mengecek angka mereka dari kanan ke kiri perlahan-lahan, dan langsung <i>"menyisipkannya" (insert)</i> ke sela-sela ruang kosong yang paling akurat ukurannya agar susunan kartu di tangan tetap tidak rusak.</p>
+        </div>
+        
+        </div>
+
+        
+        <div id="content-latihan" class="tab-content hidden">
+            <div class="mt-8 bg-slate-50 p-8 rounded-2xl shadow-md border border-slate-200">
+                <h3 class="text-2xl font-bold text-slate-900 mb-6">🧠 Uji Pemahaman (5 Soal)</h3>
+                
+                <div class="space-y-6">
+                    <!-- Q1 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">1. Analogi dunia nyata manakah yang paling pas mendeskripsikan Insertion Sort?</p>
+                        <select id="q1-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-slate-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">Menyusun letak kartu remi/UNO di tangan</option>
+                            <option value="B">Membelah buku kamus di tengah-tengah</option>
+                        </select>
+                        <p id="q1-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">2. Jika tangan kirimu memiliki angka [2, 5, 8], lalu kamu mengambil angka 4. Di mana 4 akan disisipkan?</p>
+                        <select id="q2-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-slate-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">Di posisi pertama (paling kiri)</option>
+                            <option value="B">Di posisi kedua (antara 2 dan 5)</option>
+                        </select>
+                        <p id="q2-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">3. Saat membandingkan untuk mencari celah sisipan, Insertion Sort mengecek dari arah mana?</p>
+                        <select id="q3-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-slate-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">Dari Kanan ke Kiri</option>
+                            <option value="B">Dari Kiri ke Kanan</option>
+                        </select>
+                        <p id="q3-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">4. Kapan Insertion Sort bekerja PALING CEPAT (Kinerja Terbaik)?</p>
+                        <select id="q4-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-slate-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">Saat data diacak total</option>
+                            <option value="B">Saat data sudah dalam kondisi hampir terurut penuh</option>
+                        </select>
+                        <p id="q4-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">5. Area 'Sudah Urut' pada Insertion Sort perlahan-lahan bertambah panjang di sebelah mana?</p>
+                        <select id="q5-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-slate-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">Di sebelah Kiri</option>
+                            <option value="B">Di sebelah Kanan</option>
+                        </select>
+                        <p id="q5-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+                </div>
+                
+                <button onclick="checkAllQuiz()" class="mt-6 w-full bg-slate-600 hover:bg-slate-700 text-white font-bold px-6 py-4 rounded-xl transition-colors shadow-lg active:scale-95 text-lg">Cek Semua Jawaban</button>
+            </div>
+            
+            <script>
+                function checkAllQuiz() {
+                    const answers = ['A', 'B', 'A', 'B', 'A'];
+                    let score = 0;
+                    for(let i=1; i<=5; i++) {
+                        const ans = document.getElementById('q'+i+'-ans').value;
+                        const feedback = document.getElementById('q'+i+'-feedback');
+                        feedback.classList.remove('hidden', 'text-green-600', 'text-red-600', 'text-amber-600');
+                        
+                        if(ans === '') {
+                            feedback.innerHTML = "⚠️ Belum dijawab!";
+                            feedback.classList.add('text-amber-600');
+                        } else if (ans === answers[i-1]) {
+                            feedback.innerHTML = "✅ Benar!";
+                            feedback.classList.add('text-green-600');
+                            score++;
+                        } else {
+                            feedback.innerHTML = "❌ Salah, coba lagi.";
+                            feedback.classList.add('text-red-600');
+                        }
+                    }
+                    if(score === 5) alert("Luar biasa! Semua jawaban benar! 🎉");
+                }
+            </script>
+        </div>
+</div>
+        </div>
+    </div>
+
+    <script>
+        function openTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
+            document.querySelectorAll('button[id^="tab-"]').forEach(btn => {
+                btn.className = 'px-6 py-3 rounded-full font-bold transition-all bg-white text-gray-600 hover:bg-gray-100 border border-gray-200';
+            });
+            
+            document.getElementById('content-' + tabName).classList.remove('hidden');
+            document.getElementById('content-' + tabName).classList.add('block');
+            
+            let colorClass = 'bg-blue-600';
+            if(tabName === 'materi') colorClass = 'bg-amber-500';
+            if(tabName === 'latihan') colorClass = 'bg-green-600';
+            
+            const activeBtn = document.getElementById('tab-' + tabName);
+            activeBtn.className = `px-6 py-3 rounded-full font-bold transition-all text-white shadow-md scale-105 ${colorClass}`;
+        }
+    </script>
+    <script>
+        const container = document.getElementById('container');
+        const btnNext = document.getElementById('btn-next');
+        const statusText = document.getElementById('status-text');
+
+        let array = [];
+        let wrappers = [];
+        let sortedArr = [0]; 
+        let step_i = 1; 
+        let step_j = 1; 
+        let step_state = 'init'; 
+
+        const unoColors = [
+            { bg: 'bg-red-500', text: 'text-red-500', name: 'Merah' },
+            { bg: 'bg-yellow-400', text: 'text-yellow-400', name: 'Kuning' },
+            { bg: 'bg-green-500', text: 'text-green-500', name: 'Hijau' },
+            { bg: 'bg-blue-500', text: 'text-blue-500', name: 'Biru' }
+        ];
+
+        function generateCards(count = 5) {
+            container.innerHTML = '';
+            array = [];
+            wrappers = [];
+            
+            for(let i = 0; i < count; i++) {
+                const val = Math.floor(Math.random() * 9) + 1; 
+                const color = unoColors[Math.floor(Math.random() * unoColors.length)];
+                array.push({ val, color });
+                
+                const wrapper = document.createElement('div');
+                wrapper.className = 'p-1 sm:p-2 relative z-10 transition-transform duration-300';
+                
+                const cardOuter = document.createElement('div');
+                // Adjust width and height to a 1:1.4 ratio for a realistic card look
+                cardOuter.className = 'bg-white rounded-xl shadow-[0_4px_10px_rgba(0,0,0,0.5)] border border-gray-300 w-20 h-28 sm:w-28 sm:h-40 flex flex-col justify-center p-1.5 sm:p-2 person-part relative box-border';
+                
+                const cardInner = document.createElement('div');
+                cardInner.className = `w-full h-full rounded-lg ${color.bg} flex flex-col justify-between p-1 sm:p-1.5 box-border shadow-inner`;
+                
+                const topVal = document.createElement('div');
+                topVal.className = `text-white text-sm sm:text-lg font-bold leading-none text-left drop-shadow-md uno-number-shadow`;
+                topVal.textContent = val;
+                
+                const midWrapper = document.createElement('div');
+                // Make the central oval proportional
+                midWrapper.className = `self-center bg-white rounded-[50%] w-12 h-16 sm:w-16 sm:h-20 -rotate-12 flex items-center justify-center shadow-sm`;
+                
+                const midVal = document.createElement('div');
+                midVal.className = `font-black text-3xl sm:text-5xl rotate-12 ${color.text} uno-number-shadow`;
+                midVal.style.color = color.bg.includes('yellow') ? '#fbbf24' : ''; 
+                midVal.textContent = val;
+                
+                midWrapper.appendChild(midVal);
+                
+                const botVal = document.createElement('div');
+                botVal.className = `text-white text-sm sm:text-lg font-bold leading-none text-right rotate-180 drop-shadow-md uno-number-shadow`;
+                botVal.textContent = val;
+                
+                cardInner.appendChild(topVal);
+                cardInner.appendChild(midWrapper);
+                cardInner.appendChild(botVal);
+                
+                cardOuter.appendChild(cardInner);
+                wrapper.appendChild(cardOuter);
+                container.appendChild(wrapper);
+                wrappers.push(wrapper);
+            }
+        }
+
+        function updateStyles(sortedIndices = [], activeIdx = null, compareIdx = null) {
+            wrappers.forEach((w, idx) => {
+                const cardOuter = w.children[0];
+                
+                cardOuter.className = 'bg-white rounded-xl shadow-[0_4px_10px_rgba(0,0,0,0.5)] border border-gray-300 w-16 h-24 sm:w-[5.5rem] sm:min-h-[12rem] flex flex-col justify-center p-1 sm:p-1.5 person-part relative box-border';
+                w.style.zIndex = '10';
+                
+                if (idx === activeIdx) {
+                    cardOuter.classList.add('ring-4', 'ring-blue-500', 'shadow-[0_20px_30px_rgba(0,0,0,0.6)]', '-translate-y-6', 'sm:-translate-y-8', 'scale-110');
+                    w.style.zIndex = '30';
+                } else if (idx === compareIdx) {
+                    cardOuter.classList.add('ring-4', 'ring-yellow-400');
+                    w.style.zIndex = '20';
+                } else if (sortedIndices.includes(idx)) {
+                    cardOuter.classList.add('ring-4', 'ring-green-400');
+                }
+            });
+        }
+
+        async function swapAnimation(i, j) {
+            const rectsMap = new Map();
+            wrappers.forEach(w => rectsMap.set(w, w.getBoundingClientRect()));
+
+            [array[i], array[j]] = [array[j], array[i]];
+            [wrappers[i], wrappers[j]] = [wrappers[j], wrappers[i]];
+
+            wrappers.forEach(w => container.appendChild(w));
+
+            wrappers.forEach(w => {
+                const oldRect = rectsMap.get(w);
+                const newRect = w.getBoundingClientRect();
+                const deltaX = oldRect.left - newRect.left;
+                
+                if (deltaX !== 0) {
+                    w.style.transition = 'none';
+                    w.style.transform = `translateX(${deltaX}px)`;
+                }
+            });
+
+            container.offsetHeight; 
+
+            const speed = 500;
+            wrappers.forEach(w => {
+                if (w.style.transform) {
+                    w.style.transition = `transform ${speed}ms ease-in-out`;
+                    w.style.transform = '';
+                }
+            });
+
+            await new Promise(r => setTimeout(r, speed));
+            wrappers.forEach(w => w.style.transition = '');
+        }
+
+        function resetGame() {
+            generateCards(5);
+            step_i = 1;
+            step_j = 1;
+            sortedArr = [0]; 
+            step_state = 'init';
+            
+            statusText.innerHTML = "Selamat datang! Klik <b>Mulai Langkah Pertama</b>. Kita akan membelah halaman kamus ini langsung ke bagian tengahnya untuk mencari kata target secara instan!";
+            btnNext.innerHTML = `<span>Mulai Langkah Pertama</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
+            btnNext.disabled = false;
+            btnNext.classList.remove('opacity-50', 'cursor-not-allowed');
+            
+            updateStyles(sortedArr, null, null);
+        }
+
+        function nextStep() {
+            const n = array.length;
+            
+            if (step_state === 'init') {
+                step_state = 'pick_card';
+                btnNext.innerHTML = `<span>Langkah Selanjutnya</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
+            }
+            
+            if (step_state === 'pick_card') {
+                step_j = step_i;
+                updateStyles(sortedArr, step_j, null);
+                
+                const cardName = `Angka ${array[step_j].val} ${array[step_j].color.name}`;
+                
+                statusText.innerHTML = `Perhatikan tumpukan yang <i>sudah terurut rapi di tangan kiri</i>.<br><br>Sekarang mari kita <b>angkat sebuah kartu baru</b> dari meja, yaitu kartu UNO <b>${cardName}</b>.`;
+                
+                step_state = 'compare';
+                return;
+            }
+            
+            if (step_state === 'compare') {
+                updateStyles(sortedArr, step_j, step_j - 1);
+                
+                const cardName = `Angka ${array[step_j].val}`;
+                const compareName = `Angka ${array[step_j-1].val}`;
+                
+                statusText.innerHTML = `Kita harus mengecek kartu dari kanan ke kiri.<br><br>Bandingkan kartu yang baru dipegang (<b>${cardName}</b>) dengan kartu di sebelahnya (<b>${compareName}</b>). Apakah nilainya lebih kecil?`;
+                
+                step_state = 'check_compare';
+                return;
+            }
+            
+            if (step_state === 'check_compare') {
+                const val = array[step_j].val;
+                const compVal = array[step_j-1].val;
+                
+                if (val < compVal) {
+                    statusText.innerHTML = `<b>Ya, betul sekali!</b> Nilai ${val} lebih kecil dari ${compVal}.<br><br>Kartu UNO ini pantas untuk menyelip lebih dalam, jadi mari kita <b>geser posisinya ke sisi kiri</b>.`;
+                    step_state = 'do_swap';
+                    btnNext.innerHTML = `<span>Geser Kartu ke Kiri</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>`;
+                } else {
+                    statusText.innerHTML = `<b>Tidak.</b> Nilai ${val} lebih besar atau sama dengan ${compVal}.<br><br>Kartu ini <b>telah menemukan letak celah yang pas</b> di tangan. Ia tidak perlu bergeser menyelip lebih dalam lagi.`;
+                    step_state = 'insert_done';
+                }
+                return;
+            }
+            
+            if (step_state === 'do_swap') {
+                btnNext.disabled = true;
+                btnNext.classList.add('opacity-50', 'cursor-not-allowed');
+                btnNext.innerHTML = `<span>Menggeser...</span>`;
+                statusText.innerHTML = `<span class="text-blue-600 font-bold">Proses penggeseran kartu UNO sedang berlangsung...</span>`;
+                
+                swapAnimation(step_j - 1, step_j).then(() => {
+                    btnNext.disabled = false;
+                    btnNext.classList.remove('opacity-50', 'cursor-not-allowed');
+                    
+                    step_j--; // Card has moved left
+                    
+                    if (step_j > 0) {
+                        statusText.innerHTML = `Kartu kita meluncur melewati sebuah kartu.<br><br>Mari ulangi! Bandingkan kembali kartu kita dengan kartu yang kini ada di sebelahnya.`;
+                        step_state = 'compare';
+                    } else {
+                        statusText.innerHTML = `Wussh! Kartu kita sudah meluncur mentok hingga mencapai ujung paling kiri! Posisinya otomatis sudah pasti benar.`;
+                        step_state = 'insert_done';
+                    }
+                    
+                    updateStyles(sortedArr, step_j, null);
+                    btnNext.innerHTML = `<span>Langkah Selanjutnya</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
+                });
+                return;
+            }
+            
+            if (step_state === 'insert_done') {
+                sortedArr.push(step_i); 
+                
+                statusText.innerHTML = `Kartu UNO telah sukses mendarat dan <b>disisipkan ke dalam celah yang tepat</b>, menggenapi urutan di tangan kiri.`;
+                
+                step_i++;
+                if (step_i < n) {
+                    step_state = 'pick_card';
+                    updateStyles(sortedArr, null, null);
+                } else {
+                    step_state = 'done';
+                    updateStyles(sortedArr, null, null);
+                }
+                return;
+            }
+            
+            if (step_state === 'done') {
+                updateStyles(sortedArr, null, null);
+                statusText.innerHTML = `🎉 <b>Selamat! Anda telah memahami Insertion Sort!</b><br><br>Seluruh tumpukan kartu UNO yang berantakan telah berhasil disisipkan lembar demi lembar menjadi formasi berurutan yang indah.`;
+                btnNext.innerHTML = `<span>Selesai</span>`;
+                btnNext.disabled = true;
+                btnNext.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        resetGame();
+    </script>
+</body>
+</html>

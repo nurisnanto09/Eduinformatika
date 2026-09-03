@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Game Flowchart Terpadu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8fafc; overflow-x: hidden; }
+        .text-block { cursor: pointer; transition: 0.2s; user-select: none; }
+        .text-block:active { transform: scale(0.95); }
+        .selected { border-color: #f59e0b !important; box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.3) !important; }
+        
+        .fc-node { 
+            display: flex; align-items: center; justify-content: center; 
+            background: white; border: 2px dashed #94a3b8; 
+            text-align: center; color: #64748b; font-size: 0.85rem; padding: 10px;
+            cursor: pointer; transition: 0.2s; position: relative; font-weight: bold;
+        }
+        .fc-node.filled { border-style: solid; border-color: #3b82f6; color: #1e293b; background: #eff6ff; }
+        .fc-oval { border-radius: 999px; min-height: 50px; width: 60%; margin: 0 auto; }
+        .fc-jajar { border-radius: 0; transform: skew(-15deg); min-height: 50px; width: 80%; margin: 0 auto; }
+        .fc-jajar span { transform: skew(15deg); display: block; width: 100%; }
+        .fc-persegi { border-radius: 8px; min-height: 60px; width: 90%; margin: 0 auto; }
+        .fc-ketupat { border-radius: 0; transform: rotate(45deg); width: 100px; height: 100px; margin: 20px auto; }
+        .fc-ketupat span { transform: rotate(-45deg); display: block; width: 120px; margin-left: -10px; }
+        
+        .arrow-down { width: 2px; height: 25px; background: #94a3b8; margin: 0 auto; position: relative; }
+        .arrow-down::after { content: ''; position: absolute; bottom: 0; left: -4px; border-width: 5px 5px 0; border-style: solid; border-color: #94a3b8 transparent transparent transparent; }
+        
+        .arrow-loop {
+            position: absolute;
+            top: 50%;
+            right: -60px;
+            width: 60px;
+            height: 140px;
+            border-top: 2px dashed #ef4444;
+            border-right: 2px dashed #ef4444;
+            border-bottom: 2px dashed #ef4444;
+            transform: translateY(-100%);
+            z-index: 0;
+            display: flex;
+            align-items: center;
+        }
+        .arrow-loop::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 0;
+            border-width: 5px 5px 5px 0;
+            border-style: solid;
+            border-color: transparent #ef4444 transparent transparent;
+        }
+        .arrow-loop-text { position: absolute; right: 10px; top: 50%; background: #fff; color: #ef4444; font-size: 10px; font-weight: bold; padding: 2px; transform: translateY(-50%); }
+    </style>
+</head>
+<body class="font-sans text-gray-800 antialiased h-screen flex flex-col">
+
+    <!-- Header / Level Navigator -->
+    <header class="bg-gray-900 text-white shadow-md flex-shrink-0 z-20">
+        <div class="px-6 py-4 flex flex-col md:flex-row md:items-center justify-between">
+            <h1 class="text-xl font-black text-blue-400 mb-4 md:mb-0"><i class="fas fa-sitemap mr-2"></i> Portal Flowchart Terpadu</h1>
+            <div class="flex gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide" id="level-nav">
+                <!-- Nav buttons injected here -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+        
+        <!-- Kiri: Gudang Kata -->
+        <div class="w-full md:w-1/3 bg-gray-50 border-r border-gray-200 p-6 flex flex-col shadow-inner z-10 overflow-y-auto">
+            <h2 class="text-2xl font-black text-gray-800 mb-2" id="lvl-title">Memuat...</h2>
+            <p class="text-gray-600 text-sm mb-6 pb-4 border-b border-gray-200">Klik teks di bawah ini, lalu klik bentuk kosong di sebelah kanan untuk memasangkannya.</p>
+            
+            <div class="flex-1">
+                <h3 class="font-bold text-gray-400 text-xs tracking-wider uppercase mb-3"><i class="fas fa-cubes mr-1"></i> Teks Acak</h3>
+                <div class="flex flex-col gap-3" id="text-pool">
+                    <!-- Text blocks injected here -->
+                </div>
+            </div>
+            
+            <div class="mt-8 bg-blue-50 p-4 rounded-xl border border-blue-100 text-center">
+                <p id="status-msg" class="font-bold text-gray-600 mb-4 text-sm">Susun urutan dan arah dengan benar!</p>
+                <button onclick="checkAnswer()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3 rounded-lg shadow-md transition-transform active:scale-95 uppercase tracking-wider text-sm"><i class="fas fa-check-double mr-2"></i> Cek Jawaban</button>
+            </div>
+        </div>
+
+        <!-- Kanan: Simbol Flowchart -->
+        <div class="w-full md:w-2/3 bg-white p-6 overflow-y-auto relative flex justify-center pb-20">
+            <div class="w-full max-w-md relative flex flex-col pt-4">
+                
+                <!-- Keterangan -->
+                <div class="absolute top-0 right-0 bg-gray-100 p-3 rounded-lg border border-gray-200 text-xs text-gray-500 w-48 shadow-sm">
+                    <p class="font-bold mb-1 border-b pb-1">Panduan Bentuk:</p>
+                    <p>• <b>Oval:</b> Mulai / Selesai</p>
+                    <p>• <b>Jajar Genjang:</b> Input / Output</p>
+                    <p>• <b>Persegi Panjang:</b> Proses</p>
+                    <p>• <b>Belah Ketupat:</b> Keputusan (Ya/Tidak)</p>
+                </div>
+
+                <div class="flex flex-col w-full relative z-10 mt-10">
+                    <!-- Slot 1: Mulai (Oval) -->
+                    <div class="flex items-center absolute -left-8 top-2 text-xs font-bold text-gray-400">1</div>
+                    <div class="fc-node fc-oval" id="slot-0" onclick="placeToSlot(0)" data-shape="mulai">Kosong</div>
+                    <div class="arrow-down"></div>
+                    
+                    <!-- Slot 2: Input (Jajar Genjang) -->
+                    <div class="flex items-center absolute -left-8 top-[100px] text-xs font-bold text-gray-400">2</div>
+                    <div class="fc-node fc-jajar" id="slot-1" onclick="placeToSlot(1)" data-shape="input"><span>Kosong</span></div>
+                    <div class="arrow-down"></div>
+                    
+                    <!-- Slot 3: Proses (Persegi) -->
+                    <div class="flex items-center absolute -left-8 top-[180px] text-xs font-bold text-gray-400">3</div>
+                    <div class="fc-node fc-persegi" id="slot-2" onclick="placeToSlot(2)" data-shape="proses">Kosong</div>
+                    <div class="arrow-down"></div>
+                    
+                    <!-- Slot 4: Keputusan (Belah Ketupat) -->
+                    <div class="flex items-center absolute -left-8 top-[270px] text-xs font-bold text-gray-400">4</div>
+                    <div class="relative">
+                        <div class="fc-node fc-ketupat" id="slot-3" onclick="placeToSlot(3)" data-shape="keputusan"><span>Kosong</span></div>
+                        
+                        <!-- Visual Loop Arrow Placeholder -->
+                        <div class="arrow-loop hidden md:flex" id="loop-line"><span class="arrow-loop-text">TIDAK</span></div>
+                    </div>
+                    
+                    <!-- Arah Keputusan -->
+                    <div class="w-full flex justify-center relative -mt-2">
+                        <div class="text-xs font-bold text-green-600 bg-white px-1 relative z-20">YA</div>
+                    </div>
+                    
+                    <div class="arrow-down" style="margin-top: -10px; height: 35px;"></div>
+                    
+                    <!-- Slot 5: Output (Jajar Genjang) -->
+                    <div class="flex items-center absolute -left-8 top-[410px] text-xs font-bold text-gray-400">5</div>
+                    <div class="fc-node fc-jajar" id="slot-4" onclick="placeToSlot(4)" data-shape="output"><span>Kosong</span></div>
+                    <div class="arrow-down"></div>
+                    
+                    <!-- Slot 6: Selesai (Oval) -->
+                    <div class="flex items-center absolute -left-8 top-[490px] text-xs font-bold text-gray-400">6</div>
+                    <div class="fc-node fc-oval" id="slot-5" onclick="placeToSlot(5)" data-shape="selesai">Kosong</div>
+                </div>
+
+                <!-- Program Penentuan Arah Loop -->
+                <div class="mt-12 bg-red-50 border-2 border-dashed border-red-300 p-4 rounded-xl relative">
+                    <span class="absolute -top-3 left-4 bg-red-100 text-red-600 font-bold px-2 text-xs rounded">Program Arah Keputusan</span>
+                    <p class="text-sm font-bold text-gray-700 mb-2">Jika jawaban keputusan adalah "TIDAK", panah harus berulang kembali (Loop) ke langkah mana?</p>
+                    <select id="loop-select" class="w-full p-3 rounded border border-gray-300 font-bold text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-red-400" onchange="drawLoop()">
+                        <option value="0">-- Pilih Target Kembali --</option>
+                        <option value="1">Kembali ke Langkah 1 (Mulai)</option>
+                        <option value="2">Kembali ke Langkah 2 (Input)</option>
+                        <option value="3">Kembali ke Langkah 3 (Proses)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const levelsData = [{"id": 1, "title": "Soal 1: Memasak Telur Ceplok", "texts": ["Selesai", "Apakah telur sudah matang?", "Nyalakan kompor dan goreng telur", "Siapkan wajan dan pecahkan telur", "Mulai", "Telur ceplok siap dihidangkan"], "ans": ["Mulai", "Siapkan wajan dan pecahkan telur", "Nyalakan kompor dan goreng telur", "Apakah telur sudah matang?", "Telur ceplok siap dihidangkan", "Selesai"], "loop_target": "3"}, {"id": 2, "title": "Soal 2: Mengambil Uang Tunai di ATM", "texts": ["Mulai", "Mesin memproses dan menghitung uang", "Ambil uang kertas dari celah mesin", "Masukkan kartu ATM dan ketik PIN", "Apakah saldo tabungan mencukupi?", "Selesai"], "ans": ["Mulai", "Masukkan kartu ATM dan ketik PIN", "Mesin memproses dan menghitung uang", "Apakah saldo tabungan mencukupi?", "Ambil uang kertas dari celah mesin", "Selesai"], "loop_target": "2"}, {"id": 3, "title": "Soal 3: Membeli Minuman Vending Machine", "texts": ["Ambil kaleng minuman dari lubang bawah", "Selesai", "Mesin menjatuhkan minuman yang dipilih", "Mulai", "Masukkan uang kertas ke dalam mesin", "Apakah jumlah uang sesuai dengan harga?"], "ans": ["Mulai", "Masukkan uang kertas ke dalam mesin", "Mesin menjatuhkan minuman yang dipilih", "Apakah jumlah uang sesuai dengan harga?", "Ambil kaleng minuman dari lubang bawah", "Selesai"], "loop_target": "2"}, {"id": 4, "title": "Soal 4: Mengisi Daya Baterai (Charging)", "texts": ["Apakah indikator baterai sudah 100%?", "Mulai", "Selesai", "Sambungkan kabel charger ke ponsel", "Biarkan ponsel diisi daya selama beberapa waktu", "Cabut kabel charger dari ponsel"], "ans": ["Mulai", "Sambungkan kabel charger ke ponsel", "Biarkan ponsel diisi daya selama beberapa waktu", "Apakah indikator baterai sudah 100%?", "Cabut kabel charger dari ponsel", "Selesai"], "loop_target": "3"}, {"id": 5, "title": "Soal 5: Mencuci Pakaian dengan Mesin Cuci", "texts": ["Mulai", "Selesai", "Mesin memutar tabung untuk mencuci", "Angkat pakaian bersih dari dalam tabung", "Masukkan baju kotor dan deterjen", "Apakah waktu pencucian sudah habis?"], "ans": ["Mulai", "Masukkan baju kotor dan deterjen", "Mesin memutar tabung untuk mencuci", "Apakah waktu pencucian sudah habis?", "Angkat pakaian bersih dari dalam tabung", "Selesai"], "loop_target": "3"}, {"id": 6, "title": "Soal 6: Menyeduh Mie Instan Cup", "texts": ["Buka tutup dan nikmati mie instan", "Tutup cup dan diamkan selama 3 menit", "Mulai", "Selesai", "Apakah mie sudah mengembang dan empuk?", "Tuang air panas ke dalam cup mie"], "ans": ["Mulai", "Tuang air panas ke dalam cup mie", "Tutup cup dan diamkan selama 3 menit", "Apakah mie sudah mengembang dan empuk?", "Buka tutup dan nikmati mie instan", "Selesai"], "loop_target": "3"}, {"id": 7, "title": "Soal 7: Menyetrika Pakaian", "texts": ["Simpan pakaian yang sudah rapi ke dalam lemari", "Apakah pakaian sudah licin dan tidak kusut?", "Selesai", "Gosokkan setrika panas ke seluruh permukaan kain", "Mulai", "Letakkan pakaian kusut di atas meja setrika"], "ans": ["Mulai", "Letakkan pakaian kusut di atas meja setrika", "Gosokkan setrika panas ke seluruh permukaan kain", "Apakah pakaian sudah licin dan tidak kusut?", "Simpan pakaian yang sudah rapi ke dalam lemari", "Selesai"], "loop_target": "3"}, {"id": 8, "title": "Soal 8: Meminjam Buku Perpustakaan", "texts": ["Mulai", "Selesai", "Apakah masa berlaku kartu anggota masih aktif?", "Serahkan buku dan kartu anggota ke pustakawan", "Pustakawan memindai barcode buku ke sistem komputer", "Terima buku yang sudah berhasil didata"], "ans": ["Mulai", "Serahkan buku dan kartu anggota ke pustakawan", "Pustakawan memindai barcode buku ke sistem komputer", "Apakah masa berlaku kartu anggota masih aktif?", "Terima buku yang sudah berhasil didata", "Selesai"], "loop_target": "2"}, {"id": 9, "title": "Soal 9: Kasir Minimarket", "texts": ["Mulai", "Selesai", "Kasir memindai (scan) kode batang setiap barang", "Apakah semua barang belanjaan sudah selesai di-scan?", "Serahkan keranjang belanjaan ke meja kasir", "Terima struk pembayaran dan barang"], "ans": ["Mulai", "Serahkan keranjang belanjaan ke meja kasir", "Kasir memindai (scan) kode batang setiap barang", "Apakah semua barang belanjaan sudah selesai di-scan?", "Terima struk pembayaran dan barang", "Selesai"], "loop_target": "3"}];
+        
+        let currentLevel = 0;
+        let selectedBlock = null;
+        let slots = [null, null, null, null, null, null]; // holds text
+        
+        function init() {
+            renderNav();
+            loadLevel(1);
+        }
+        
+        function renderNav() {
+            const nav = document.getElementById('level-nav');
+            nav.innerHTML = '';
+            levelsData.forEach(lvl => {
+                const btn = document.createElement('button');
+                btn.className = `px-3 py-1.5 rounded-md font-bold text-xs whitespace-nowrap transition-colors ${currentLevel === lvl.id ? 'bg-blue-500 text-white shadow' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`;
+                btn.innerText = `Soal ${lvl.id}`;
+                btn.onclick = () => loadLevel(lvl.id);
+                nav.appendChild(btn);
+            });
+        }
+        
+        function loadLevel(id) {
+            currentLevel = id;
+            selectedBlock = null;
+            slots = [null, null, null, null, null, null];
+            document.getElementById('loop-select').value = "0";
+            document.getElementById('status-msg').innerHTML = "Susun urutan dan arah dengan benar!";
+            document.getElementById('status-msg').className = "font-bold text-gray-600 mb-4 text-sm";
+            
+            const lvl = levelsData.find(l => l.id === id);
+            document.getElementById('lvl-title').innerText = lvl.title;
+            
+            // Render Text Pool
+            const pool = document.getElementById('text-pool');
+            pool.innerHTML = '';
+            // Shuffle text purely for display
+            let shuffled = [...lvl.texts].sort(() => Math.random() - 0.5);
+            shuffled.forEach((txt, idx) => {
+                const d = document.createElement('div');
+                d.className = 'text-block bg-white border-2 border-gray-300 p-3 rounded-lg shadow-sm text-sm font-semibold text-gray-700 hover:border-blue-400';
+                d.innerText = txt;
+                d.id = 'txt-' + idx;
+                d.onclick = () => selectText(d, txt);
+                pool.appendChild(d);
+            });
+            
+            // Clear Slots
+            for(let i=0; i<6; i++) {
+                updateSlotVisual(i, "Kosong", false);
+            }
+            
+            drawLoop();
+            renderNav();
+        }
+        
+        function selectText(el, txt) {
+            document.querySelectorAll('.text-block').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedBlock = { el: el, text: txt };
+        }
+        
+        function placeToSlot(slotIndex) {
+            if(!selectedBlock) return;
+            
+            // If slot already has text, put it back to pool visually
+            if(slots[slotIndex]) {
+                const existingText = slots[slotIndex];
+                document.querySelectorAll('.text-block').forEach(b => {
+                    if(b.innerText === existingText) b.style.display = 'block';
+                });
+            }
+            
+            slots[slotIndex] = selectedBlock.text;
+            updateSlotVisual(slotIndex, selectedBlock.text, true);
+            selectedBlock.el.style.display = 'none';
+            selectedBlock.el.classList.remove('selected');
+            selectedBlock = null;
+        }
+        
+        function updateSlotVisual(idx, text, filled) {
+            const el = document.getElementById('slot-'+idx);
+            let target = el;
+            if(el.classList.contains('fc-jajar') || el.classList.contains('fc-ketupat')) {
+                target = el.querySelector('span');
+            }
+            target.innerText = text;
+            
+            if(filled) el.classList.add('filled');
+            else el.classList.remove('filled');
+        }
+        
+        function drawLoop() {
+            const val = document.getElementById('loop-select').value;
+            const line = document.getElementById('loop-line');
+            if(val === "0") {
+                line.style.display = 'none';
+            } else {
+                line.style.display = 'flex';
+                // Adjust height dynamically based on target
+                // slot 4 (index 3) is decision. 
+                // Target 1 (index 0) => top of slot 4 to top of slot 1 -> dist ~250px
+                // Target 2 (index 1) => dist ~170px
+                // Target 3 (index 2) => dist ~90px
+                let h = 90;
+                if(val === "2") h = 170;
+                if(val === "1") h = 260;
+                line.style.height = h + 'px';
+            }
+        }
+        
+        function checkAnswer() {
+            const lvl = levelsData.find(l => l.id === currentLevel);
+            const msgEl = document.getElementById('status-msg');
+            
+            // Check slots empty
+            if(slots.includes(null)) {
+                msgEl.innerText = "Gagal: Masih ada bentuk flowchart yang kosong!";
+                msgEl.className = "font-bold text-red-600 mb-4 text-sm";
+                return;
+            }
+            
+            // Check texts order
+            let textsCorrect = true;
+            for(let i=0; i<6; i++) {
+                if(slots[i] !== lvl.ans[i]) {
+                    textsCorrect = false;
+                    break;
+                }
+            }
+            
+            // Check loop direction
+            const loopVal = document.getElementById('loop-select').value;
+            let loopCorrect = (loopVal === lvl.loop_target);
+            // Some tolerance: if they select input instead of process, let's strictly demand the logical one.
+            
+            if(textsCorrect && loopCorrect) {
+                msgEl.innerHTML = "🎉 <b>SEMPURNA!</b><br>Teks berada di bentuk yang tepat, urutan logis, dan arah perulangan (loop) akurat.";
+                msgEl.className = "font-bold text-green-600 mb-4 text-sm";
+            } else if (!textsCorrect) {
+                msgEl.innerHTML = "❌ <b>Susunan Salah!</b><br>Periksa kembali fungsi tiap bentuk dan urutan logikanya.";
+                msgEl.className = "font-bold text-red-600 mb-4 text-sm";
+            } else {
+                msgEl.innerHTML = "❌ <b>Arah Loop Salah!</b><br>Jika kondisi Tidak terpenuhi, harus kembali ke proses yang logis agar tidak error.";
+                msgEl.className = "font-bold text-red-600 mb-4 text-sm";
+            }
+        }
+        
+        // Start
+        window.onload = init;
+    </script>
+</body>
+</html>

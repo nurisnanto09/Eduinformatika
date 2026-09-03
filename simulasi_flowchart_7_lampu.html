@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelompok 7 - Flowchart Puzzle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .fc-node { display: flex; align-items: center; justify-content: center; background: white; border: 2px solid #3b82f6; font-weight: bold; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); cursor: pointer; user-select: none; transition: 0.2s;}
+        .fc-node:active { transform: scale(0.95); }
+        .fc-oval { border-radius: 999px; }
+        .fc-jajar { border-radius: 0; transform: skew(-15deg); }
+        .fc-jajar span { transform: skew(15deg); display: block; }
+        .fc-persegi { border-radius: 8px; }
+        .fc-ketupat { border-radius: 0; transform: rotate(45deg); width: 80px; height: 80px; margin: 10px auto; }
+        .fc-ketupat span { transform: rotate(-45deg); display: block; width: 100px; margin-left: -10px; font-size: 0.8rem; }
+        
+        .fc-arrow-down { width: 2px; height: 30px; background: #94a3b8; margin: 0 auto; position: relative; }
+        .fc-arrow-down::after { content: ''; position: absolute; bottom: 0; left: -4px; border-width: 5px 5px 0; border-style: solid; border-color: #94a3b8 transparent transparent transparent; }
+        
+        .dropzone { border: 2px dashed #94a3b8; background: #f1f5f9; min-height: 60px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .correct { border-color: #22c55e !important; background: #dcfce7 !important; }
+        .wrong { border-color: #ef4444 !important; background: #fee2e2 !important; }
+        .selected { border-color: #f59e0b !important; box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.3) !important; }
+    </style>
+</head>
+<body class="bg-gray-50 h-screen flex flex-col font-sans overflow-hidden">
+
+    <div class="bg-gray-900 text-white p-4 shadow-md flex-shrink-0 z-20 relative">
+        <h1 class="text-xl font-black text-blue-400"><i class="fas fa-users mr-2"></i> Tugas Kelompok 7</h1>
+    </div>
+
+    <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+        <div class="flex-1 p-6 overflow-y-auto bg-gray-100 relative">
+            
+            <div class="flex items-start justify-center gap-10 bg-white p-6 rounded-2xl shadow-sm border border-gray-200 mt-6">
+                <div class="flex flex-col items-center relative">
+                    <div class="fc-node fc-ketupat bg-yellow-50 text-[10px]"><span>Ada Ambulans?</span></div>
+                    
+                    <button onclick="insertAt(1)" class="my-1 bg-gray-200 hover:bg-blue-200 rounded-full w-8 h-8 flex items-center justify-center text-gray-500 transition-colors z-10 btn-ins">+</button>
+                    <div class="fc-arrow-down absolute top-16 -z-10 h-10"></div>
+                    
+                    <div class="fc-node fc-persegi w-32 h-12 text-xs">Ubah Semua Jadi Merah</div>
+                    
+                    <button onclick="insertAt(2)" class="my-1 bg-gray-200 hover:bg-blue-200 rounded-full w-8 h-8 flex items-center justify-center text-gray-500 transition-colors z-10 btn-ins">+</button>
+                    <div class="fc-arrow-down absolute top-36 -z-10 h-10"></div>
+                    
+                    <div class="fc-node fc-persegi w-32 h-12 text-xs bg-green-50">Lampu Hijau Darurat</div>
+                    
+                    <button onclick="insertAt(3)" class="my-1 bg-gray-200 hover:bg-blue-200 rounded-full w-8 h-8 flex items-center justify-center text-gray-500 transition-colors z-10 btn-ins">+</button>
+                    <div class="fc-arrow-down absolute top-56 -z-10 h-10"></div>
+                    
+                    <div class="fc-node fc-oval w-32 h-12 text-xs">Selesai</div>
+                </div>
+                <div class="bg-red-50 p-4 border border-red-200 rounded-xl max-w-[150px] text-center">
+                    <p class="text-xs font-bold text-red-600 mb-2">BLOK PRIORITAS</p>
+                    <div class="fc-node fc-jajar bg-white text-[10px]"><span>Nyalakan Sirine</span></div>
+                </div>
+            </div>
+        
+        </div>
+        
+        <div class="w-full md:w-1/3 p-6 bg-white border-l border-gray-200 flex flex-col shadow-[-10px_0_15px_-5px_rgba(0,0,0,0.05)] z-10">
+            <h2 class="text-2xl font-black text-gray-800 mb-2">7. Lampu Lalu Lintas Darurat</h2>
+            <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 mb-6 shadow-inner">
+                <p class="text-gray-700 text-sm font-medium leading-relaxed"><b>Puzzle Prioritas</b><br>Jika ada ambulans, sirine peringatan harus diprioritaskan sebelum lampu diubah merah. Pilih celah (+) untuk menyisipkan blok darurat.</p>
+            </div>
+            
+            <div class="mb-6 flex-1"></div>
+            
+            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-center">
+                <p id="status-text" class="font-bold text-gray-600 mb-4">Siap untuk mulai?</p>
+                <button onclick="checkAnswer()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-xl shadow-lg transition-transform active:scale-95 text-lg uppercase tracking-wider"><i class="fas fa-check-circle mr-2"></i> Cek Jawaban</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables for generic logic
+        let selectedItem = null;
+        let swapItem = null;
+        window.hackerArrows = [];
+        window.insId = 0;
+        window.para = '';
+
+        function selectItem(el) {
+            if(selectedItem) selectedItem.classList.remove('selected');
+            selectedItem = el;
+            el.classList.add('selected');
+        }
+        
+        function place(zone) {
+            if(!selectedItem) return;
+            if(zone.children.length > 0) {
+                document.getElementById('pool').appendChild(zone.children[0]);
+            }
+            selectedItem.classList.remove('selected');
+            zone.appendChild(selectedItem);
+            selectedItem = null;
+        }
+
+        function checkSlots(zoneIds, checkInner=false) {
+            let correct = 0;
+            zoneIds.forEach(id => {
+                const zone = document.getElementById(id);
+                if(!zone) return;
+                zone.classList.remove('correct', 'wrong');
+                if(zone.children.length > 0) {
+                    const child = zone.children[0];
+                    const ans = zone.getAttribute('data-ans');
+                    if(child.id === ans) {
+                        zone.classList.add('correct');
+                        correct++;
+                    } else {
+                        zone.classList.add('wrong');
+                    }
+                }
+            });
+            return correct === zoneIds.length ? "Luar Biasa! Semua simbol berada di posisi yang logis dan tepat." : "Masih ada yang keliru (merah). Perhatikan bentuk dan alurnya.";
+        }
+
+        function addArrow() {
+            const f = document.getElementById('a-from').value;
+            const t = document.getElementById('a-to').value;
+            const str = f + "->" + t;
+            if(!window.hackerArrows.includes(str)) {
+                window.hackerArrows.push(str);
+                const li = document.createElement('li');
+                li.innerText = "Panah: Node " + f + " menuju Node " + t;
+                document.getElementById('arrow-list').appendChild(li);
+            }
+        }
+
+        function swapSelect(el) {
+            if(!swapItem) {
+                swapItem = el;
+                el.classList.add('selected');
+            } else {
+                const txt1 = swapItem.innerText;
+                swapItem.innerText = el.innerText;
+                el.innerText = txt1;
+                swapItem.classList.remove('selected');
+                swapItem = null;
+            }
+        }
+
+        function insertAt(id) {
+            document.querySelectorAll('.btn-ins').forEach(btn => btn.classList.remove('bg-blue-500', 'text-white'));
+            event.target.classList.add('bg-blue-500', 'text-white');
+            window.insId = id;
+        }
+
+        function selBtn(el) {
+            document.querySelectorAll('.btn-para').forEach(b => b.classList.remove('border-green-500'));
+            el.classList.add('border-green-500');
+        }
+
+        function checkAnswer() {
+            
+            let res = "Silakan klik tombol (+) untuk menyisipkan blok sirine.";
+            if(window.insId === 1) res = "Sangat Tepat! Sirine peringatan harus menyala SEBELUM lampu diubah jadi merah.";
+            if(window.insId > 1) res = "Terlalu lambat! Sirine harus berbunyi paling awal.";
+            document.getElementById('status-text').innerHTML = res;
+        
+        }
+    </script>
+</body>
+</html>

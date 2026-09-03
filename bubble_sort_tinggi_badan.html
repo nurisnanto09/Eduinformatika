@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edukasi Bubble Sort: Tinggi Badan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .person-part {
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-blue-50 min-h-screen p-4 md:p-8 font-sans">
+    
+    <div class="w-full px-2 sm:px-4 xl:px-8 max-w-[1600px] mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-black text-blue-900 mb-2">Edukasi Bubble Sort</h1>
+            <p class="text-lg text-blue-700 font-medium">Belajar Algoritma Melalui Simulasi Barisan Orang (Langkah demi Langkah)</p>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <div class="flex flex-wrap justify-center gap-2 sm:gap-4 mb-8">
+            <button onclick="openTab('simulasi')" id="tab-simulasi" class="px-6 py-3 rounded-full font-bold transition-all bg-blue-600 text-white shadow-md scale-105">🎮 Simulasi</button>
+            <button onclick="openTab('materi')" id="tab-materi" class="px-6 py-3 rounded-full font-bold transition-all bg-white text-gray-600 hover:bg-gray-100 border border-gray-200">📖 Materi</button>
+            <button onclick="openTab('latihan')" id="tab-latihan" class="px-6 py-3 rounded-full font-bold transition-all bg-white text-gray-600 hover:bg-gray-100 border border-gray-200">🧠 Latihan</button>
+        </div>
+
+        <!-- Tab Contents -->
+        <div id="content-simulasi" class="tab-content block">
+        <!-- Main Content -->
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col lg:flex-row border border-blue-100">
+            
+            <!-- Left: Visualization Area -->
+            <div class="lg:w-2/3 p-6 md:p-10 border-b lg:border-b-0 lg:border-r border-gray-200 bg-gradient-to-b from-white to-sky-50 relative">
+                
+                <!-- Floor -->
+                <div class="absolute bottom-0 left-0 right-0 h-12 bg-gray-200 border-t-4 border-gray-300"></div>
+
+                <!-- People Container -->
+                <div id="container" class="h-80 w-full flex items-end justify-center gap-2 sm:gap-6 relative z-10 pb-2">
+                    <!-- People will be generated here -->
+                </div>
+
+                <!-- Legend -->
+                <div class="relative mb-6 mx-auto sm:mx-0 w-max bg-white/80 p-3 rounded-lg text-sm text-gray-600 shadow-sm border border-gray-100">
+                    <div class="flex items-center gap-2 mb-1"><div class="w-3 h-3 bg-sky-400 rounded-full"></div> Belum dicek</div>
+                    <div class="flex items-center gap-2 mb-1"><div class="w-3 h-3 bg-yellow-400 rounded-full"></div> Sedang dibandingkan</div>
+                    <div class="flex items-center gap-2"><div class="w-3 h-3 bg-green-400 rounded-full"></div> Sudah di posisi benar</div>
+                </div>
+            </div>
+
+            <!-- Right: Control & Explanations -->
+            <div class="lg:w-1/3 p-6 md:p-10 bg-white flex flex-col">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xl">ℹ️</div>
+                    <h2 class="text-2xl font-bold text-gray-800">Status Proses</h2>
+                </div>
+                
+                <!-- Explanation Box -->
+                <!-- FIXED HEIGHT to prevent buttons jumping -->
+                <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100 shadow-inner flex-grow mb-8 relative min-h-[12rem] flex flex-col justify-center flex flex-col justify-center">
+                    <!-- Decorative quote mark -->
+                    <div class="absolute top-2 left-2 text-4xl text-blue-200 font-serif leading-none">"</div>
+                    <p id="status-text" class="text-gray-700 text-lg leading-relaxed relative z-10">
+                        Selamat datang! Klik tombol <b>Mulai</b> di bawah. Kita akan belajar mengurutkan barisan orang ini dari yang terpendek hingga yang tertinggi menggunakan metode Bubble Sort.
+                    </p>
+                </div>
+
+                <!-- Controls -->
+                <div class="flex flex-col gap-4 mt-auto">
+                    <button id="btn-next" onclick="nextStep()" class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-600/30 transition-transform active:scale-95 text-lg flex justify-center items-center gap-2">
+                        <span>Mulai Langkah Pertama</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                    
+                    <button id="btn-reset" onclick="resetGame()" class="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-colors border border-gray-200">
+                        Acak Ulang Data
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        
+        </div>
+
+        <div id="content-materi" class="tab-content hidden">
+        <!-- Concept Explanation -->
+        <div class="mt-8 bg-white p-6 rounded-2xl shadow-md border border-gray-200">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">💡 Konsep Dasar: Apa itu Bubble Sort?</h3>
+            <p class="text-gray-700 text-lg leading-relaxed"><b>Bubble Sort</b> adalah cara mengurutkan data yang paling intuitif. Bayangkan gelembung udara yang naik ke permukaan air. Algoritma ini hanya membandingkan dua orang yang saling bersebelahan. Jika orang di sebelah kiri ternyata lebih tinggi dari orang di kanannya, mereka harus bertukar tempat! Proses perbandingan dua orang bersebelahan ini dilakukan terus-menerus menyapu dari ujung kiri ke ujung kanan. Hasilnya? Orang yang paling tinggi akan selalu "menggelembung" dan bergerak hingga mentok ke ujung paling kanan barisan. Proses penyapuan ini kita ulangi dari awal hingga akhirnya seluruh barisan berdiri rapi sempurna dari yang terpendek ke yang tertinggi.</p>
+        </div>
+        
+        </div>
+
+        
+        <div id="content-latihan" class="tab-content hidden">
+            <div class="mt-8 bg-sky-50 p-8 rounded-2xl shadow-md border border-sky-200">
+                <h3 class="text-2xl font-bold text-sky-900 mb-6">🧠 Uji Pemahaman (5 Soal)</h3>
+                
+                <div class="space-y-6">
+                    <!-- Q1 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">1. Apa ciri khas utama algoritma Bubble Sort?</p>
+                        <select id="q1-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-sky-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">Membelah data menjadi dua bagian</option>
+                            <option value="B">Membandingkan dua elemen yang bersebelahan</option>
+                        </select>
+                        <p id="q1-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">2. Diberikan data [4, 1, 3], apa urutan setelah TEPAT SATU langkah (satu kali perbandingan awal)?</p>
+                        <select id="q2-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-sky-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">[1, 4, 3]</option>
+                            <option value="B">[1, 3, 4]</option>
+                        </select>
+                        <p id="q2-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">3. Elemen apa yang PASTI berada di posisi benar pada akhir putaran pertama?</p>
+                        <select id="q3-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-sky-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">Elemen Terkecil</option>
+                            <option value="B">Elemen Terbesar</option>
+                        </select>
+                        <p id="q3-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">4. Jika data awal adalah [1, 2, 3], berapa kali proses PENUKARAN (Swap) akan terjadi?</p>
+                        <select id="q4-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-sky-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">0 Kali</option>
+                            <option value="B">3 Kali</option>
+                        </select>
+                        <p id="q4-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">5. Bubble Sort paling COCOK digunakan untuk?</p>
+                        <select id="q5-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-sky-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">Mengurutkan jutaan data di database besar</option>
+                            <option value="B">Pelajaran dasar dan data berjumlah kecil</option>
+                        </select>
+                        <p id="q5-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+                </div>
+                
+                <button onclick="checkAllQuiz()" class="mt-6 w-full bg-sky-600 hover:bg-sky-700 text-white font-bold px-6 py-4 rounded-xl transition-colors shadow-lg active:scale-95 text-lg">Cek Semua Jawaban</button>
+            </div>
+            
+            <script>
+                function checkAllQuiz() {
+                    const answers = ['B', 'A', 'B', 'A', 'B'];
+                    let score = 0;
+                    for(let i=1; i<=5; i++) {
+                        const ans = document.getElementById('q'+i+'-ans').value;
+                        const feedback = document.getElementById('q'+i+'-feedback');
+                        feedback.classList.remove('hidden', 'text-green-600', 'text-red-600', 'text-amber-600');
+                        
+                        if(ans === '') {
+                            feedback.innerHTML = "⚠️ Belum dijawab!";
+                            feedback.classList.add('text-amber-600');
+                        } else if (ans === answers[i-1]) {
+                            feedback.innerHTML = "✅ Benar!";
+                            feedback.classList.add('text-green-600');
+                            score++;
+                        } else {
+                            feedback.innerHTML = "❌ Salah, coba lagi.";
+                            feedback.classList.add('text-red-600');
+                        }
+                    }
+                    if(score === 5) alert("Luar biasa! Semua jawaban benar! 🎉");
+                }
+            </script>
+        </div>
+</div>
+        </div>
+    </div>
+
+    <script>
+        function openTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
+            document.querySelectorAll('button[id^="tab-"]').forEach(btn => {
+                btn.className = 'px-6 py-3 rounded-full font-bold transition-all bg-white text-gray-600 hover:bg-gray-100 border border-gray-200';
+            });
+            
+            document.getElementById('content-' + tabName).classList.remove('hidden');
+            document.getElementById('content-' + tabName).classList.add('block');
+            
+            let colorClass = 'bg-blue-600';
+            if(tabName === 'materi') colorClass = 'bg-amber-500';
+            if(tabName === 'latihan') colorClass = 'bg-green-600';
+            
+            const activeBtn = document.getElementById('tab-' + tabName);
+            activeBtn.className = `px-6 py-3 rounded-full font-bold transition-all text-white shadow-md scale-105 ${colorClass}`;
+        }
+    </script>
+    <script>
+        const container = document.getElementById('container');
+        const btnNext = document.getElementById('btn-next');
+        const statusText = document.getElementById('status-text');
+
+        let array = [];
+        let wrappers = [];
+        let sortedArr = [];
+        let step_i = 0;
+        let step_j = 0;
+        let step_state = 'init'; 
+
+        function generatePeople(count = 6) {
+            container.innerHTML = '';
+            array = [];
+            wrappers = [];
+            
+            for(let i = 0; i < count; i++) {
+                const height = Math.floor(Math.random() * 61) + 130; // 130cm to 190cm
+                array.push(height);
+                
+                const wrapper = document.createElement('div');
+                wrapper.className = 'flex flex-col items-center justify-end px-1 sm:px-2 z-10';
+                
+                const label = document.createElement('span');
+                label.className = 'font-black mb-2 text-gray-700 bg-white/80 px-2 py-0.5 rounded-md text-sm sm:text-base person-part shadow-sm border border-gray-100';
+                label.textContent = height + 'cm';
+                
+                const head = document.createElement('div');
+                head.className = 'w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-sky-400 border-4 border-sky-600 mb-1 z-20 person-part shadow-md';
+                
+                const body = document.createElement('div');
+                body.className = 'w-12 sm:w-16 rounded-t-xl bg-sky-400 border-4 border-b-0 border-sky-600 person-part shadow-md';
+                body.style.height = `${(height - 100) * 1.8}px`; // Visual height scaling
+                
+                wrapper.appendChild(label);
+                wrapper.appendChild(head);
+                wrapper.appendChild(body);
+                
+                container.appendChild(wrapper);
+                wrappers.push(wrapper);
+            }
+        }
+
+        function updateStyles(compareIndices = [], sortedIndices = []) {
+            wrappers.forEach((w, idx) => {
+                const label = w.children[0];
+                const head = w.children[1];
+                const body = w.children[2];
+                
+                // Base reset
+                head.className = 'w-10 h-10 sm:w-12 sm:h-12 rounded-full border-4 mb-1 z-20 person-part shadow-md';
+                body.className = 'w-12 sm:w-16 rounded-t-xl border-4 border-b-0 person-part shadow-md';
+                label.classList.remove('text-green-700', 'text-yellow-700', 'text-gray-700');
+                label.classList.remove('scale-110');
+                
+                if (sortedIndices.includes(idx)) {
+                    head.classList.add('bg-green-400', 'border-green-600');
+                    body.classList.add('bg-green-400', 'border-green-600');
+                    label.classList.add('text-green-700');
+                } else if (compareIndices.includes(idx)) {
+                    head.classList.add('bg-yellow-400', 'border-yellow-600', 'scale-110');
+                    body.classList.add('bg-yellow-400', 'border-yellow-600', 'scale-110', 'transform-origin-bottom');
+                    label.classList.add('text-yellow-700', 'scale-110');
+                    w.style.zIndex = '30';
+                } else {
+                    head.classList.add('bg-sky-400', 'border-sky-600');
+                    body.classList.add('bg-sky-400', 'border-sky-600');
+                    label.classList.add('text-gray-700');
+                    w.style.zIndex = '10';
+                }
+                
+                body.style.transformOrigin = 'bottom';
+            });
+        }
+
+        async function swapAnimation(i, j) {
+            const rectsMap = new Map();
+            wrappers.forEach(w => rectsMap.set(w, w.getBoundingClientRect()));
+
+            // Logic swap
+            [array[i], array[j]] = [array[j], array[i]];
+            [wrappers[i], wrappers[j]] = [wrappers[j], wrappers[i]];
+
+            // DOM swap
+            wrappers.forEach(w => container.appendChild(w));
+
+            // FLIP Invert
+            wrappers.forEach(w => {
+                const oldRect = rectsMap.get(w);
+                const newRect = w.getBoundingClientRect();
+                const deltaX = oldRect.left - newRect.left;
+                
+                if (deltaX !== 0) {
+                    w.style.transition = 'none';
+                    w.style.transform = `translateX(${deltaX}px)`;
+                }
+            });
+
+            container.offsetHeight; // Reflow
+
+            const speed = 600;
+            wrappers.forEach(w => {
+                if (w.style.transform) {
+                    w.style.transition = `transform ${speed}ms ease-in-out`;
+                    w.style.transform = '';
+                }
+            });
+
+            await new Promise(r => setTimeout(r, speed));
+            wrappers.forEach(w => w.style.transition = '');
+        }
+
+        function resetGame() {
+            generatePeople(6);
+            step_i = 0;
+            step_j = 0;
+            sortedArr = [];
+            step_state = 'init';
+            
+            statusText.innerHTML = "Selamat datang! Klik <b>Mulai Langkah Pertama</b>. Kita akan membelah halaman kamus ini langsung ke bagian tengahnya untuk mencari kata target secara instan!";
+            btnNext.innerHTML = `<span>Mulai Langkah Pertama</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
+            btnNext.disabled = false;
+            btnNext.classList.remove('opacity-50', 'cursor-not-allowed');
+            
+            updateStyles();
+        }
+
+        function nextStep() {
+            const n = array.length;
+            
+            if (step_state === 'init') {
+                step_state = 'compare';
+                btnNext.innerHTML = `<span>Langkah Selanjutnya</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
+            }
+            
+            if (step_state === 'compare') {
+                updateStyles([step_j, step_j + 1], sortedArr);
+                statusText.innerHTML = `Kita melihat posisi yang bersebelahan: <b>Orang ke-${step_j + 1} (${array[step_j]}cm)</b> dan <b>Orang ke-${step_j + 2} (${array[step_j+1]}cm)</b>.<br><br>Apakah <b>${array[step_j]}cm</b> lebih tinggi dari <b>${array[step_j+1]}cm</b>?`;
+                step_state = 'check_swap';
+                return;
+            }
+            
+            if (step_state === 'check_swap') {
+                if (array[step_j] > array[step_j + 1]) {
+                    statusText.innerHTML = `<b>Ya, betul!</b> ${array[step_j]}cm ternyata lebih tinggi dari ${array[step_j+1]}cm.<br><br>Karena yang tinggi harus di kanan, kita harus <b>MENUKAR</b> tempat mereka berdua!`;
+                    step_state = 'do_swap';
+                    btnNext.innerHTML = `<span>Lakukan Penukaran</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>`;
+                } else {
+                    statusText.innerHTML = `<b>Tidak.</b> ${array[step_j]}cm tidak lebih tinggi dari ${array[step_j+1]}cm.<br><br>Urutan mereka berdua sudah sesuai. Kita biarkan saja dan melangkah ke pasangan berikutnya.`;
+                    step_state = 'next_pair';
+                }
+                return;
+            }
+            
+            if (step_state === 'do_swap') {
+                btnNext.disabled = true;
+                btnNext.classList.add('opacity-50', 'cursor-not-allowed');
+                btnNext.innerHTML = `<span>Menukar...</span>`;
+                statusText.innerHTML = `<span class="text-yellow-600 font-bold">Proses penukaran fisik sedang berlangsung...</span>`;
+                
+                swapAnimation(step_j, step_j + 1).then(() => {
+                    btnNext.disabled = false;
+                    btnNext.classList.remove('opacity-50', 'cursor-not-allowed');
+                    btnNext.innerHTML = `<span>Langkah Selanjutnya</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
+                    statusText.innerHTML = `Posisi mereka berhasil ditukar dengan mulus!`;
+                    step_state = 'next_pair';
+                });
+                return;
+            }
+            
+            if (step_state === 'next_pair') {
+                step_j++;
+                if (step_j >= n - step_i - 1) {
+                    const tallestVal = array[n - step_i - 1];
+                    sortedArr.push(n - step_i - 1);
+                    
+                    statusText.innerHTML = `<b>Satu putaran sukses diselesaikan!</b><br><br>Perhatikan bahwa orang tertinggi (<b>${tallestVal}cm</b>) berhasil kita dorong (menggelembung) hingga mentok ke posisi paling kanannya yang permanen.`;
+                    
+                    step_i++;
+                    step_j = 0;
+                    
+                    if (step_i >= n - 1) {
+                        sortedArr.push(0);
+                        step_state = 'done';
+                    } else {
+                        step_state = 'compare';
+                    }
+                } else {
+                    statusText.innerHTML = `Mari bergeser ke kanan, kita cek pasangan orang yang selanjutnya.`;
+                    step_state = 'compare';
+                }
+                updateStyles([], sortedArr);
+                return;
+            }
+            
+            if (step_state === 'done') {
+                updateStyles([], sortedArr);
+                statusText.innerHTML = `🎉 <b>Selamat! Anda telah memahami Bubble Sort!</b><br><br>Seluruh barisan kini telah berdiri tegak berurutan dari yang paling pendek hingga yang paling tinggi tanpa ada cacat urutan.`;
+                btnNext.innerHTML = `<span>Selesai</span>`;
+                btnNext.disabled = true;
+                btnNext.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        resetGame();
+    </script>
+</body>
+</html>

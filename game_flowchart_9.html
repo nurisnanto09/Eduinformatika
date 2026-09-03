@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelompok 9 - Flowchart Puzzle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8fafc; overflow: hidden; } 
+        
+        .clickable { cursor: pointer; transition: 0.2s; user-select: none; }
+        .clickable:active { transform: scale(0.95); }
+        .selected-text { border-color: #3b82f6 !important; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3) !important; background: #eff6ff !important; }
+        .selected-shape { border-color: #f59e0b !important; box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.3) !important; background: #fffbeb !important; }
+        
+        .shape-oval { border-radius: 999px; }
+        .shape-jajar { transform: skew(-15deg); }
+        .shape-persegi { border-radius: 8px; }
+        .shape-ketupat { transform: rotate(45deg); }
+        
+        .board-slot {
+            width: 240px; height: 70px;
+            background: transparent;
+            position: relative;
+            margin: 0 auto;
+            display: flex; justify-content: center; align-items: center;
+        }
+        
+        .slot-placeholder {
+            width: 100%; height: 100%;
+            border: 2px dashed #94a3b8; border-radius: 8px;
+            display: flex; justify-content: center; align-items: center;
+            color: #94a3b8; font-size: 0.85rem; font-weight: bold;
+            position: absolute; z-index: 1;
+        }
+        .board-slot:hover .slot-placeholder { border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); cursor: pointer; }
+        
+        .rendered-shape {
+            position: absolute; z-index: 2; background: white; border: 3px solid #1e293b;
+            display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+        
+        .rs-oval { width: 100%; height: 80%; border-radius: 999px; }
+        .rs-jajar { width: 95%; height: 80%; transform: skew(-15deg); }
+        .rs-persegi { width: 100%; height: 90%; border-radius: 6px; }
+        .rs-ketupat { width: 75px; height: 75px; transform: rotate(45deg); margin-top: 0px;}
+        
+        .rendered-text {
+            position: absolute; z-index: 3; width: 90%; text-align: center;
+            font-size: 0.75rem; font-weight: bold; color: #0f172a; pointer-events: none; line-height: 1.2;
+        }
+        
+        .arrow-down { width: 2px; height: 26px; background: #94a3b8; margin: 0 auto; position: relative; }
+        .arrow-down::after { content: ''; position: absolute; bottom: -2px; left: -5px; border-width: 6px 6px 0; border-style: solid; border-color: #94a3b8 transparent transparent transparent; }
+        
+        #popup-modal { background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
+    </style>
+</head>
+<body class="font-sans text-gray-800 h-screen flex flex-col">
+
+    <header class="bg-gradient-to-r from-gray-900 to-gray-800 text-white shadow-md flex-shrink-0 z-20 h-20 flex items-center relative">
+        <div class="px-8 w-full flex justify-between items-center relative">
+            
+            <!-- Placeholder for symmetry -->
+            <div class="w-32 hidden md:block"></div>
+
+            <!-- Centered Titles -->
+            <div class="flex flex-col items-center absolute left-1/2 transform -translate-x-1/2 w-3/4 text-center pointer-events-none">
+                <h2 class="text-xs font-bold text-blue-400 tracking-widest uppercase mb-0.5"><i class="fas fa-users mr-1"></i> Kelompok 9</h2>
+                <h1 class="text-2xl font-black text-gray-100">Soal 9: Kasir Minimarket</h1>
+            </div>
+
+            <!-- Back button -->
+            <a href="page_flowchart.html" class="text-sm font-bold bg-gray-700 hover:bg-gray-600 px-6 py-2.5 rounded-lg transition ml-auto relative z-10"><i class="fas fa-home mr-2"></i> Kembali</a>
+            
+        </div>
+    </header>
+
+    <main class="flex-1 flex overflow-hidden relative">
+        
+        <!-- KIRI (25%) -->
+        <div class="w-1/4 bg-blue-50 border-r border-blue-200 p-4 flex flex-col shadow-inner z-10 overflow-y-auto min-w-[280px]">
+            <h3 class="font-black text-amber-800 mb-2 text-sm border-b border-amber-200 pb-1 uppercase"><i class="fas fa-shapes mr-1"></i> 1. Pilihan Bentuk</h3>
+            <div class="grid grid-cols-2 gap-3 mb-3">
+                <div class="bg-white border border-amber-200 p-2 rounded text-center clickable hover:border-amber-500" onclick="selectShape(this, 'oval')">
+                    <div class="w-12 h-6 border-2 border-gray-800 shape-oval mx-auto bg-gray-100"></div>
+                    <p class="text-[10px] font-bold mt-2 text-gray-600">Mulai/Selesai</p>
+                </div>
+                <div class="bg-white border border-amber-200 p-2 rounded text-center clickable hover:border-amber-500" onclick="selectShape(this, 'jajar')">
+                    <div class="w-12 h-6 border-2 border-gray-800 shape-jajar mx-auto bg-gray-100"></div>
+                    <p class="text-[10px] font-bold mt-2 text-gray-600">Input/Output</p>
+                </div>
+                <div class="bg-white border border-amber-200 p-2 rounded text-center clickable hover:border-amber-500" onclick="selectShape(this, 'persegi')">
+                    <div class="w-12 h-6 border-2 border-gray-800 shape-persegi mx-auto bg-gray-100"></div>
+                    <p class="text-[10px] font-bold mt-2 text-gray-600">Proses</p>
+                </div>
+                <div class="bg-white border border-amber-200 p-2 rounded text-center clickable hover:border-amber-500 flex flex-col items-center justify-center" onclick="selectShape(this, 'ketupat')">
+                    <div class="w-6 h-6 border-2 border-gray-800 shape-ketupat mx-auto bg-gray-100 mb-1"></div>
+                    <p class="text-[10px] font-bold text-gray-600 leading-none">Keputusan</p>
+                </div>
+            </div>
+
+            <h3 class="font-black text-blue-800 mb-2 text-sm border-b border-blue-200 pb-1 uppercase"><i class="fas fa-font mr-1"></i> 2. Pilihan Teks</h3>
+            <div class="flex flex-col gap-2 pb-4 flex-1" id="text-pool">
+                <div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-0' onclick="selectText(this, 'Serahkan keranjang belanjaan ke meja kasir')">Serahkan keranjang belanjaan ke meja kasir</div>
+<div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-1' onclick="selectText(this, 'Ambil keranjang kosong dari pintu masuk')">Ambil keranjang kosong dari pintu masuk</div>
+<div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-2' onclick="selectText(this, 'Tawar harga barang ke kasir')">Tawar harga barang ke kasir</div>
+<div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-3' onclick="selectText(this, 'Selesai')">Selesai</div>
+<div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-4' onclick="selectText(this, 'Terima struk pembayaran dan barang')">Terima struk pembayaran dan barang</div>
+<div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-5' onclick="selectText(this, 'Mulai')">Mulai</div>
+<div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-6' onclick="selectText(this, 'Kasir memindai (scan) kode batang setiap barang')">Kasir memindai (scan) kode batang setiap barang</div>
+<div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-7' onclick="selectText(this, 'Apakah semua barang belanjaan sudah selesai di-scan?')">Apakah semua barang belanjaan sudah selesai di-scan?</div>
+
+            </div>
+        </div>
+
+        <!-- TENGAH (50% - 1 Column Algorithm Board, slightly large) -->
+        <div class="w-2/4 bg-white py-2 px-4 overflow-y-auto relative flex flex-col items-center border-r border-gray-200">
+            
+            <!-- Timer placed top right -->
+            <div class="absolute top-2 right-4 bg-slate-800 text-white px-3 py-1.5 rounded-lg shadow-sm flex items-center z-20">
+                <i class="fas fa-clock text-amber-400 mr-2 animate-pulse"></i>
+                <div id="timer-display" class="font-mono font-black tracking-widest text-lg">05:00</div>
+            </div>
+            
+            <div class="w-full flex flex-col items-center mt-4" id="board-container">
+                
+                <div class="board-slot" id="slot-0" onclick="placeToZone(0)">
+                    <div class="slot-placeholder"><span id="sl-0" class="transition-all duration-300 font-bold">Langkah 1</span></div>
+                    <div class="rendered-shape hidden" id="rs-0"></div>
+                    <div class="rendered-text" id="rt-0"></div>
+                </div>
+                <div class="arrow-down"></div>
+                
+                <div class="board-slot" id="slot-1" onclick="placeToZone(1)">
+                    <div class="slot-placeholder"><span id="sl-1" class="transition-all duration-300 font-bold">Langkah 2</span></div>
+                    <div class="rendered-shape hidden" id="rs-1"></div>
+                    <div class="rendered-text" id="rt-1"></div>
+                </div>
+                <div class="arrow-down"></div>
+                
+                <div class="board-slot" id="slot-2" onclick="placeToZone(2)">
+                    <div class="slot-placeholder"><span id="sl-2" class="transition-all duration-300 font-bold">Langkah 3</span></div>
+                    <div class="rendered-shape hidden" id="rs-2"></div>
+                    <div class="rendered-text" id="rt-2"></div>
+                </div>
+                <div class="arrow-down"></div>
+
+                <div class="board-slot" id="slot-3" onclick="placeToZone(3)">
+                    <div class="slot-placeholder"><span id="sl-3" class="transition-all duration-300 font-bold">Langkah 4</span></div>
+                    <div class="rendered-shape hidden" id="rs-3"></div>
+                    <div class="rendered-text" id="rt-3"></div>
+                </div>
+                <div class="arrow-down"></div>
+                
+                <div class="board-slot" id="slot-4" onclick="placeToZone(4)">
+                    <div class="slot-placeholder"><span id="sl-4" class="transition-all duration-300 font-bold">Langkah 5</span></div>
+                    <div class="rendered-shape hidden" id="rs-4"></div>
+                    <div class="rendered-text" id="rt-4"></div>
+                </div>
+                <div class="arrow-down"></div>
+                
+                <div class="board-slot" id="slot-5" onclick="placeToZone(5)">
+                    <div class="slot-placeholder"><span id="sl-5" class="transition-all duration-300 font-bold">Langkah 6</span></div>
+                    <div class="rendered-shape hidden" id="rs-5"></div>
+                    <div class="rendered-text" id="rt-5"></div>
+                </div>
+                
+            </div>
+            
+            <!-- Dynamic Elements (YA/TIDAK Labels & Dropdown) -->
+            <div id="dynamic-elements" class="hidden">
+                <div class="absolute top-[calc(50%+37px)] left-1/2 transform -translate-x-1/2 bg-white text-green-600 font-black text-[12px] px-1 z-10" id="label-ya">YA</div>
+                
+                <!-- U-Shaped Dashed Loop (Upwards) -->
+                <div class="absolute left-[calc(50%+37px)] top-1/2 z-0" id="loop-indicator" style="display:none; transform: translateY(-100%); width: 160px;">
+                    <!-- Bottom line (out from Ketupat) -->
+                    <div class="absolute border-b-[3px] border-dashed border-red-500 w-full left-0 bottom-0"></div>
+                    <!-- Up line -->
+                    <div class="absolute border-r-[3px] border-dashed border-red-500 h-full right-0 top-0"></div>
+                    <!-- Top line (into target shape) -->
+                    <div class="absolute border-t-[3px] border-dashed border-red-500 w-[90px] right-0 top-0">
+                        <!-- Arrowhead pointing left -->
+                        <div class="absolute left-[-2px] top-[-5px] border-r-[8px] border-r-red-500 border-y-[4px] border-y-transparent"></div>
+                    </div>
+                    <!-- Label TIDAK at the bottom right corner -->
+                    <div class="absolute right-0 bottom-0 transform translate-x-1/2 translate-y-1/2 bg-red-50 text-red-600 text-[11px] font-black px-1.5 py-0.5 rounded border border-red-300 shadow-sm">
+                        TIDAK
+                    </div>
+                </div>
+
+                <!-- U-Shaped Dashed Loop (Downwards) -->
+                <div class="absolute left-[calc(50%+37px)] top-1/2 z-0" id="loop-indicator-down" style="display:none; transform: translateY(0); width: 160px;">
+                    <!-- Top line (out from Ketupat) -->
+                    <div class="absolute border-t-[3px] border-dashed border-red-500 w-full left-0 top-0"></div>
+                    <!-- Down line -->
+                    <div class="absolute border-r-[3px] border-dashed border-red-500 h-full right-0 top-0"></div>
+                    <!-- Bottom line (into target shape) -->
+                    <div class="absolute border-b-[3px] border-dashed border-red-500 w-[90px] right-0 bottom-0">
+                        <!-- Arrowhead pointing left -->
+                        <div class="absolute left-[-2px] bottom-[-5px] border-r-[8px] border-r-red-500 border-y-[4px] border-y-transparent"></div>
+                    </div>
+                    <!-- Label TIDAK at the top right corner -->
+                    <div class="absolute right-0 top-0 transform translate-x-1/2 -translate-y-1/2 bg-red-50 text-red-600 text-[11px] font-black px-1.5 py-0.5 rounded border border-red-300 shadow-sm">
+                        TIDAK
+                    </div>
+                </div>
+                
+                <div id="decision-setting" class="absolute left-[calc(50%+210px)] top-[calc(50%+15px)] bg-red-50 border border-red-200 p-2 rounded flex flex-col items-center justify-center shadow-lg w-[120px] z-50">
+                    <span class="font-bold text-red-600 text-[10px] mb-1 text-center block">Jika "TIDAK", ulang ke:</span>
+                    <select id="loop-select" class="p-1 border border-red-300 rounded outline-none font-bold text-[10px] w-full" onchange="drawLoop()">
+                        <option value="0">- Pilih -</option>
+                        <option value="1">Langkah 1</option>
+                        <option value="2">Langkah 2</option>
+                        <option value="3">Langkah 3</option>
+                        <option value="4">Langkah 4</option>
+                        <option value="5">Langkah 5</option>
+                        <option value="6">Langkah 6</option>
+                    </select>
+                </div>
+            </div>
+            
+        </div>
+        
+        <!-- KANAN (25%) -->
+        <div class="w-1/4 bg-slate-50 p-4 flex flex-col z-10 overflow-y-auto min-w-[220px]">
+            
+            <!-- Target Misi -->
+            <div class="bg-blue-100 border border-blue-200 rounded-xl p-3 mb-4 shadow-sm">
+                <h4 class="text-[10px] font-black text-blue-800 uppercase tracking-wider mb-1"><i class="fas fa-bullseye mr-1"></i> Target Misi</h4>
+                <p class="text-xs text-blue-900 font-medium leading-tight">Bentuklah alur proses pembayaran barang belanjaan di meja kasir minimarket.</p>
+            </div>
+
+            <!-- Progress -->
+            <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-3 mb-4">
+                <div class="flex justify-between items-center mb-1">
+                    <h4 class="text-[10px] font-bold text-gray-500 uppercase tracking-wider"><i class="fas fa-tasks mr-1"></i> Progress</h4>
+                    <span id="progress-text" class="text-[10px] font-black text-blue-600">0/6</span>
+                </div>
+                <div class="w-full bg-gray-100 rounded-full h-2">
+                    <div id="progress-bar" class="bg-blue-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Score -->
+            <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-3 text-center mb-4">
+                <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Nilai Akhir</h4>
+                <div class="flex items-end justify-center">
+                    <span id="score-display" class="text-4xl font-black text-blue-600 leading-none">0</span>
+                    <span class="text-sm font-bold text-gray-400 ml-1 mb-1">/100</span>
+                </div>
+                <p id="score-msg" class="text-[9px] font-bold text-gray-500 mt-2 leading-tight h-3">Cepat dan tepat!</p>
+            </div>
+
+            <!-- Buttons -->
+            <button onclick="checkAnswer()" class="w-full bg-green-500 hover:bg-green-600 text-white font-black py-2.5 rounded-lg shadow-md transition-transform active:scale-95 uppercase tracking-wider text-xs mb-2"><i class="fas fa-check-double mr-2"></i> Cek Jawaban</button>
+            <button id="btn-mistakes" onclick="showMistakes()" class="hidden w-full bg-amber-500 hover:bg-amber-600 text-white font-black py-2.5 rounded-lg shadow-md transition-transform active:scale-95 uppercase tracking-wider text-xs mb-2"><i class="fas fa-search mr-2"></i> Lihat Kesalahan</button>
+            
+            <div class="flex gap-2 mb-4 mt-1">
+                <button onclick="useHint()" class="w-1/2 bg-purple-100 text-purple-700 hover:bg-purple-200 border border-purple-300 font-bold py-1.5 rounded-lg transition text-[10px]"><i class="fas fa-lightbulb mr-1"></i> Hint (-30s)</button>
+                <button onclick="resetBoard()" class="w-1/2 bg-white border border-red-200 text-red-500 hover:bg-red-50 font-bold py-1.5 rounded-lg transition text-[10px]"><i class="fas fa-undo mr-1"></i> Reset</button>
+            </div>
+
+            <!-- Cara Bermain -->
+            <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-3 mt-auto shadow-sm">
+                <h4 class="text-[10px] font-black text-yellow-800 uppercase tracking-wider mb-2"><i class="fas fa-info-circle mr-1"></i> Cara Bermain</h4>
+                <ol class="text-[10px] text-yellow-900 font-medium list-decimal pl-3 space-y-1">
+                    <li>Pilih <strong>Bentuk</strong> lalu klik kotak.</li>
+                    <li>Pilih <strong>Teks</strong> lalu klik kotak.</li>
+                    <li>Atur panah loop kotak Keputusan.</li>
+                </ol>
+            </div>
+            
+        </div>
+    </main>
+
+    <div id="popup-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full mx-4 shadow-2xl text-center transform transition-all scale-95" id="popup-content">
+            <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4" id="popup-icon">
+                <i class="fas fa-check text-5xl text-green-500"></i>
+            </div>
+            <h2 class="text-3xl font-black text-gray-800 mb-2" id="popup-title">Selamat!</h2>
+            <p class="text-lg text-gray-600 mb-8" id="popup-desc">Algoritma Anda benar 100%.</p>
+            <button onclick="closePopup()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition-colors text-lg">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswerTexts = ["Mulai", "Serahkan keranjang belanjaan ke meja kasir", "Kasir memindai (scan) kode batang setiap barang", "Apakah semua barang belanjaan sudah selesai di-scan?", "Terima struk pembayaran dan barang", "Selesai"];
+        const correctAnswerShapes = ["oval", "jajar", "persegi", "ketupat", "jajar", "oval"];
+        const correctLoop = "3";
+        
+        let activeTextObj = null;
+        let activeShapeObj = null;
+        let board = [{ text: null, shape: null }, { text: null, shape: null }, { text: null, shape: null }, { text: null, shape: null }, { text: null, shape: null }, { text: null, shape: null }];
+        let timeRemaining = 300;
+        let timerInterval = null;
+        let gameActive = true;
+        
+        window.onload = () => { startTimer(); };
+
+        function startTimer() {
+            if(timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if(!gameActive) return;
+                timeRemaining--;
+                updateTimerUI();
+                if(timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    gameActive = false;
+                    showPopup("Waktu Habis!", "Waktu 5 menit sudah berakhir.", "red", "fa-clock");
+                }
+            }, 1000);
+        }
+
+        function updateTimerUI() {
+            const m = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
+            const s = (timeRemaining % 60).toString().padStart(2, '0');
+            const timerEl = document.getElementById('timer-display');
+            timerEl.innerText = `${m}:${s}`;
+            if(timeRemaining <= 60) {
+                timerEl.classList.add('text-red-500');
+                timerEl.classList.remove('text-gray-800');
+            }
+        }
+        
+        function selectText(el, txt) {
+            if(!gameActive) return;
+            if(activeShapeObj) { activeShapeObj.el.classList.remove('selected-shape'); activeShapeObj = null; }
+            document.querySelectorAll('.text-block').forEach(b => b.classList.remove('selected-text'));
+            el.classList.add('selected-text');
+            activeTextObj = { el: el, text: txt };
+        }
+        
+        function selectShape(el, shapeType) {
+            if(!gameActive) return;
+            if(activeTextObj) { activeTextObj.el.classList.remove('selected-text'); activeTextObj = null; }
+            document.querySelectorAll('.clickable').forEach(b => b.classList.remove('selected-shape'));
+            el.classList.add('selected-shape');
+            activeShapeObj = { el: el, type: shapeType };
+        }
+        
+        function placeToZone(idx) {
+            if(!gameActive) return;
+            if (activeTextObj) {
+                board.forEach(z => { if(z.text === activeTextObj.text) z.text = null; });
+                board[idx].text = activeTextObj.text;
+                activeTextObj.el.classList.remove('selected-text');
+                activeTextObj.el.style.opacity = '0.3';
+                activeTextObj = null;
+                renderBoard();
+            } else if (activeShapeObj) {
+                board[idx].shape = activeShapeObj.type;
+                activeShapeObj.el.classList.remove('selected-shape');
+                activeShapeObj = null;
+                renderBoard();
+            }
+        }
+        
+        function drawLoop() {
+            const val = parseInt(document.getElementById('loop-select').value);
+            const indicatorUp = document.getElementById('loop-indicator');
+            const indicatorDown = document.getElementById('loop-indicator-down');
+            const loopSelect = document.getElementById('loop-select');
+            
+            indicatorUp.style.display = 'none';
+            indicatorDown.style.display = 'none';
+            
+            loopSelect.style.borderColor = '';
+            loopSelect.style.backgroundColor = '';
+            document.getElementById('btn-mistakes').classList.add('hidden');
+            
+            if(val === 0) return;
+            
+            let decIdx = -1;
+            for(let i=0; i<6; i++) { if(board[i].shape === 'ketupat') decIdx = i; }
+            if(decIdx === -1) return;
+            
+            let targetIdx = val - 1; 
+            let dist = decIdx - targetIdx; 
+            
+            if(dist > 0) {
+                // Pointing upwards
+                indicatorUp.style.height = (dist * 96) + 'px';
+                indicatorUp.style.display = 'block';
+            } else if(dist < 0) {
+                // Pointing downwards
+                indicatorDown.style.height = (Math.abs(dist) * 96) + 'px';
+                indicatorDown.style.display = 'block';
+            }
+        }
+        
+        function renderBoard() {
+            let decIdx = -1;
+            document.getElementById('btn-mistakes').classList.add('hidden');
+            
+            for(let i=0; i<6; i++) {
+                const z = board[i];
+                const rt = document.getElementById('rt-'+i);
+                const rs = document.getElementById('rs-'+i);
+                const sl = document.getElementById('sl-'+i);
+                
+                rt.style.color = '';
+                rs.style.borderColor = '';
+                rs.style.borderWidth = '';
+                
+                if(z.text || z.shape) {
+                    sl.style.transform = 'translateX(-160px)';
+                    sl.style.color = '#3b82f6';
+                    sl.style.fontSize = '12px';
+                } else {
+                    sl.style.transform = 'translateX(0)';
+                    sl.style.color = '';
+                    sl.style.fontSize = '';
+                }
+                
+                if(z.text) {
+                    rt.innerText = z.text;
+                    if(z.shape === 'ketupat') {
+                        rt.style.width = '120px';
+                        rt.style.fontSize = '10.5px';
+                    } else {
+                        rt.style.width = '90%';
+                        rt.style.fontSize = '14px';
+                    }
+                } else {
+                    rt.innerText = '';
+                }
+                
+                if(z.shape) {
+                    rs.className = 'rendered-shape rs-' + z.shape;
+                    if(z.shape === 'ketupat') decIdx = i;
+                } else {
+                    rs.className = 'rendered-shape hidden';
+                }
+            }
+            
+            const decSetting = document.getElementById('decision-setting');
+            const labelYa = document.getElementById('label-ya');
+            const loopIndicatorUp = document.getElementById('loop-indicator');
+            const loopIndicatorDown = document.getElementById('loop-indicator-down');
+            const dynamicContainer = document.getElementById('dynamic-elements');
+            
+            updateProgress();
+            
+            if(decIdx !== -1) {
+                const targetSlot = document.getElementById('slot-' + decIdx);
+                targetSlot.appendChild(labelYa);
+                targetSlot.appendChild(loopIndicatorUp);
+                targetSlot.appendChild(loopIndicatorDown);
+                targetSlot.appendChild(decSetting);
+                
+                labelYa.style.display = 'block';
+                decSetting.style.display = 'flex';
+                
+                drawLoop();
+            } else {
+                dynamicContainer.appendChild(labelYa);
+                dynamicContainer.appendChild(loopIndicatorUp);
+                dynamicContainer.appendChild(loopIndicatorDown);
+                dynamicContainer.appendChild(decSetting);
+                
+                labelYa.style.display = 'none';
+                loopIndicatorUp.style.display = 'none';
+                loopIndicatorDown.style.display = 'none';
+                decSetting.style.display = 'none';
+                document.getElementById('loop-select').value = "0";
+            }
+        }
+        
+        function updateProgress() {
+            let scoreProgress = 0;
+            for(let i=0; i<6; i++) {
+                if(board[i].shape) scoreProgress += 0.5;
+                if(board[i].text) scoreProgress += 0.5;
+            }
+            const pText = document.getElementById('progress-text');
+            const pBar = document.getElementById('progress-bar');
+            pText.innerText = Math.floor(scoreProgress) + "/6";
+            pBar.style.width = (scoreProgress / 6 * 100) + "%";
+        }
+        
+        function useHint() {
+            if(!gameActive) return;
+            if(timeRemaining <= 30) {
+                alert("Waktu tidak cukup untuk menggunakan Hint!");
+                return;
+            }
+            let targetIdx = -1;
+            for(let i=0; i<6; i++) { if(!board[i].shape && !board[i].text) { targetIdx = i; break; } }
+            if(targetIdx === -1) {
+                for(let i=0; i<6; i++) {
+                    if(board[i].shape !== correctAnswerShapes[i] || board[i].text !== correctAnswerTexts[i]) {
+                        targetIdx = i; break;
+                    }
+                }
+            }
+            if(targetIdx !== -1) {
+                board[targetIdx].shape = correctAnswerShapes[targetIdx];
+                board[targetIdx].text = correctAnswerTexts[targetIdx];
+                document.querySelectorAll('.text-block').forEach(el => {
+                    if(el.innerText === correctAnswerTexts[targetIdx]) { el.style.opacity = '0.3'; el.classList.remove('selected-text'); }
+                });
+                timeRemaining -= 30;
+                updateTimerUI();
+                renderBoard();
+                const rs = document.getElementById('rs-'+targetIdx);
+                rs.style.backgroundColor = '#fef08a'; // yellow-200
+                setTimeout(() => { rs.style.backgroundColor = 'white'; }, 800);
+            } else {
+                const loopSelect = document.getElementById('loop-select');
+                if(loopSelect.value !== correctLoop) {
+                    loopSelect.value = correctLoop;
+                    timeRemaining -= 30;
+                    updateTimerUI();
+                    renderBoard();
+                } else {
+                    alert("Semua blok sudah benar! Tinggal klik Cek Jawaban.");
+                }
+            }
+        }
+        
+        function resetBoard() {
+            if(!gameActive && timeRemaining <= 0) {
+                timeRemaining = 300;
+                gameActive = true;
+                const timerEl = document.getElementById('timer-display');
+                timerEl.classList.remove('text-red-500');
+                timerEl.classList.add('text-gray-800');
+                startTimer();
+                
+                document.getElementById('score-display').innerText = "0";
+                document.getElementById('score-display').className = "text-5xl font-black text-blue-600 leading-none";
+                document.getElementById('score-msg').innerText = "Kerjakan dengan cepat dan tepat!";
+            }
+            
+            board = [{ text: null, shape: null }, { text: null, shape: null }, { text: null, shape: null },
+                     { text: null, shape: null }, { text: null, shape: null }, { text: null, shape: null }];
+            document.querySelectorAll('.text-block').forEach(el => { el.style.opacity = '1'; el.classList.remove('selected-text'); });
+            document.querySelectorAll('.clickable').forEach(el => { el.classList.remove('selected-shape'); });
+            activeTextObj = null; activeShapeObj = null;
+            document.getElementById('loop-select').value = "0";
+            document.getElementById('btn-mistakes').classList.add('hidden');
+            drawLoop();
+            renderBoard();
+            updateProgress();
+        }
+        
+        function checkAnswer() {
+            if(!gameActive) return;
+            
+            let allFilled = true;
+            for(let i=0; i<6; i++) {
+                if(!board[i].text || !board[i].shape) allFilled = false;
+            }
+            
+            if(!allFilled) {
+                document.getElementById('score-msg').innerText = "Papan belum terisi penuh!";
+                document.getElementById('score-msg').classList.add('text-red-500');
+                return;
+            }
+            
+            let shapeScore = 0; let textScore = 0; let loopScore = 0;
+            
+            for(let i=0; i<6; i++) {
+                if(board[i].shape === correctAnswerShapes[i]) shapeScore += 10;
+                if(board[i].text === correctAnswerTexts[i]) textScore += 5;
+            }
+            if(document.getElementById('loop-select').value === correctLoop) loopScore = 10;
+            
+            let total = shapeScore + textScore + loopScore;
+            
+            const sDisplay = document.getElementById('score-display');
+            sDisplay.innerText = total;
+            const sMsg = document.getElementById('score-msg');
+            
+            if(total === 100) {
+                sDisplay.className = "text-5xl font-black text-green-500 leading-none";
+                sMsg.innerText = "Sempurna!";
+                sMsg.className = "text-[10px] font-bold text-green-600 mt-2 h-6";
+                document.getElementById('btn-mistakes').classList.add('hidden');
+                gameActive = false;
+                clearInterval(timerInterval);
+                showPopup("Selamat Anda Benar!", "Algoritma Anda terangkai dengan sempurna.", "green", "fa-check");
+            } else {
+                sDisplay.className = "text-5xl font-black text-amber-500 leading-none";
+                let errText = [];
+                if(shapeScore < 60) errText.push("Bentuk");
+                if(textScore < 30) errText.push("Urutan");
+                if(loopScore === 0) errText.push("Looping");
+                sMsg.innerHTML = "Kesalahan di: " + errText.join(", ");
+                sMsg.className = "text-[10px] font-bold text-amber-600 mt-2 h-6";
+                document.getElementById('btn-mistakes').classList.remove('hidden');
+            }
+        }
+        
+        function showMistakes() {
+            if(!gameActive) return;
+            for(let i=0; i<6; i++) {
+                const rs = document.getElementById('rs-'+i);
+                const rt = document.getElementById('rt-'+i);
+                
+                if(board[i].shape && board[i].shape !== correctAnswerShapes[i]) {
+                    rs.style.borderColor = '#ef4444';
+                    rs.style.borderWidth = '4px';
+                }
+                if(board[i].text && board[i].text !== correctAnswerTexts[i]) {
+                    rt.style.color = '#ef4444';
+                }
+            }
+            
+            const loopSelect = document.getElementById('loop-select');
+            if(loopSelect.value !== correctLoop) {
+                loopSelect.style.borderColor = '#ef4444';
+                loopSelect.style.backgroundColor = '#fee2e2';
+            }
+            
+            document.getElementById('btn-mistakes').classList.add('hidden');
+            document.getElementById('score-msg').innerText = "Bagian berwarna merah masih salah.";
+        }
+        
+        function showPopup(title, desc, color, icon) {
+            const modal = document.getElementById('popup-modal');
+            const content = document.getElementById('popup-content');
+            document.getElementById('popup-title').innerText = title;
+            document.getElementById('popup-desc').innerText = desc;
+            const iconContainer = document.getElementById('popup-icon');
+            iconContainer.className = `w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 bg-${color}-100`;
+            iconContainer.innerHTML = `<i class="fas ${icon} text-4xl text-${color}-500"></i>`;
+            modal.classList.remove('hidden');
+            setTimeout(() => { content.classList.remove('scale-95'); content.classList.add('scale-100'); }, 10);
+        }
+        
+        function closePopup() {
+            const modal = document.getElementById('popup-modal');
+            const content = document.getElementById('popup-content');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); }, 200);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulator Stack & Queue</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .item-enter {
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes flash-red {
+            0% { background-color: #fee2e2; }
+            100% { background-color: transparent; }
+        }
+        .flash-remove {
+            animation: flash-red 0.5s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen font-sans p-4 md:p-8 flex flex-col items-center">
+
+    <div class="max-w-3xl w-full">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-black text-slate-800 mb-2">Simulator <span class="text-indigo-600">Stack</span> & <span class="text-emerald-600">Queue</span></h1>
+            <p class="text-lg text-slate-500 font-medium">Satu data, empat operasi — lihat perbedaan LIFO dan FIFO</p>
+        </div>
+
+        <!-- Controls Area -->
+        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 mb-6 w-full">
+            <!-- Input -->
+            <div class="flex items-center gap-3 mb-5 justify-center">
+                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-xl border border-blue-100 shrink-0">
+                    <i class="fas fa-keyboard"></i>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Masukkan Angka</label>
+                    <input type="number" id="input-number" placeholder="Misal: 10" class="w-48 text-xl font-bold border-2 border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:border-blue-500 transition-colors">
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex flex-wrap gap-3 justify-center">
+                <button onclick="doOp('push')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl shadow-md active:scale-95 transition-all flex items-center gap-2 text-sm">
+                    <i class="fas fa-plus"></i> Push / Enqueue
+                </button>
+                <button onclick="doOp('pop')" class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-xl shadow-md active:scale-95 transition-all flex items-center gap-2 text-sm">
+                    <i class="fas fa-arrow-left"></i> Pop 2
+                </button>
+                <button onclick="doOp('dequeue')" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-6 rounded-xl shadow-md active:scale-95 transition-all flex items-center gap-2 text-sm">
+                    <i class="fas fa-arrow-right"></i> Dequeue (Pop 1)
+                </button>
+                <button onclick="doOp('clear')" class="bg-white hover:bg-slate-50 text-slate-600 font-bold py-3 px-6 rounded-xl shadow-sm border-2 border-slate-200 active:scale-95 transition-all flex items-center gap-2 text-sm">
+                    <i class="fas fa-trash"></i> Kosongkan
+                </button>
+            </div>
+        </div>
+
+        <!-- Status Bar -->
+        <div id="status-bar" class="bg-white border border-slate-200 rounded-2xl px-6 py-3 mb-6 text-center font-bold text-slate-500 text-sm shadow-sm">
+            <i class="fas fa-info-circle mr-1"></i> Masukkan angka lalu tekan Push/Enqueue untuk menambahkan.
+        </div>
+
+        <!-- Data Display -->
+        <div class="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-200">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-black text-slate-800"><i class="fas fa-database text-blue-500 mr-2"></i>Isi Data</h2>
+                <div class="bg-blue-50 text-blue-700 px-4 py-1 rounded-lg text-sm font-bold border border-blue-200">
+                    Jumlah: <span id="data-count">0</span>
+                </div>
+            </div>
+
+            <!-- Visual Container -->
+            <div class="min-h-[200px] bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl relative flex items-center p-4 overflow-hidden">
+                <!-- Labels -->
+                <div class="absolute left-3 top-2 text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full z-20">
+                    <i class="fas fa-arrow-down mr-1"></i>DEPAN (Dequeue)
+                </div>
+                <div class="absolute right-3 top-2 text-xs font-bold text-red-500 bg-red-50 border border-red-200 px-2 py-0.5 rounded-full z-20">
+                    <i class="fas fa-arrow-down mr-1"></i>BELAKANG (Pop)
+                </div>
+
+                <div id="data-container" class="w-full flex items-center justify-center z-10 gap-3 flex-wrap py-8 px-2">
+                </div>
+                <div id="data-empty" class="absolute inset-0 flex items-center justify-center text-slate-400 font-bold z-0 pointer-events-none">Data Kosong — Tambahkan angka!</div>
+            </div>
+
+            <!-- Explanation -->
+            <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 text-center">
+                    <p class="font-black text-indigo-700 text-sm mb-1"><i class="fas fa-plus mr-1"></i>Push / Enqueue</p>
+                    <p class="text-xs text-indigo-600">Tambah angka ke data</p>
+                </div>
+                <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-center">
+                    <p class="font-black text-red-600 text-sm mb-1"><i class="fas fa-arrow-left mr-1"></i>Pop (Stack)</p>
+                    <p class="text-xs text-red-500">Hapus dari <b>belakang</b> (LIFO)</p>
+                </div>
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-center">
+                    <p class="font-black text-amber-600 text-sm mb-1"><i class="fas fa-arrow-right mr-1"></i>Dequeue (Queue)</p>
+                    <p class="text-xs text-amber-500">Hapus dari <b>depan</b> (FIFO)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let data = [];
+
+        function doOp(type) {
+            const input = document.getElementById('input-number');
+            const val = parseInt(input.value);
+
+            if (type === 'push') {
+                if (isNaN(val)) { showStatus('⚠️ Masukkan angka terlebih dahulu!', 'text-orange-600 bg-orange-50 border-orange-200'); return; }
+                data.push(val);
+                input.value = '';
+                showStatus(`✅ Angka <b>${val}</b> ditambahkan ke data.`, 'text-indigo-700 bg-indigo-50 border-indigo-200');
+            } else if (type === 'pop') {
+                if (data.length === 0) { showStatus('❌ Data kosong! Tidak ada yang bisa di-Pop.', 'text-red-600 bg-red-50 border-red-200'); return; }
+                const removed = data.pop();
+                showStatus(`🗑️ Pop: angka <b>${removed}</b> dihapus dari <b>belakang</b> (LIFO).`, 'text-red-600 bg-red-50 border-red-200');
+            } else if (type === 'dequeue') {
+                if (data.length === 0) { showStatus('❌ Data kosong! Tidak ada yang bisa di-Dequeue.', 'text-red-600 bg-red-50 border-red-200'); return; }
+                const removed = data.shift();
+                showStatus(`🗑️ Dequeue: angka <b>${removed}</b> dihapus dari <b>depan</b> (FIFO).`, 'text-amber-700 bg-amber-50 border-amber-200');
+            } else if (type === 'clear') {
+                data = [];
+                showStatus('🧹 Semua data dikosongkan.', 'text-slate-600 bg-slate-50 border-slate-200');
+            }
+
+            render();
+            input.focus();
+        }
+
+        function showStatus(msg, classes) {
+            const bar = document.getElementById('status-bar');
+            bar.className = `border rounded-2xl px-6 py-3 mb-6 text-center font-bold text-sm shadow-sm ${classes}`;
+            bar.innerHTML = msg;
+        }
+
+        function render() {
+            const container = document.getElementById('data-container');
+            const emptyMsg = document.getElementById('data-empty');
+            const countEl = document.getElementById('data-count');
+            
+            container.innerHTML = '';
+            countEl.textContent = data.length;
+            emptyMsg.style.display = data.length === 0 ? 'flex' : 'none';
+
+            data.forEach((item, index) => {
+                const el = document.createElement('div');
+                const isFirst = index === 0;
+                const isLast = index === data.length - 1;
+
+                let colorClass = 'bg-white text-slate-800 border-slate-200';
+                if (isFirst && isLast) {
+                    colorClass = 'bg-gradient-to-r from-emerald-500 to-red-400 text-white border-transparent ring-2 ring-blue-300';
+                } else if (isFirst) {
+                    colorClass = 'bg-emerald-500 text-white border-emerald-600 ring-2 ring-emerald-300';
+                } else if (isLast) {
+                    colorClass = 'bg-red-400 text-white border-red-500 ring-2 ring-red-300';
+                }
+
+                el.className = `item-enter w-16 h-16 flex flex-col items-center justify-center font-black text-lg rounded-xl shadow-md border-2 shrink-0 transition-all ${colorClass}`;
+                el.style.position = 'relative';
+                
+                const numSpan = document.createElement('span');
+                numSpan.textContent = item;
+                el.appendChild(numSpan);
+
+                const idxSpan = document.createElement('span');
+                idxSpan.className = 'text-[9px] font-bold opacity-70';
+                idxSpan.textContent = `[${index}]`;
+                el.appendChild(idxSpan);
+
+                // Arrow between items
+                if (index < data.length - 1) {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'flex items-center gap-0';
+                    wrapper.appendChild(el);
+                    const arrow = document.createElement('span');
+                    arrow.className = 'text-slate-300 text-xl mx-1';
+                    arrow.innerHTML = '→';
+                    wrapper.appendChild(arrow);
+                    container.appendChild(wrapper);
+                } else {
+                    container.appendChild(el);
+                }
+            });
+        }
+
+        document.getElementById('input-number').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                doOp('push');
+            }
+        });
+    </script>
+</body>
+</html>

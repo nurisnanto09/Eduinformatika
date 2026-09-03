@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edukasi Linear Search: Mencari Kunci di Rumah</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .card-anim {
+            transition: all 0.3s ease-in-out;
+        }
+        .shake {
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+        .flip-card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card-front, .flip-card-back {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+        .flipped {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="bg-stone-50 min-h-screen p-4 md:p-8 font-sans">
+    
+    <div class="w-full px-2 sm:px-4 xl:px-8 max-w-[1600px] mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-black text-stone-800 mb-2">Edukasi Linear Search</h1>
+            <p class="text-lg text-stone-600 font-medium">Mencari Kunci yang Hilang di Dalam Rumah (Langkah demi Langkah)</p>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <div class="flex flex-wrap justify-center gap-2 sm:gap-4 mb-8">
+            <button onclick="openTab('simulasi')" id="tab-simulasi" class="px-6 py-3 rounded-full font-bold transition-all bg-blue-600 text-white shadow-md scale-105">🎮 Simulasi</button>
+            <button onclick="openTab('materi')" id="tab-materi" class="px-6 py-3 rounded-full font-bold transition-all bg-white text-gray-600 hover:bg-gray-100 border border-gray-200">📖 Materi</button>
+            <button onclick="openTab('latihan')" id="tab-latihan" class="px-6 py-3 rounded-full font-bold transition-all bg-white text-gray-600 hover:bg-gray-100 border border-gray-200">🧠 Latihan</button>
+        </div>
+
+        <!-- Tab Contents -->
+        <div id="content-simulasi" class="tab-content block">
+        <!-- Main Content -->
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col lg:flex-row border border-stone-200">
+            
+            <!-- Left: Visualization Area -->
+            <div class="lg:w-2/3 p-6 md:p-10 border-b lg:border-b-0 lg:border-r border-gray-200 bg-amber-50 relative">
+                
+                <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+CjxwYXRoIGQ9Ik0wIDEwaDIwdjFIMHoiIGZpbGw9IiNlN2UzZTMiIGZpbGwtb3BhY2l0eT0iMC41Ii8+CjxwYXRoIGQ9Ik0xMCAwaDF2MjBIMTB6IiBmaWxsPSIjZTdlM2UzIiBmaWxsLW9wYWNpdHk9IjAuNSIvPgo8L3N2Zz4=')] opacity-50 pointer-events-none"></div>
+
+                <div class="text-center mb-6 relative z-10">
+                    <span class="inline-block bg-white px-6 py-2 rounded-full font-bold text-stone-700 shadow-sm border border-stone-200">
+                        Target Kita: Mencari Kunci Rumah (🔑)
+                    </span>
+                </div>
+
+                <!-- House Locations -->
+                <div id="container" class="w-full flex flex-wrap items-center justify-center gap-4 relative z-10 min-h-[12rem]">
+                    <!-- Places will be generated here -->
+                </div>
+            </div>
+
+            <!-- Right: Control & Explanations -->
+            <div class="lg:w-1/3 p-6 md:p-10 bg-white flex flex-col">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-full bg-stone-100 text-stone-600 flex items-center justify-center font-bold text-xl">ℹ️</div>
+                    <h2 class="text-2xl font-bold text-gray-800">Status Proses</h2>
+                </div>
+                
+                <!-- Explanation Box -->
+                <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200 shadow-inner flex-grow mb-8 relative min-h-[12rem] flex flex-col justify-center flex flex-col justify-center">
+                    <div class="absolute top-2 left-2 text-4xl text-stone-300 font-serif leading-none">"</div>
+                    <p id="status-text" class="text-gray-700 text-lg leading-relaxed relative z-10">
+                        Aduh, kamu kehilangan kunci rumah! Klik <b>Mulai Langkah Pertama</b> untuk mencari dari ruangan pertama. Kita akan mengecek satu per satu secara berurutan sampai ketemu!
+                    </p>
+                </div>
+
+                <!-- Controls -->
+                <div class="flex flex-col gap-4 mt-auto">
+                    <button id="btn-next" onclick="nextStep()" class="w-full py-4 bg-stone-800 hover:bg-stone-900 text-white font-bold rounded-xl shadow-lg shadow-stone-800/30 transition-transform active:scale-95 text-lg flex justify-center items-center gap-2">
+                        <span>Mulai Langkah Pertama</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                    
+                    <button id="btn-reset" onclick="resetGame()" class="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-colors border border-gray-200">
+                        Hilangkan Kunci Lagi (Acak)
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        
+        </div>
+
+        <div id="content-materi" class="tab-content hidden">
+        <!-- Concept Explanation -->
+        <div class="mt-8 bg-white p-6 rounded-2xl shadow-md border border-gray-200">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">💡 Konsep Dasar: Apa itu Linear Search?</h3>
+            <p class="text-gray-700 text-lg leading-relaxed"><b>Linear Search</b> (Pencarian Berurutan) adalah algoritma pencarian yang paling sederhana dan mirip dengan cara kita mencari barang hilang di kehidupan nyata. Jika kita tidak tahu di mana kuncinya, kita harus memeriksa dari tempat pertama: mengecek meja tamu, lalu pindah mengecek kursi, lalu rak TV, dan seterusnya satu per satu secara berurutan. <br><br><b>Ciri khas utamanya:</b> Data tidak perlu berurutan lokasinya. Namun, sebagai kelemahannya, jika barang yang dicari kebetulan terselip di urutan paling akhir (atau ternyata sama sekali tidak ada), kita terpaksa membuang waktu mengecek seluruh tempat di rumah dari awal sampai akhir.</p>
+        </div>
+        
+        </div>
+
+        
+        <div id="content-latihan" class="tab-content hidden">
+            <div class="mt-8 bg-amber-50 p-8 rounded-2xl shadow-md border border-amber-200">
+                <h3 class="text-2xl font-bold text-amber-900 mb-6">🧠 Uji Pemahaman (5 Soal)</h3>
+                
+                <div class="space-y-6">
+                    <!-- Q1 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">1. Apa SYARAT MUTLAK urutan data sebelum menggunakan Linear Search?</p>
+                        <select id="q1-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-amber-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">Data Wajib Terurut (A-Z)</option>
+                            <option value="B">Tidak ada syarat, data boleh berantakan</option>
+                        </select>
+                        <p id="q1-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">2. Ada data loker: [15, 22, 8, 9, 31]. Jika kamu mencari 9, di pengecekan ke-berapa ia ditemukan?</p>
+                        <select id="q2-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-amber-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">Pengecekan ke-3</option>
+                            <option value="B">Pengecekan ke-4</option>
+                        </select>
+                        <p id="q2-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">3. Kapan Linear Search mengalami Skenario Terburuk (Worst Case)?</p>
+                        <select id="q3-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-amber-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">Saat data yang dicari berada di urutan paling awal</option>
+                            <option value="B">Saat data yang dicari berada di urutan paling akhir (atau tidak ada sama sekali)</option>
+                        </select>
+                        <p id="q3-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">4. Berapa rata-rata pengecekan jika ada 1000 data dalam Linear Search?</p>
+                        <select id="q4-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-amber-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">Sekitar 10 kali (Logaritmik)</option>
+                            <option value="B">Sekitar 500 kali (Setengahnya)</option>
+                        </select>
+                        <p id="q4-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <p class="font-bold text-gray-800 mb-3">5. Jika kamu mencari angka '5' di dalam deretan [1, 2, 3], apa yang dikembalikan Linear Search?</p>
+                        <select id="q5-ans" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:border-amber-500 focus:outline-none">
+                            <option value="">-- Pilih Jawaban --</option>
+                            <option value="A">Hasil 'Tidak Ditemukan' setelah 3 kali cek</option>
+                            <option value="B">Hasil 'Tidak Ditemukan' setelah 1 kali cek</option>
+                        </select>
+                        <p id="q5-feedback" class="mt-2 font-bold text-sm hidden"></p>
+                    </div>
+                </div>
+                
+                <button onclick="checkAllQuiz()" class="mt-6 w-full bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-4 rounded-xl transition-colors shadow-lg active:scale-95 text-lg">Cek Semua Jawaban</button>
+            </div>
+            
+            <script>
+                function checkAllQuiz() {
+                    const answers = ['B', 'B', 'B', 'B', 'A'];
+                    let score = 0;
+                    for(let i=1; i<=5; i++) {
+                        const ans = document.getElementById('q'+i+'-ans').value;
+                        const feedback = document.getElementById('q'+i+'-feedback');
+                        feedback.classList.remove('hidden', 'text-green-600', 'text-red-600', 'text-amber-600');
+                        
+                        if(ans === '') {
+                            feedback.innerHTML = "⚠️ Belum dijawab!";
+                            feedback.classList.add('text-amber-600');
+                        } else if (ans === answers[i-1]) {
+                            feedback.innerHTML = "✅ Benar!";
+                            feedback.classList.add('text-green-600');
+                            score++;
+                        } else {
+                            feedback.innerHTML = "❌ Salah, coba lagi.";
+                            feedback.classList.add('text-red-600');
+                        }
+                    }
+                    if(score === 5) alert("Luar biasa! Semua jawaban benar! 🎉");
+                }
+            </script>
+        </div>
+</div>
+        </div>
+    </div>
+
+    <script>
+        function openTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
+            document.querySelectorAll('button[id^="tab-"]').forEach(btn => {
+                btn.className = 'px-6 py-3 rounded-full font-bold transition-all bg-white text-gray-600 hover:bg-gray-100 border border-gray-200';
+            });
+            
+            document.getElementById('content-' + tabName).classList.remove('hidden');
+            document.getElementById('content-' + tabName).classList.add('block');
+            
+            let colorClass = 'bg-blue-600';
+            if(tabName === 'materi') colorClass = 'bg-amber-500';
+            if(tabName === 'latihan') colorClass = 'bg-green-600';
+            
+            const activeBtn = document.getElementById('tab-' + tabName);
+            activeBtn.className = `px-6 py-3 rounded-full font-bold transition-all text-white shadow-md scale-105 ${colorClass}`;
+        }
+    </script>
+    <script>
+        const container = document.getElementById('container');
+        const btnNext = document.getElementById('btn-next');
+        const statusText = document.getElementById('status-text');
+
+        const furnitureList = [
+            { name: 'Meja Tamu', icon: '🛋️' },
+            { name: 'Rak TV', icon: '📺' },
+            { name: 'Laci Kabinet', icon: '🗄️' },
+            { name: 'Vas Bunga', icon: '🏺' },
+            { name: 'Meja Makan', icon: '🍽️' },
+            { name: 'Dapur', icon: '🍳' },
+            { name: 'Kulkas', icon: '❄️' },
+            { name: 'Rak Sepatu', icon: '👞' },
+            { name: 'Bawah Kasur', icon: '🛏️' }
+        ];
+
+        let wrappers = [];
+        let targetIdx = 0;
+        let step_i = 0; 
+        let step_state = 'init'; 
+
+        function generatePlaces() {
+            container.innerHTML = '';
+            wrappers = [];
+            targetIdx = Math.floor(Math.random() * furnitureList.length);
+            
+            furnitureList.forEach((item, index) => {
+                const isTarget = index === targetIdx;
+                
+                // Outer container for 3D flip perspective
+                const wrapper = document.createElement('div');
+                wrapper.className = 'w-24 h-32 sm:w-28 sm:h-36 perspective-[1000px] card-anim';
+                
+                // Inner flipper
+                const inner = document.createElement('div');
+                inner.className = 'relative w-full h-full flip-card-inner rounded-2xl shadow-md border-2 border-transparent';
+                
+                // Front Face (Furniture)
+                const front = document.createElement('div');
+                front.className = 'absolute w-full h-full flip-card-front bg-white rounded-2xl border-2 border-stone-200 flex flex-col items-center justify-center p-2 box-border';
+                front.innerHTML = `
+                    <div class="text-4xl mb-2">${item.icon}</div>
+                    <div class="text-xs sm:text-sm font-bold text-stone-600 text-center leading-tight">${item.name}</div>
+                `;
+                
+                // Back Face (Result)
+                const back = document.createElement('div');
+                back.className = `absolute w-full h-full flip-card-back rounded-2xl flex flex-col items-center justify-center p-2 box-border text-center ${isTarget ? 'bg-green-100 border-4 border-green-500' : 'bg-red-50 border-2 border-red-300'}`;
+                back.innerHTML = isTarget 
+                    ? `<div class="text-5xl drop-shadow-md">🔑</div><div class="text-sm font-black text-green-700 mt-2">Ketemu!</div>` 
+                    : `<div class="text-3xl opacity-50">❌</div><div class="text-xs font-bold text-red-500 mt-2">Kosong</div>`;
+                
+                inner.appendChild(front);
+                inner.appendChild(back);
+                wrapper.appendChild(inner);
+                
+                container.appendChild(wrapper);
+                wrappers.push(wrapper);
+            });
+        }
+
+        function updateStyles(activeIdx) {
+            wrappers.forEach((w, idx) => {
+                const inner = w.children[0];
+                const front = inner.children[0];
+                
+                if (idx === activeIdx) {
+                    front.classList.add('border-blue-500', 'bg-blue-50', 'ring-4', 'ring-blue-200');
+                    w.classList.add('scale-110', 'z-10');
+                } else {
+                    front.classList.remove('border-blue-500', 'bg-blue-50', 'ring-4', 'ring-blue-200');
+                    w.classList.remove('scale-110', 'z-10');
+                }
+            });
+        }
+
+        function resetGame() {
+            generatePlaces();
+            step_i = 0;
+            step_state = 'init';
+            
+            statusText.innerHTML = "Selamat datang! Klik <b>Mulai Langkah Pertama</b>. Kita akan membelah halaman kamus ini langsung ke bagian tengahnya untuk mencari kata target secara instan!";
+            btnNext.innerHTML = `<span>Mulai Langkah Pertama</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
+            btnNext.disabled = false;
+            btnNext.classList.remove('opacity-50', 'cursor-not-allowed');
+            
+            updateStyles(null);
+        }
+
+        function nextStep() {
+            if (step_state === 'init') {
+                step_state = 'check';
+                btnNext.innerHTML = `<span>Langkah Selanjutnya</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
+            }
+            
+            if (step_state === 'check') {
+                updateStyles(step_i);
+                
+                const placeName = furnitureList[step_i].name;
+                statusText.innerHTML = `Kita menghampiri lokasi ke-${step_i + 1}.<br><br>Mari kita periksa dan obrak-abrik di area <b>${placeName}</b>. Apakah kunci rumah kita ada di sini?`;
+                
+                step_state = 'evaluate';
+                return;
+            }
+            
+            if (step_state === 'evaluate') {
+                const wrapper = wrappers[step_i];
+                const inner = wrapper.children[0];
+                const placeName = furnitureList[step_i].name;
+                
+                // Shake and flip animation
+                wrapper.classList.add('shake');
+                setTimeout(() => {
+                    wrapper.classList.remove('shake');
+                    inner.classList.add('flipped'); // Reveal what's inside
+                    
+                    if (step_i === targetIdx) {
+                        statusText.innerHTML = `🎉 <b>YESS! KETEMU!</b><br><br>Ternyata kunci rumahnya tersembunyi di <b>${placeName}</b>!<br>Pencarian kita bisa langsung dihentikan di sini.`;
+                        step_state = 'done';
+                        btnNext.innerHTML = `<span>Pencarian Selesai</span>`;
+                        btnNext.disabled = true;
+                        btnNext.classList.add('opacity-50', 'cursor-not-allowed');
+                    } else {
+                        statusText.innerHTML = `<b>Yah, tidak ada!</b> Kuncinya bukan di ${placeName}.<br><br>Barang ini terpaksa kita abaikan. Kita harus bergerak maju ke tempat selanjutnya secara berurutan!`;
+                        step_i++;
+                        step_state = 'check';
+                        btnNext.innerHTML = `<span>Periksa Tempat Berikutnya</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path></svg>`;
+                    }
+                }, 500); // Wait for shake to finish before flip
+                
+                return;
+            }
+        }
+
+        resetGame();
+    </script>
+</body>
+</html>

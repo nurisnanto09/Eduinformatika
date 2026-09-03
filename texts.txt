@@ -1,0 +1,64 @@
+
+--- binary_search_kamus.html ---
+statusText.innerHTML = "Klik <b>Mulai Langkah Pertama</b>. Kita akan membelah halaman kamus ini langsung ke bagian tengahnya untuk mencari kata \"Melati\" secara instan!";
+statusText.innerHTML = `Kata tidak ditemukan!`;
+statusText.innerHTML = `Kita membelah sisa halaman kamus tepat di <b>titik tengahnya</b>!<br><br>Halaman yang terbuka sekarang adalah kata <b>"${midWord}"</b>.`;
+statusText.innerHTML = `🎉 <b>YESS! KETEMU!</b><br><br>Halaman tengah yang kita buka ternyata tepat berada di kata <b>"${targetWord}"</b>!<br>Kita berhasil menemukannya dengan sangat cepat!`;
+statusText.innerHTML = `Menurut urutan alfabetis (A-Z), huruf awal kata <b>"${midWord}"</b> muncul sebelum huruf awal target kita <b>"${targetWord}"</b>.<br><br>Ini berarti kata target kita <b>PASTI ada di sebelah KANAN</b>. Seluruh sisa halaman di sebelah kiri bisa kita lipat dan buang!`;
+statusText.innerHTML = `Menurut urutan alfabetis (A-Z), huruf awal kata <b>"${midWord}"</b> muncul setelah huruf awal target kita <b>"${targetWord}"</b>.<br><br>Ini berarti kata target kita <b>PASTI ada di sebelah KIRI</b>. Seluruh sisa halaman di sebelah kanan bisa kita lipat dan buang!`;
+
+--- bubble_sort_tinggi_badan.html ---
+statusText.innerHTML = "Selamat datang! Klik tombol <b>Mulai Langkah Pertama</b> di bawah. Kita akan belajar mengurutkan barisan orang ini dari yang terpendek hingga yang tertinggi menggunakan metode Bubble Sort.";
+statusText.innerHTML = `Kita melihat posisi yang bersebelahan: <b>Orang ke-${step_j + 1} (${array[step_j]}cm)</b> dan <b>Orang ke-${step_j + 2} (${array[step_j+1]}cm)</b>.<br><br>Apakah <b>${array[step_j]}cm</b> lebih tinggi dari <b>${array[step_j+1]}cm</b>?`;
+statusText.innerHTML = `<b>Ya, betul!</b> ${array[step_j]}cm ternyata lebih tinggi dari ${array[step_j+1]}cm.<br><br>Karena yang tinggi harus di kanan, kita harus <b>MENUKAR</b> tempat mereka berdua!`;
+statusText.innerHTML = `<b>Tidak.</b> ${array[step_j]}cm tidak lebih tinggi dari ${array[step_j+1]}cm.<br><br>Urutan mereka berdua sudah sesuai. Kita biarkan saja dan melangkah ke pasangan berikutnya.`;
+statusText.innerHTML = `<span class="text-yellow-600 font-bold">Proses penukaran fisik sedang berlangsung...</span>`;
+statusText.innerHTML = `Posisi mereka berhasil ditukar dengan mulus!`;
+statusText.innerHTML = `<b>Satu putaran sukses diselesaikan!</b><br><br>Perhatikan bahwa orang tertinggi (<b>${tallestVal}cm</b>) berhasil kita dorong (menggelembung) hingga mentok ke posisi paling kanannya yang permanen.`;
+statusText.innerHTML = `Mari bergeser ke kanan, kita cek pasangan orang yang selanjutnya.`;
+statusText.innerHTML = `🎉 <b>Selamat! Anda telah memahami Bubble Sort!</b><br><br>Seluruh barisan kini telah berdiri tegak berurutan dari yang paling pendek hingga yang paling tinggi tanpa ada cacat urutan.`;
+
+--- insertion_sort_kartu.html ---
+statusText.innerHTML = "Selamat datang! Klik tombol <b>Mulai Langkah Pertama</b> di bawah. Kita akan mengangkat kartu UNO satu per satu dari meja permainan, lalu menyelipkannya pada urutan angka yang benar di kelompok tangan kiri.";
+statusText.innerHTML = `Perhatikan kartu dengan bingkai hijau di bagian kiri, itu adalah tumpukan kartu yang <i>sudah terurut rapi di tangan kita</i>.<br><br>Sekarang mari kita <b>angkat sebuah kartu baru</b> dari meja (Warna Biru), yaitu kartu UNO <b>${cardName}</b>.`;
+statusText.innerHTML = `Kita harus mengecek kartu dari arah kanan ke kiri.<br><br>Coba bandingkan kartu yang baru kita pegang ini (<b>${cardName}</b>) dengan kartu tepat di sebelahnya (<b>${compareName}</b>). Apakah nilainya jauh lebih kecil sehingga ia pantas untuk digeser menyisip ke sebelah kirinya?`;
+statusText.innerHTML = `<b>Ya, betul sekali!</b> Nilai ${val} lebih kecil dari ${compVal}.<br><br>Karena angkanya lebih kecil, kartu UNO ini pantas untuk menyelip lebih dalam, jadi mari kita <b>geser posisinya melompat ke sisi kiri</b>.`;
+statusText.innerHTML = `<b>Tidak.</b> Nilai ${val} lebih besar (atau bernilai sama) dengan ${compVal}.<br><br>Karena urutannya sudah benar, kartu ini dinyatakan <b>telah berhasil menemukan letak celah yang pas</b> di tangan. Ia tidak perlu bergeser menyelip lebih dalam lagi.`;
+statusText.innerHTML = `<span class="text-blue-600 font-bold">Proses penggeseran kartu UNO sedang berlangsung...</span>`;
+statusText.innerHTML = `Kartu kita telah meluncur melewati sebuah kartu yang lebih besar.<br><br>Mari ulangi proses tadi! Bandingkan kembali kartu pegangan kita dengan kartu yang kini ada di sebelahnya.`;
+statusText.innerHTML = `Wussh! Kartu kita sudah meluncur mentok merapat hingga mencapai ujung paling kiri meja permainan! Posisi angkanya otomatis sudah pasti benar.`;
+statusText.innerHTML = `Kartu UNO telah sukses mendarat dan <b>disisipkan ke dalam celah yang tepat</b>, menggenapi urutan kelompok kartu yang ada di tangan kiri.`;
+statusText.innerHTML = `🎉 <b>Selamat! Anda telah memahami Insertion Sort!</b><br><br>Seluruh tumpukan kartu UNO yang berantakan di meja telah berhasil kita sisipkan lembar demi lembar dengan penuh kesabaran hingga membentuk formasi berurutan yang sangat indah.`;
+
+--- linear_search_kunci.html ---
+statusText.innerHTML = "Aduh, kamu kehilangan kunci rumah! Klik <b>Mulai Langkah Pertama</b> untuk mencari dari ruangan pertama. Kita akan mengecek tempat satu per satu secara berurutan.";
+statusText.innerHTML = `Kita menghampiri lokasi ke-${step_i + 1}.<br><br>Mari kita periksa dan obrak-abrik di area <b>${placeName}</b>. Apakah kunci rumah kita ada di sini?`;
+statusText.innerHTML = `🎉 <b>YESS! KETEMU!</b><br><br>Ternyata kunci rumahnya tersembunyi di <b>${placeName}</b>!<br>Pencarian kita bisa langsung dihentikan di sini. Kita tidak perlu lagi mengecek sisa ruangan lainnya.`;
+statusText.innerHTML = `<b>Yah, tidak ada!</b> Kuncinya bukan di ${placeName}.<br><br>Barang ini terpaksa kita abaikan. Kita harus bergerak maju ke tempat selanjutnya!`;
+
+--- queue_kasir.html ---
+statusText.innerHTML = `<b>Toko Penuh!</b> Antrean kasir sudah memanjang mencapai batas maksimal (${MAX_PEOPLE} orang).<br><br>Harap tunggu Kasir melayani (Dequeue) seseorang di depan agar antrean bisa maju.`;
+statusText.innerHTML = `Seorang pelanggan baru (Pelanggan <b>#${customerId}</b>) masuk ke dalam toko (Proses <i>Enqueue</i>).<br><br>Sesuai aturan, ia dengan sopan berdiri menempati urutan <b>paling ujung belakang</b> antrean!`;
+statusText.innerHTML = `<b>Kosong!</b><br><br>Tidak ada satupun pelanggan di antrean. Kasir sedang menganggur. Silakan masukkan orang ke dalam antrean (Enqueue) terlebih dahulu!`;
+statusText.innerHTML = `Kasir melayani Pelanggan <b>${nameText}</b> yang berada di <b>barisan paling depan</b> (Proses <i>Dequeue</i>).<br><br>Orang yang pertama kali antre adalah yang pertama kali dilayani dan keluar (FIFO)! Seluruh sisa antrean kini bergeser maju.`;
+
+--- selection_sort_baju.html ---
+statusText.innerHTML = "Selamat datang! Klik <b>Mulai Langkah Pertama</b>. Kita akan mencari baju paling pendek di lemari ini untuk diurutkan dengan rapi.";
+statusText.innerHTML = `Kita ingin mengisi <b>Target Gantungan ke-${step_i + 1}</b> (bergaris putus-putus) dengan baju yang paling pendek.<br><br>Untuk memulainya, mari kita <b>asumsikan</b> baju yang sedang ada di gantungan ini <b>(${array[min_idx]}cm)</b> adalah kandidat baju terpendek kita (Warna Ungu).`;
+statusText.innerHTML = `Mari bandingkan kandidat kita (<b>${array[min_idx]}cm</b>) dengan baju selanjutnya di <b>Posisi ke-${step_j + 1} (${array[step_j]}cm)</b>.<br><br>Apakah baju baru ini jauh lebih pendek dari kandidat kita?`;
+statusText.innerHTML = `<b>Ya, betul sekali!</b> ${array[step_j]}cm ternyata lebih pendek dari ${array[min_idx]}cm.<br><br>Sekarang, gelar "Kandidat Baju Terpendek" (Warna Ungu) berpindah ke baju <b>Posisi ke-${step_j + 1}</b> ini.`;
+statusText.innerHTML = `<b>Tidak.</b> ${array[step_j]}cm masih lebih panjang atau sama panjangnya.<br><br>Kandidat Terpendek (Warna Ungu) tetap tak tergantikan posisinya.`;
+statusText.innerHTML = `Lanjut mengecek baju berikutnya di arah kanan untuk memastikan apakah ada baju yang jauh lebih pendek lagi.`;
+statusText.innerHTML = `<b>Misi Pencarian Selesai!</b> Kita sudah mengecek semua sisa gantungan baju hingga ujung lemari.<br><br>Juara baju terpendek mutlak dari kelompok ini berada di <b>Posisi ke-${min_idx + 1} (${array[min_idx]}cm)</b>.`;
+statusText.innerHTML = `Waktunya eksekusi! Mari kita <b>TUKAR</b> baju juara terpendek ini (${array[min_idx]}cm) agar berpindah tepat ke Target Gantungan awal kita (Gantungan ke-${step_i + 1}).`;
+statusText.innerHTML = `Wah kebetulan sekali! Baju terpendek mutlak ternyata memang sudah menggantung di Target Gantungan sejak awal.<br><br>Jadi kita tidak perlu lelah-lelah memindahkannya.`;
+statusText.innerHTML = `<span class="text-rose-600 font-bold">Proses pemindahan baju di gantungan sedang berlangsung...</span>`;
+statusText.innerHTML = `Posisi baju telah ditukar dengan sempurna!`;
+statusText.innerHTML = `<b>Satu putaran sukses diselesaikan!</b><br><br>Kini Gantungan ke-${step_i + 1} (Warna Hijau) telah dikunci karena sudah pasti ditempati oleh baju yang benar secara urutan.`;
+statusText.innerHTML = `🎉 <b>Selamat! Anda telah memahami Selection Sort!</b><br><br>Semua kemeja di gantungan lemari ini kini telah tersortir sangat rapi dari yang terpendek di kiri hingga yang terpanjang di ujung kanan.`;
+
+--- stack_piring.html ---
+statusText.innerHTML = `<b>Peringatan!</b> Tumpukan sudah terlalu tinggi (mencapai batas maksimal ${MAX_PLATES} piring).<br><br>Bahaya, piringnya bisa rubuh jika ditambah lagi! Kamu harus mengambil piring (Pop) terlebih dahulu.`;
+statusText.innerHTML = `Piring baru <b>#${thisPlateId}</b> telah diletakkan di <b>posisi paling atas</b> meja (Proses <i>Push</i>).<br><br>Kini piring #${thisPlateId} adalah piring teratas di tumpukan!`;
+statusText.innerHTML = `<b>Kosong!</b><br><br>Tidak ada satupun piring tersisa di meja prasmanan. Kamu tidak bisa mengambil piring (Pop). Silakan tambah piring baru terlebih dahulu!`;
+statusText.innerHTML = `Seseorang mengambil piring <b>${plateIdText}</b> dari <b>posisi paling atas</b> (Proses <i>Pop</i>).<br><br>Perhatikan bahwa piring yang terakhir kali masuk tadi justru menjadi yang pertama kali keluar (LIFO)!`;
