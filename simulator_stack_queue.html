@@ -50,15 +50,6 @@
                 <button onclick="doOp('push')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl shadow-md active:scale-95 transition-all flex items-center gap-2 text-sm">
                     <i class="fas fa-plus"></i> Push / Enqueue
                 </button>
-                <button onclick="doOp('pop')" class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-xl shadow-md active:scale-95 transition-all flex items-center gap-2 text-sm">
-                    <i class="fas fa-arrow-left"></i> Pop 2
-                </button>
-                <button onclick="doOp('dequeue')" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-6 rounded-xl shadow-md active:scale-95 transition-all flex items-center gap-2 text-sm">
-                    <i class="fas fa-arrow-right"></i> Dequeue (Pop 1)
-                </button>
-                <button onclick="doOp('clear')" class="bg-white hover:bg-slate-50 text-slate-600 font-bold py-3 px-6 rounded-xl shadow-sm border-2 border-slate-200 active:scale-95 transition-all flex items-center gap-2 text-sm">
-                    <i class="fas fa-trash"></i> Kosongkan
-                </button>
             </div>
         </div>
 
@@ -105,6 +96,19 @@
                 <div id="data-container" class="w-full flex items-center justify-center z-10 gap-3 flex-wrap py-8 px-2">
                 </div>
                 <div id="data-empty" class="absolute inset-0 flex items-center justify-center text-slate-400 font-bold z-0 pointer-events-none">Data Kosong — Tambahkan angka!</div>
+            </div>
+
+            <!-- Action Buttons (below data) -->
+            <div class="flex flex-wrap gap-3 justify-center mt-5">
+                <button onclick="doOp('pop')" class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-xl shadow-md active:scale-95 transition-all flex items-center gap-2 text-sm">
+                    <i class="fas fa-arrow-left"></i> Pop 2
+                </button>
+                <button onclick="doOp('dequeue')" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-6 rounded-xl shadow-md active:scale-95 transition-all flex items-center gap-2 text-sm">
+                    <i class="fas fa-arrow-right"></i> Dequeue (Pop 1)
+                </button>
+                <button onclick="doOp('clear')" class="bg-white hover:bg-slate-50 text-slate-600 font-bold py-3 px-6 rounded-xl shadow-sm border-2 border-slate-200 active:scale-95 transition-all flex items-center gap-2 text-sm">
+                    <i class="fas fa-trash"></i> Kosongkan
+                </button>
             </div>
         </div>
 
