@@ -32,6 +32,22 @@
             <p class="text-lg text-slate-500 font-medium">Satu data, empat operasi — lihat perbedaan LIFO dan FIFO</p>
         </div>
 
+        <!-- Explanation -->
+        <div class="mb-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 text-center">
+                <p class="font-black text-indigo-700 text-sm mb-1"><i class="fas fa-plus mr-1"></i>Push / Enqueue</p>
+                <p class="text-xs text-indigo-600">Tambah angka ke data</p>
+            </div>
+            <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-center">
+                <p class="font-black text-red-600 text-sm mb-1"><i class="fas fa-arrow-left mr-1"></i>Pop (Stack)</p>
+                <p class="text-xs text-red-500">Hapus dari <b>belakang</b> (LIFO)</p>
+            </div>
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-center">
+                <p class="font-black text-amber-600 text-sm mb-1"><i class="fas fa-arrow-right mr-1"></i>Dequeue (Queue)</p>
+                <p class="text-xs text-amber-500">Hapus dari <b>depan</b> (FIFO)</p>
+            </div>
+        </div>
+
         <!-- Controls Area -->
         <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 mb-6 w-full">
             <!-- Input -->
@@ -64,22 +80,6 @@
                 <h2 class="text-xl font-black text-slate-800"><i class="fas fa-database text-blue-500 mr-2"></i>Isi Data</h2>
                 <div class="bg-blue-50 text-blue-700 px-4 py-1 rounded-lg text-sm font-bold border border-blue-200">
                     Jumlah: <span id="data-count">0</span>
-                </div>
-            </div>
-
-            <!-- Explanation -->
-            <div class="mb-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 text-center">
-                    <p class="font-black text-indigo-700 text-sm mb-1"><i class="fas fa-plus mr-1"></i>Push / Enqueue</p>
-                    <p class="text-xs text-indigo-600">Tambah angka ke data</p>
-                </div>
-                <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-center">
-                    <p class="font-black text-red-600 text-sm mb-1"><i class="fas fa-arrow-left mr-1"></i>Pop (Stack)</p>
-                    <p class="text-xs text-red-500">Hapus dari <b>belakang</b> (LIFO)</p>
-                </div>
-                <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-center">
-                    <p class="font-black text-amber-600 text-sm mb-1"><i class="fas fa-arrow-right mr-1"></i>Dequeue (Queue)</p>
-                    <p class="text-xs text-amber-500">Hapus dari <b>depan</b> (FIFO)</p>
                 </div>
             </div>
 
