@@ -76,6 +76,22 @@
                 </div>
             </div>
 
+            <!-- Explanation -->
+            <div class="mb-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 text-center">
+                    <p class="font-black text-indigo-700 text-sm mb-1"><i class="fas fa-plus mr-1"></i>Push / Enqueue</p>
+                    <p class="text-xs text-indigo-600">Tambah angka ke data</p>
+                </div>
+                <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-center">
+                    <p class="font-black text-red-600 text-sm mb-1"><i class="fas fa-arrow-left mr-1"></i>Pop (Stack)</p>
+                    <p class="text-xs text-red-500">Hapus dari <b>belakang</b> (LIFO)</p>
+                </div>
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-center">
+                    <p class="font-black text-amber-600 text-sm mb-1"><i class="fas fa-arrow-right mr-1"></i>Dequeue (Queue)</p>
+                    <p class="text-xs text-amber-500">Hapus dari <b>depan</b> (FIFO)</p>
+                </div>
+            </div>
+
             <!-- Visual Container -->
             <div class="min-h-[200px] bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl relative flex items-center p-4 overflow-hidden">
                 <!-- Labels -->
@@ -90,27 +106,24 @@
                 </div>
                 <div id="data-empty" class="absolute inset-0 flex items-center justify-center text-slate-400 font-bold z-0 pointer-events-none">Data Kosong — Tambahkan angka!</div>
             </div>
+        </div>
 
-            <!-- Explanation -->
-            <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 text-center">
-                    <p class="font-black text-indigo-700 text-sm mb-1"><i class="fas fa-plus mr-1"></i>Push / Enqueue</p>
-                    <p class="text-xs text-indigo-600">Tambah angka ke data</p>
-                </div>
-                <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-center">
-                    <p class="font-black text-red-600 text-sm mb-1"><i class="fas fa-arrow-left mr-1"></i>Pop (Stack)</p>
-                    <p class="text-xs text-red-500">Hapus dari <b>belakang</b> (LIFO)</p>
-                </div>
-                <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-center">
-                    <p class="font-black text-amber-600 text-sm mb-1"><i class="fas fa-arrow-right mr-1"></i>Dequeue (Queue)</p>
-                    <p class="text-xs text-amber-500">Hapus dari <b>depan</b> (FIFO)</p>
-                </div>
+        <!-- Riwayat Langkah -->
+        <div class="bg-white p-6 md:p-8 rounded-3xl shadow-lg border border-slate-200 mt-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-black text-slate-800"><i class="fas fa-history text-purple-500 mr-2"></i>Riwayat Langkah</h2>
+                <button onclick="clearHistory()" class="text-xs font-bold text-slate-400 hover:text-red-500 transition-colors"><i class="fas fa-trash mr-1"></i>Hapus Riwayat</button>
+            </div>
+            <div id="history-container" class="space-y-2 max-h-[300px] overflow-y-auto">
+                <p id="history-empty" class="text-slate-400 text-sm text-center py-4 font-medium">Belum ada langkah. Mulai operasi untuk melihat riwayat.</p>
             </div>
         </div>
     </div>
 
     <script>
         let data = [];
+        let history = [];
+        let stepCount = 0;
 
         function doOp(type) {
             const input = document.getElementById('input-number');
@@ -120,22 +133,64 @@
                 if (isNaN(val)) { showStatus('⚠️ Masukkan angka terlebih dahulu!', 'text-orange-600 bg-orange-50 border-orange-200'); return; }
                 data.push(val);
                 input.value = '';
+                addHistory('push', val, null);
                 showStatus(`✅ Angka <b>${val}</b> ditambahkan ke data.`, 'text-indigo-700 bg-indigo-50 border-indigo-200');
             } else if (type === 'pop') {
                 if (data.length === 0) { showStatus('❌ Data kosong! Tidak ada yang bisa di-Pop.', 'text-red-600 bg-red-50 border-red-200'); return; }
                 const removed = data.pop();
+                addHistory('pop', null, removed);
                 showStatus(`🗑️ Pop: angka <b>${removed}</b> dihapus dari <b>belakang</b> (LIFO).`, 'text-red-600 bg-red-50 border-red-200');
             } else if (type === 'dequeue') {
                 if (data.length === 0) { showStatus('❌ Data kosong! Tidak ada yang bisa di-Dequeue.', 'text-red-600 bg-red-50 border-red-200'); return; }
                 const removed = data.shift();
+                addHistory('dequeue', null, removed);
                 showStatus(`🗑️ Dequeue: angka <b>${removed}</b> dihapus dari <b>depan</b> (FIFO).`, 'text-amber-700 bg-amber-50 border-amber-200');
             } else if (type === 'clear') {
                 data = [];
+                addHistory('clear', null, null);
                 showStatus('🧹 Semua data dikosongkan.', 'text-slate-600 bg-slate-50 border-slate-200');
             }
 
             render();
             input.focus();
+        }
+
+        function addHistory(type, added, removed) {
+            stepCount++;
+            const container = document.getElementById('history-container');
+            const emptyMsg = document.getElementById('history-empty');
+            if (emptyMsg) emptyMsg.remove();
+
+            let icon, color, text;
+            if (type === 'push') {
+                icon = 'fa-plus-circle'; color = 'text-indigo-600 bg-indigo-50 border-indigo-200';
+                text = `Push / Enqueue → masukkan angka <b>${added}</b>`;
+            } else if (type === 'pop') {
+                icon = 'fa-minus-circle'; color = 'text-red-600 bg-red-50 border-red-200';
+                text = `Pop 2 → hapus angka <b>${removed}</b> dari belakang`;
+            } else if (type === 'dequeue') {
+                icon = 'fa-minus-circle'; color = 'text-amber-600 bg-amber-50 border-amber-200';
+                text = `Dequeue (Pop 1) → hapus angka <b>${removed}</b> dari depan`;
+            } else if (type === 'clear') {
+                icon = 'fa-trash'; color = 'text-slate-600 bg-slate-50 border-slate-200';
+                text = `Kosongkan semua data`;
+            }
+
+            const row = document.createElement('div');
+            row.className = `flex items-center gap-3 px-4 py-2.5 rounded-xl border text-sm item-enter ${color}`;
+            row.innerHTML = `
+                <span class="font-black text-xs w-8 shrink-0">L${stepCount}</span>
+                <i class="fas ${icon}"></i>
+                <span class="font-bold">${text}</span>
+                <span class="ml-auto text-xs opacity-60 shrink-0">[${data.join(', ')}]</span>
+            `;
+            container.insertBefore(row, container.firstChild);
+        }
+
+        function clearHistory() {
+            const container = document.getElementById('history-container');
+            container.innerHTML = '<p id="history-empty" class="text-slate-400 text-sm text-center py-4 font-medium">Belum ada langkah. Mulai operasi untuk melihat riwayat.</p>';
+            stepCount = 0;
         }
 
         function showStatus(msg, classes) {
