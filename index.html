@@ -203,7 +203,10 @@
                         <label class="font-bold text-gray-700">Pilih Tanggal Pertemuan:</label>
                         <input type="date" id="tanggal-presensi" class="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 shadow-sm font-medium">
                     </div>
-                    <button onclick="loadPresensi()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-bold shadow-md transition-all text-sm flex items-center gap-2"><i class="fas fa-search"></i> Mulai Absen</button>
+                    <div class="flex gap-2">
+                        <button onclick="bukaModalRekapPresensi()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg font-bold shadow-md transition-all text-sm flex items-center gap-2"><i class="fas fa-list"></i> Lihat Data Presensi</button>
+                        <button onclick="loadPresensi()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-bold shadow-md transition-all text-sm flex items-center gap-2"><i class="fas fa-edit"></i> Mulai Absen</button>
+                    </div>
                 </div>
             </div>
 
@@ -258,6 +261,41 @@
                 <div class="mt-8 flex justify-end gap-3">
                     <button onclick="tutupModalSiswa()" class="px-5 py-2 rounded-lg font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors">Batal</button>
                     <button onclick="simpanSiswa()" class="px-5 py-2 rounded-lg font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md transition-colors">Simpan</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL REKAP PRESENSI -->
+        <div id="modal-rekap-presensi" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 z-50 flex justify-center items-center backdrop-blur-sm transition-opacity">
+            <div class="bg-white rounded-2xl w-full max-w-3xl p-6 shadow-2xl transform transition-all scale-100 flex flex-col max-h-[90vh]">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-black text-gray-800">Rekap Data Presensi</h3>
+                    <button onclick="tutupModalRekapPresensi()" class="text-gray-400 hover:text-red-500 transition-colors"><i class="fas fa-times text-xl"></i></button>
+                </div>
+                <div class="overflow-y-auto flex-1 bg-white rounded-xl border border-gray-200">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="sticky top-0 z-10 bg-gray-50 shadow-sm">
+                            <tr class="border-b border-gray-200 text-gray-500 text-xs uppercase tracking-wider">
+                                <th class="p-4 font-bold">Tanggal</th>
+                                <th class="p-4 font-bold">NIS</th>
+                                <th class="p-4 font-bold">Nama Lengkap</th>
+                                <th class="p-4 font-bold text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rekap-presensi-tbody" class="divide-y divide-gray-100 text-gray-700">
+                            <!-- Injected by JS -->
+                            <tr>
+                                <td colspan="4" class="p-8 text-center text-gray-500">
+                                    <i class="fas fa-info-circle text-2xl mb-2 text-blue-400"></i>
+                                    <p>Data rekap presensi akan dimuat di sini.</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-6 flex justify-end gap-3 pt-4 border-t border-gray-100">
+                    <button class="px-5 py-2 rounded-lg font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors" onclick="alert('Fitur Export PDF/Excel dapat diintegrasikan dengan GAS.')"><i class="fas fa-download mr-2"></i>Export</button>
+                    <button onclick="tutupModalRekapPresensi()" class="px-5 py-2 rounded-lg font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors">Tutup</button>
                 </div>
             </div>
         </div>
@@ -681,6 +719,66 @@
             // Refresh data
             isSiswaFetched = false;
             fetchSiswa();
+        }
+
+        // ==========================================
+        // MODAL REKAP PRESENSI
+        // ==========================================
+        async function bukaModalRekapPresensi() {
+            document.getElementById('modal-rekap-presensi').classList.remove('hidden');
+            const tbody = document.getElementById('rekap-presensi-tbody');
+            tbody.innerHTML = '<tr><td colspan="4" class="p-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin text-2xl mb-2"></i><p>Mengambil data presensi...</p></td></tr>';
+            
+            try {
+                // Di sini Anda bisa memanggil GAS untuk mengambil sheet "Presensi"
+                // Menggunakan simulasi data statis atau memanggil GAS jika endpoint `action=get_presensi` sudah ada
+                
+                // --- SIMULASI UI JIKA GAS BELUM ADA ---
+                setTimeout(() => {
+                    const today = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                    
+                    let html = '';
+                    if (globalDataSiswa && globalDataSiswa.length > 0) {
+                        globalDataSiswa.forEach((siswa, idx) => {
+                            // Acak status untuk simulasi: 80% Hadir, 20% lain-lain
+                            const rand = Math.random();
+                            let status = "Hadir";
+                            let statusColor = "bg-green-100 text-green-700 border-green-200";
+                            
+                            if (rand > 0.8) {
+                                status = "Sakit";
+                                statusColor = "bg-yellow-100 text-yellow-700 border-yellow-200";
+                            } else if (rand > 0.9) {
+                                status = "Izin";
+                                statusColor = "bg-blue-100 text-blue-700 border-blue-200";
+                            } else if (rand > 0.95) {
+                                status = "Alpa";
+                                statusColor = "bg-red-100 text-red-700 border-red-200";
+                            }
+
+                            html += `
+                                <tr class="hover:bg-blue-50/50 transition-colors">
+                                    <td class="p-4 font-medium text-gray-600">${today}</td>
+                                    <td class="p-4 font-bold text-gray-800">${siswa['No'] || (idx+1)}</td>
+                                    <td class="p-4">${siswa['Nama Lengkap'] || '-'}</td>
+                                    <td class="p-4 text-center">
+                                        <span class="px-3 py-1 rounded-full text-xs font-bold border ${statusColor}">${status}</span>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                    } else {
+                        html = '<tr><td colspan="4" class="p-8 text-center text-gray-500">Belum ada data. Silakan ke menu Daftar Siswa terlebih dahulu.</td></tr>';
+                    }
+                    tbody.innerHTML = html;
+                }, 1000);
+            } catch (error) {
+                tbody.innerHTML = '<tr><td colspan="4" class="p-8 text-center text-red-500">Gagal mengambil data rekap.</td></tr>';
+            }
+        }
+
+        function tutupModalRekapPresensi() {
+            document.getElementById('modal-rekap-presensi').classList.add('hidden');
         }
 
         // Initialize
