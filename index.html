@@ -525,9 +525,65 @@
             }
         }
         
-        function simpanPresensi() {
-            const tgl = document.getElementById('label-tanggal').innerText;
-            alert("Data kehadiran tanggal " + tgl + " berhasil disimpan ke sistem! (Simulasi UI)");
+        async function simpanPresensi() {
+            const tgl = document.getElementById('tanggal-presensi').value;
+            const tglLabel = document.getElementById('label-tanggal').innerText;
+            
+            if (!tgl || !globalDataSiswa) {
+                alert("Tanggal belum dipilih atau data siswa belum dimuat!");
+                return;
+            }
+
+            // Ubah tombol menjadi loading
+            const btnSimpan = document.querySelector('button[onclick="simpanPresensi()"]');
+            const originalBtnText = btnSimpan.innerHTML;
+            btnSimpan.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Menyimpan...';
+            btnSimpan.disabled = true;
+
+            // Kumpulkan data absensi dari radio button
+            const dataKehadiran = [];
+            globalDataSiswa.forEach((siswa, idx) => {
+                const no = siswa['No'] || (idx + 1);
+                const nama = siswa['Nama Lengkap'] || '-';
+                
+                // Cari radio button yang dicentang untuk siswa ini
+                const selectedRadio = document.querySelector(`input[name="presensi_${no}"]:checked`);
+                const status = selectedRadio ? selectedRadio.value : 'Hadir'; // Default Hadir jika tidak ditemukan
+                
+                dataKehadiran.push({
+                    no: no,
+                    nama: nama,
+                    status: status
+                });
+            });
+
+            const payload = {
+                action: "simpan_presensi",
+                tanggal: tgl, // Simpan dalam format YYYY-MM-DD
+                tanggalFormatted: tglLabel,
+                dataKehadiran: dataKehadiran
+            };
+
+            try {
+                // Gunakan URL Web App GAS Anda (sama seperti URL fetch siswa)
+                const gasUrl = 'https://script.google.com/macros/s/AKfycbypyCxR1n4yj7Dhi7LgJ8mQYXMDpOp7V4IDxRDU4kP03h6QdgBS5tRElQXrl64msVjYvA/exec';
+                
+                const response = await fetch(gasUrl, {
+                    method: 'POST',
+                    // Gunakan mode no-cors untuk menghindari error CORS saat preflight,
+                    // atau cukup kirim sebagai text/plain agar dianggap simple request
+                    body: JSON.stringify(payload)
+                });
+                
+                alert("Data kehadiran tanggal " + tglLabel + " berhasil disimpan ke Spreadsheet!");
+            } catch (error) {
+                console.error("Error saving presensi:", error);
+                alert("Terjadi kesalahan saat menyimpan data kehadiran. Pastikan GAS Web App memiliki fungsi doPost.");
+            } finally {
+                // Kembalikan tombol ke semula
+                btnSimpan.innerHTML = originalBtnText;
+                btnSimpan.disabled = false;
+            }
         }
 
         // Initialize
