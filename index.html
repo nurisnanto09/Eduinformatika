@@ -95,7 +95,10 @@
                     <h2 class="text-3xl font-black text-gray-800 mb-2">Daftar Siswa</h2>
                     <p class="text-gray-500 font-medium">Manajemen data peserta didik kelas Informatika.</p>
                 </div>
-                <button class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-bold shadow-md transition-all text-sm"><i class="fas fa-file-export mr-2"></i>Export ke Sheets</button>
+                <div class="flex gap-2">
+                    <button onclick="bukaModalSiswa()" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg font-bold shadow-md transition-all text-sm"><i class="fas fa-plus mr-2"></i>Tambah Siswa</button>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-bold shadow-md transition-all text-sm"><i class="fas fa-file-export mr-2"></i>Export</button>
+                </div>
             </div>
             
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
@@ -229,6 +232,34 @@
         <!-- SIMULATOR STACK & QUEUE -->
         <div id="view-simulator" class="view-section hidden animate-fade-in" style="height: calc(100vh - 5rem);">
             <iframe src="simulator_stack_queue.html" class="w-full h-full border-none rounded-2xl"></iframe>
+        </div>
+
+        <!-- MODAL SISWA -->
+        <div id="modal-siswa" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 z-50 flex justify-center items-center backdrop-blur-sm transition-opacity">
+            <div class="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl transform transition-all scale-100">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 id="modal-title" class="text-xl font-black text-gray-800">Tambah Siswa Baru</h3>
+                    <button onclick="tutupModalSiswa()" class="text-gray-400 hover:text-red-500 transition-colors"><i class="fas fa-times text-xl"></i></button>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">NIS (Opsional)</label>
+                        <input type="text" id="input-nis" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Masukkan NIS">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Nama Lengkap</label>
+                        <input type="text" id="input-nama" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Masukkan Nama Lengkap">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Kelas</label>
+                        <input type="text" id="input-kelas" value="X-Informatika" class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:outline-none" readonly>
+                    </div>
+                </div>
+                <div class="mt-8 flex justify-end gap-3">
+                    <button onclick="tutupModalSiswa()" class="px-5 py-2 rounded-lg font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors">Batal</button>
+                    <button onclick="simpanSiswa()" class="px-5 py-2 rounded-lg font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md transition-colors">Simpan</button>
+                </div>
+            </div>
         </div>
 
     </main>
@@ -440,7 +471,12 @@
                             <td class="p-5 font-bold text-gray-800">${siswa['Nama Lengkap'] || '-'}</td>
                             <td class="p-5">${kelasBadge}</td>
                             <td class="p-5">${statusBadge}</td>
-                            <td class="p-5 text-center"><button class="text-blue-600 hover:text-blue-800 font-bold text-sm bg-blue-50 px-3 py-1.5 rounded-md hover:bg-blue-100 transition-colors">Detail</button></td>
+                            <td class="p-5 text-center">
+                                <div class="flex justify-center gap-2">
+                                    <button onclick="editSiswa('${siswa['No'] || ''}', '${siswa['Nama Lengkap'] || ''}')" class="text-amber-600 hover:text-amber-800 font-bold text-sm bg-amber-50 px-3 py-1.5 rounded-md hover:bg-amber-100 transition-colors"><i class="fas fa-edit"></i></button>
+                                    <button onclick="hapusSiswa('${siswa['No'] || ''}')" class="text-red-600 hover:text-red-800 font-bold text-sm bg-red-50 px-3 py-1.5 rounded-md hover:bg-red-100 transition-colors"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
                         `;
                         tbody.appendChild(tr);
                     });
@@ -584,6 +620,67 @@
                 btnSimpan.innerHTML = originalBtnText;
                 btnSimpan.disabled = false;
             }
+        }
+
+        // ==========================================
+        // MODAL DAN AKSI SISWA (Simulasi UI)
+        // ==========================================
+        let modeEditSiswa = false;
+        let siswaEditId = null;
+
+        function bukaModalSiswa() {
+            modeEditSiswa = false;
+            document.getElementById('modal-title').innerText = "Tambah Siswa Baru";
+            document.getElementById('input-nis').value = "";
+            document.getElementById('input-nama').value = "";
+            document.getElementById('modal-siswa').classList.remove('hidden');
+        }
+
+        function tutupModalSiswa() {
+            document.getElementById('modal-siswa').classList.add('hidden');
+        }
+
+        function editSiswa(nis, nama) {
+            modeEditSiswa = true;
+            siswaEditId = nis;
+            document.getElementById('modal-title').innerText = "Edit Data Siswa";
+            document.getElementById('input-nis').value = nis;
+            document.getElementById('input-nama').value = nama;
+            document.getElementById('modal-siswa').classList.remove('hidden');
+        }
+
+        function hapusSiswa(nis) {
+            if(confirm("Apakah Anda yakin ingin menghapus siswa dengan NIS/No: " + nis + "?")) {
+                // Di sini nantinya Anda bisa membuat fetch() dengan method POST ke GAS action="hapus_siswa"
+                alert("Data siswa " + nis + " berhasil dihapus! (Simulasi UI)");
+                // Refresh data
+                isSiswaFetched = false;
+                fetchSiswa();
+            }
+        }
+
+        async function simpanSiswa() {
+            const nis = document.getElementById('input-nis').value;
+            const nama = document.getElementById('input-nama').value;
+            
+            if(!nama) {
+                alert("Nama lengkap harus diisi!");
+                return;
+            }
+
+            const payload = {
+                action: modeEditSiswa ? "edit_siswa" : "tambah_siswa",
+                nis: nis,
+                nama: nama
+            };
+
+            // Di sini nantinya Anda bisa membuat fetch() dengan method POST ke GAS action="tambah_siswa"
+            alert((modeEditSiswa ? "Perubahan data" : "Data siswa baru") + " berhasil disimpan! (Simulasi UI)");
+            tutupModalSiswa();
+            
+            // Refresh data
+            isSiswaFetched = false;
+            fetchSiswa();
         }
 
         // Initialize
