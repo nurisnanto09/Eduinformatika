@@ -1,0 +1,1067 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bedah Kisi-Kisi PTS Informatika | EduInformatika</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Vanilla Tilt JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              mono: ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "monospace"],
+            },
+            colors: {
+              brandDark: "#F8FAFC",
+              brandGray: "#ffffff",
+              brandCard: "#ffffff",
+              brandGreen: "#2563EB",
+              brandGreenDark: "#1D4ED8",
+              textGray: "#6B7280",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .bg-grid {
+        background-size: 40px 40px;
+        background-image: linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+      }
+      .glow-green {
+        box-shadow: 0 0 25px rgba(37, 99, 235, 0.2);
+      }
+      .glow {
+        box-shadow: 0 0 80px 10px rgba(37, 99, 235, 0.15);
+      }
+      .tilt-card {
+        transform-style: preserve-3d;
+      }
+      .tilt-card-content {
+        transform: translateZ(30px);
+      }
+    </style>
+  </head>
+  <body class="bg-brandDark text-gray-800 font-sans antialiased overflow-x-hidden flex flex-col min-h-screen">
+    <!-- Navigation -->
+    <nav class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between border-b border-gray-200 relative z-10 w-full">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-code text-brandGreen text-xl"></i>
+        <span class="text-xl font-bold tracking-tight text-brandGreen">EduInformatika</span>
+      </div>
+
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
+        <a href="index.html" class="hover:text-gray-800 transition">Dashboard</a>
+        <a href="index.html#materi" class="hover:text-gray-800 transition">Daftar Materi</a>
+        <a href="#" class="hover:text-blue-600 transition">Pembahasan Soal</a>
+        <a href="materi-search-sort.html" class="hover:text-gray-800 transition">Simulasi Ujian</a>
+        <a href="leaderboard.html" class="hover:text-gray-800 transition">Leaderboard</a>
+      </div>
+
+      <button class="flex items-center gap-2 border border-gray-200 rounded-full px-5 py-2.5 text-sm font-medium hover:bg-gray-50 transition"><i class="fa-solid fa-chalkboard-user text-brandGreen"></i> Guru Informatika</button>
+    </nav>
+
+    <!-- Main Content Wrapper -->
+    <div class="flex-grow">
+      <!-- Hero Section Bedah Kisi-Kisi -->
+      <main class="relative bg-grid pb-16 pt-16">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-blue-50 rounded-full blur-[150px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-6 py-12 relative z-10">
+          <div class="text-center md:text-left">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gray-50 border border-gray-200 text-xs font-medium text-gray-600 mb-6"><i class="fa-solid fa-bullseye text-brandGreen"></i> Modul Khusus</div>
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">Bedah Kisi-Kisi PTS Informatika</h1>
+            <p class="text-textGray text-base md:text-lg max-w-2xl leading-relaxed">Pahami peta soal ujianmu secara menyeluruh. Lihat distribusi materi, bobot, dan indikator penting yang akan diujikan. Strategi jitu menantimu di sini.</p>
+          </div>
+        </div>
+      </main>
+
+      <!-- Ringkasan Statistik -->
+      <section class="max-w-7xl mx-auto px-6 py-8 -mt-8 relative z-10">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Total Soal -->
+          <div class="tilt-card bg-brandGray border border-gray-200 rounded-3xl p-6 text-center" data-tilt data-tilt-glare data-tilt-max-glare="0.1">
+            <div class="tilt-card-content">
+              <div class="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center mx-auto mb-4 text-2xl text-brandGreen">
+                <i class="fa-solid fa-file-circle-question"></i>
+              </div>
+              <h3 class="text-3xl font-bold">20</h3>
+              <p class="text-textGray text-sm">Soal Pilihan Ganda</p>
+            </div>
+          </div>
+
+          <!-- Alokasi Waktu -->
+          <div class="tilt-card bg-brandGray border border-gray-200 rounded-3xl p-6 text-center" data-tilt data-tilt-glare data-tilt-max-glare="0.1">
+            <div class="tilt-card-content">
+              <div class="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center mx-auto mb-4 text-2xl text-brandGreen">
+                <i class="fa-solid fa-clock"></i>
+              </div>
+              <h3 class="text-3xl font-bold">90 Menit</h3>
+              <p class="text-textGray text-sm">Durasi Ujian</p>
+            </div>
+          </div>
+
+          <!-- Persentase Kelulusan -->
+          <div class="tilt-card bg-brandGray border border-gray-200 rounded-3xl p-6 text-center" data-tilt data-tilt-glare data-tilt-max-glare="0.1">
+            <div class="tilt-card-content">
+              <div class="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center mx-auto mb-4 text-2xl text-brandGreen">
+                <i class="fa-solid fa-percent"></i>
+              </div>
+              <h3 class="text-3xl font-bold">75%</h3>
+              <p class="text-textGray text-sm">Standar Kompetensi Minimal</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tabel Distribusi Materi -->
+      <section class="max-w-7xl mx-auto px-6 py-12">
+        <h2 class="text-2xl font-bold mb-8 border-l-4 border-brandGreen pl-4">Distribusi Materi & Bobot Soal</h2>
+
+        <div class="bg-brandGray border border-gray-200 rounded-3xl overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead class="bg-gray-50 border-b border-gray-200 text-textGray text-xs uppercase tracking-wider">
+                <tr>
+                  <th class="px-5 py-4">Materi</th>
+                  <th class="px-5 py-4 text-center">Jumlah Soal</th>
+                  <th class="px-5 py-4 text-center">Bobot (%)</th>
+                  <th class="px-5 py-4">Indikator Penting</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 text-sm">
+                <!-- Berpikir Komputasional -->
+                <tr class="hover:bg-gray-50 transition">
+                  <td class="px-5 py-4">
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-brandGreen">
+                        <i class="fa-solid fa-brain"></i>
+                      </div>
+                      <div>
+                        <p class="font-bold text-gray-800">Berpikir Komputasional</p>
+                        <p class="text-textGray text-xs">4 Pilar Utama</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-5 py-4 text-center font-semibold text-gray-800">10</td>
+                  <td class="px-5 py-4 text-center">
+                    <div class="flex items-center justify-center gap-2">
+                      <span class="text-brandGreen font-bold">50%</span>
+                      <div class="w-24 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-brandGreen" style="width: 50%"></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-5 py-4 text-textGray">Dekomposisi, Pengenalan Pola, Abstraksi, Algoritma. Terapkan pada studi kasus sederhana.</td>
+                </tr>
+
+                <!-- Stack & Queue -->
+                <tr class="hover:bg-gray-50 transition">
+                  <td class="px-5 py-4">
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-brandGreen">
+                        <i class="fa-solid fa-layer-group"></i>
+                      </div>
+                      <div>
+                        <p class="font-bold text-gray-800">Stack & Queue</p>
+                        <p class="text-textGray text-xs">Struktur Data Linier</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-5 py-4 text-center font-semibold text-gray-800">6</td>
+                  <td class="px-5 py-4 text-center">
+                    <div class="flex items-center justify-center gap-2">
+                      <span class="text-brandGreen font-bold">30%</span>
+                      <div class="w-24 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-brandGreen" style="width: 30%"></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-5 py-4 text-textGray">Prinsip LIFO & FIFO, operasi push/pop, enqueue/dequeue, contoh penerapan sehari-hari.</td>
+                </tr>
+
+                <!-- Searching & Sorting -->
+                <tr class="hover:bg-gray-50 transition">
+                  <td class="px-5 py-4">
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-brandGreen">
+                        <i class="fa-solid fa-magnifying-glass-chart"></i>
+                      </div>
+                      <div>
+                        <p class="font-bold text-gray-800">Searching & Sorting</p>
+                        <p class="text-textGray text-xs">Algoritma Standar</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-5 py-4 text-center font-semibold text-gray-800">4</td>
+                  <td class="px-5 py-4 text-center">
+                    <div class="flex items-center justify-center gap-2">
+                      <span class="text-brandGreen font-bold">20%</span>
+                      <div class="w-24 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-brandGreen" style="width: 20%"></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-5 py-4 text-textGray">Linear & Binary Search, Bubble/Insertion/Selection Sort. Mampu menelusuri proses langkah demi langkah.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Strategi Jitu -->
+      <section class="max-w-7xl mx-auto px-6 py-12">
+        <h2 class="text-2xl font-bold mb-8 border-l-4 border-brandGreen pl-4">Strategi Jitu Menaklukkan PTS</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Tips 1 -->
+          <div class="bg-brandGray border border-gray-200 rounded-3xl p-6 hover:border-brandGreen/30 transition">
+            <div class="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center mb-4 text-2xl text-brandGreen">
+              <i class="fa-solid fa-list-check"></i>
+            </div>
+            <h4 class="font-bold text-gray-800 mb-2">1. Kuasai Prioritas</h4>
+            <p class="text-textGray text-sm">Fokus pada materi dengan bobot tertinggi: Berpikir Komputasional (50%), lalu Stack & Queue (30%).</p>
+          </div>
+
+          <!-- Tips 2 -->
+          <div class="bg-brandGray border border-gray-200 rounded-3xl p-6 hover:border-brandGreen/30 transition">
+            <div class="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center mb-4 text-2xl text-brandGreen">
+              <i class="fa-solid fa-repeat"></i>
+            </div>
+            <h4 class="font-bold text-gray-800 mb-2">2. Latihan Simulasi</h4>
+            <p class="text-textGray text-sm">Gunakan simulasi interaktif di modul Searching & Sorting untuk memahami proses secara visual.</p>
+          </div>
+
+          <!-- Tips 3 -->
+          <div class="bg-brandGray border border-gray-200 rounded-3xl p-6 hover:border-brandGreen/30 transition">
+            <div class="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center mb-4 text-2xl text-brandGreen">
+              <i class="fa-solid fa-book-open"></i>
+            </div>
+            <h4 class="font-bold text-gray-800 mb-2">3. Pahami Konsep, Bukan Hafalan</h4>
+            <p class="text-textGray text-sm">Setiap soal HOTS menuntut penalaran. Pastikan kamu mengerti "mengapa" bukan hanya "apa".</p>
+          </div>
+
+          <!-- Tips 4 -->
+          <div class="bg-brandGray border border-gray-200 rounded-3xl p-6 hover:border-brandGreen/30 transition">
+            <div class="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center mb-4 text-2xl text-brandGreen">
+              <i class="fa-solid fa-stopwatch"></i>
+            </div>
+            <h4 class="font-bold text-gray-800 mb-2">4. Manajemen Waktu</h4>
+            <p class="text-textGray text-sm">Alokasikan ~2 menit per soal. Jangan terpaku pada satu soal, tandai dan kembali lagi nanti.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================== KUIS INTERAKTIF ================== -->
+      <section class="max-w-7xl mx-auto px-6 py-12">
+        <div class="text-center mb-10">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gray-50 border border-gray-200 text-xs font-medium text-gray-600 mb-4"><i class="fa-solid fa-pen-to-square text-brandGreen"></i> Uji Pemahamanmu</div>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-3">Kuis Interaktif Bedah Kisi-Kisi</h2>
+          <p class="text-textGray text-sm md:text-base max-w-2xl mx-auto">20 soal pilihan ganda dengan pembahasan. Pilih jawabanmu, dapatkan clue, dan pelajari polanya!</p>
+        </div>
+
+        <!-- Grid Soal 1 - 20 -->
+        <div class="grid grid-cols-4 sm:grid-cols-5 gap-4" id="gridSoal">
+          <!-- Grid item generated by JS -->
+        </div>
+      </section>
+
+      <!-- POP-UP MODAL SOAL -->
+      <div id="modalOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-brandCard border border-gray-200 rounded-3xl max-w-2xl w-full p-6 md:p-8 relative shadow-2xl glow-green max-h-[90vh] overflow-y-auto">
+          <!-- Close Button -->
+          <button onclick="tutupModal()" class="absolute top-5 right-6 text-textGray hover:text-gray-800 text-xl font-bold">✕</button>
+
+          <!-- Badge Header -->
+          <div class="flex items-center gap-3 mb-4">
+            <span id="modalNumberBadge" class="bg-brandGreen text-black font-bold px-3 py-1 rounded-full text-xs">Soal #1</span>
+            <span id="statusSoalBadge" class="text-xs text-textGray">Pilihan Ganda</span>
+          </div>
+
+          <!-- TEKS SOAL -->
+          <div id="modalSoalTeks" class="text-base md:text-lg font-normal leading-relaxed mb-6 text-gray-900 space-y-3"></div>
+
+          <!-- CONTAINER GAMBAR -->
+          <div id="modalGambarContainer" class="hidden mb-6 flex justify-center bg-gray-50 border border-gray-200 rounded-2xl p-3"></div>
+
+          <!-- CONTAINER TABEL -->
+          <div id="modalTabelContainer" class="hidden mb-6 overflow-x-auto bg-gray-50 border border-gray-200 rounded-2xl p-4"></div>
+
+          <!-- AI Clue Box -->
+          <div id="aiClueBox" class="hidden bg-brandGreenDark/30 border border-brandGreen/30 rounded-2xl p-4 mb-4 text-sm text-green-200"><span class="font-bold text-brandGreen">🤖 Clue:</span> <span id="aiClueTeks"></span></div>
+
+          <!-- Opsi Jawaban -->
+          <div id="modalOpsiContainer" class="space-y-3 mb-6"></div>
+
+          <!-- Box Penjelasan / Keterangan -->
+          <div id="penjelasanBox" class="hidden bg-gray-50 border border-gray-200 rounded-2xl p-5 mb-6">
+            <div id="penjelasanStatus" class="font-bold mb-1 text-sm"></div>
+            <div class="text-xs font-semibold text-textGray uppercase tracking-wider mb-2">Penjelasan / Pembahasan:</div>
+            <p id="penjelasanTeks" class="text-sm text-gray-600 leading-relaxed"></p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex items-center justify-between border-t border-gray-200 pt-4">
+            <button onclick="tampilkanClue()" class="bg-gray-50 border border-gray-200 hover:bg-gray-100 text-gray-800 font-medium py-2 px-4 rounded-xl text-xs transition">💡 Petunjuk (Clue)</button>
+            <button onclick="tutupModal()" class="bg-brandGreen text-black font-bold py-2 px-6 rounded-xl text-xs hover:bg-green-400 transition">Tutup Soal</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Area -->
+    <footer class="border-t border-gray-200 bg-[#080808] pt-12 pb-8 mt-12 relative z-10 w-full">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <!-- Kolom 1: Brand Info -->
+          <div class="md:col-span-2">
+            <div class="flex items-center gap-3 mb-4">
+              <i class="fa-solid fa-code text-brandGreen text-xl"></i>
+              <span class="text-xl font-bold tracking-tight text-brandGreen">EduInformatika</span>
+            </div>
+            <p class="text-textGray text-sm leading-relaxed max-w-sm">
+              Platform e-learning interaktif modern yang dirancang khusus untuk memfasilitasi gaya belajar visual dan praktik, memastikan pemahaman mendalam untuk menaklukkan soal-soal PTS.
+            </p>
+          </div>
+
+          <!-- Kolom 2: Tautan Cepat -->
+          <div>
+            <h4 class="text-gray-800 font-semibold mb-4">Pintasan Modul</h4>
+            <ul class="space-y-3 text-sm text-textGray">
+              <li><a href="bedah-kisi-kisi.html" class="hover:text-brandGreen transition">Bedah Kisi-Kisi</a></li>
+              <li><a href="materi-bk.html" class="hover:text-brandGreen transition">Berpikir Komputasional</a></li>
+              <li><a href="materi-stack-queue.html" class="hover:text-brandGreen transition">Stack & Queue</a></li>
+              <li><a href="#" class="hover:text-blue-600 transition">Pembahasan Soal</a>
+        <a href="materi-search-sort.html" class="hover:text-brandGreen transition">Searching & Sorting</a></li>
+            </ul>
+          </div>
+
+          <!-- Kolom 3: Bantuan -->
+          <div>
+            <h4 class="text-gray-800 font-semibold mb-4">Dukungan</h4>
+            <ul class="space-y-3 text-sm text-textGray">
+              <li>
+                <a href="#" class="hover:text-brandGreen transition"><i class="fa-solid fa-circle-question mr-2"></i> Cara Penggunaan</a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-brandGreen transition"><i class="fa-solid fa-bug mr-2"></i> Lapor Masalah</a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-brandGreen transition"><i class="fa-solid fa-paper-plane mr-2"></i> Hubungi Guru</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Copyright Bottom -->
+        <div class="border-t border-gray-200 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-textGray">
+          <p>&copy; 2026 EduInformatika. Dikembangkan oleh Guru Informatika untuk kelas Informatika SMA Negeri 4 Yogyakarta.</p>
+
+          <!-- Social Icons -->
+          <div class="flex gap-4 text-lg">
+            <a href="#" class="hover:text-brandGreen transition"><i class="fa-brands fa-github"></i></a>
+            <a href="#" class="hover:text-brandGreen transition"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#" class="hover:text-brandGreen transition"><i class="fa-solid fa-envelope"></i></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+      // Inisiasi Vanilla Tilt
+      VanillaTilt.init(document.querySelectorAll(".tilt-card"), {
+        max: 6,
+        speed: 400,
+        glare: true,
+        "max-glare": 0.15,
+      });
+
+      // ================== DATABASE SOAL ==================
+      const databaseSoal = [
+        {
+          id: 1,
+          teks: "Istilah pendekatan yang memecah masalah besar dan kompleks menjadi lebih sederhana atau kecil sehingga lebih mudah dikelola dan dipahami adalah...",
+          opsi: ["a. Perancangan Algoritme", "b. Abstraksi", "c. Pengenalan Pola", "d. Komposisi", "e. Dekomposisi"],
+          jawaban: 4,
+          clue: "Perhatikan kata kunci 'memecah masalah besar dan kompleks menjadi bagian yang lebih kecil'.",
+          penjelasan:
+            "Dekomposisi adalah salah satu metode dalam berpikir komputasional yang dilakukan dengan memecah suatu masalah besar atau kompleks menjadi beberapa bagian yang lebih kecil dan sederhana. Dengan demikian, setiap bagian dapat dipahami, dikelola, dan diselesaikan dengan lebih mudah.",
+        },
+        {
+          id: 2,
+          teks: "Proses mengembangkan solusi langkah-langkah yang harus dipenuhi secara berurutan terhadap permasalahan yang ada disebut dengan...",
+          opsi: ["a. Algoritme", "b. Abstraksi", "c. Pengenalan Pola", "d. Dekomposisi", "e. Komposisi"],
+          jawaban: 0,
+          clue: "Fokuslah pada proses menyusun langkah-langkah penyelesaian masalah secara logis dan berurutan.",
+          penjelasan:
+            "Algoritme merupakan serangkaian langkah yang disusun secara logis, sistematis, dan berurutan untuk menyelesaikan suatu masalah atau mencapai tujuan tertentu. Oleh karena itu, proses mengembangkan solusi dalam bentuk langkah-langkah berurutan disebut algoritme.",
+        },
+        {
+          id: 3,
+          teks: `Soal Literasi
+                    <p class="indent-8 text-justify">
+                        Seorang siswi SMP bernama Dina sedang bersiap untuk berangkat sekolah di pagi hari. Ia memulai aktivitasnya dengan membuat sarapan sederhana agar memiliki energi untuk belajar sepanjang hari. Setelah itu, Dina menyiapkan botol minum yang akan ia bawa ke sekolah agar tidak kehausan di kelas. Semua kegiatan tersebut ia lakukan dengan urutan yang jelas agar lebih mudah diingat. Dengan demikian, Dina bisa mengatur waktunya dengan lebih efektif sebelum berangkat.
+                    </p>
+                    <p class="indent-8 text-justify">
+                        Selanjutnya, Dina mengecek buku pelajaran dan alat tulis sesuai dengan jadwal pelajaran hari itu. Ia memastikan bahwa tidak ada satu pun buku atau pensil yang tertinggal karena bisa mengganggu kegiatan belajarnya. Setelah yakin semua sudah lengkap, Dina memasukkan perlengkapan tersebut ke dalam tas. Dengan langkah-langkah yang teratur, Dina pun siap berangkat sekolah tanpa ada yang terlupa. 
+                    </p>
+                    <p class="font-semibold pt-2">
+                        Contoh kasus di atas merupakan penerapan dari metode berpikir komputasional, metode apakah yang dimaksud adalah ... 
+                    </p>`,
+          opsi: ["a. Dekomposisi", "b. Pengenalan Pola", "c. Abstraksi", "d. Rancangan Algoritma", "e. Komposisi"],
+          jawaban: 3,
+          clue: "Perhatikan bahwa seluruh kegiatan Dina dilakukan mengikuti urutan langkah yang jelas dari awal hingga siap berangkat sekolah.",
+          penjelasan:
+            "Kasus Dina menunjukkan penerapan Rancangan Algoritma karena kegiatan persiapan sekolah dilakukan melalui serangkaian langkah yang tersusun secara logis dan berurutan, mulai dari membuat sarapan, menyiapkan botol minum, mengecek perlengkapan, memasukkannya ke dalam tas, hingga akhirnya siap berangkat sekolah.",
+        },
+        {
+          id: 4,
+          teks: `Soal Literasi
+                    <div class="text-center font-bold text-lg text-brandGreen mb-3">
+                        Rani Dan Tugas Sekolahnya
+                    </div>
+                    <p class="indent-8 text-justify">
+                        Seorang siswi SMP bernama Rani mendapat banyak pekerjaan rumah dari guru-gurunya pada hari Senin. Ia merasa sedikit bingung karena tugas yang diberikan cukup beragam, mulai dari Matematika, Bahasa Indonesia, hingga IPA. Agar lebih mudah, Rani mencoba mengelompokkan tugas-tugas tersebut berdasarkan tingkat kesulitannya. Selain itu, ia juga memperhatikan mana tugas yang memiliki batas pengumpulan paling dekat.
+                    </p>
+                    <p class="indent-8 text-justify">
+                        Dengan cara itu, Rani bisa menentukan urutan pengerjaan PR yang paling tepat sehingga tidak ada satupun yang terlambat dikumpulkan. Ia memutuskan untuk mengerjakan PR yang mudah terlebih dahulu agar cepat selesai, kemudian melanjutkan ke PR yang lebih sulit. Rani pun menyadari bahwa langkah ini membantunya lebih teratur dan tidak terburu-buru. 
+                    </p>
+                    <p class="font-semibold pt-2">
+                        Contoh kasus di atas merupakan penerapan dari metode berpikir komputasional yaitu ... 
+                    </p>`,
+          opsi: ["a. Dekomposisi", "b. Pengenalan pola", "c. Abstraksi", "d. Rancangan Algoritma", "e. Komposisi"],
+          jawaban: 0,
+          clue: "Rani membuat banyak tugas yang awalnya terasa kompleks menjadi beberapa kelompok yang lebih kecil agar lebih mudah dikelola.",
+          penjelasan:
+            "Kasus tersebut merupakan penerapan dekomposisi karena Rani memecah persoalan berupa banyaknya pekerjaan rumah menjadi bagian-bagian yang lebih kecil dengan cara mengelompokkannya berdasarkan mata pelajaran, tingkat kesulitan, dan waktu pengumpulan. Pemecahan tersebut membuat tugas lebih mudah dikelola dan diselesaikan.",
+        },
+        {
+          id: 5,
+          teks: "Soal Logika Visual: Perhatikan gambar pola potongan lingkaran di bawah ini! Manakah gambar yang tidak memiliki pola garis/potongan yang tidak sama dengan yang lain?",
+          gambarUrl: "images/soal5.png",
+          opsi: ["a. Gambar A", "b. Gambar B", "c. Gambar C", "d. Gambar D", "e. Gambar E"],
+          jawaban: 0,
+          clue: "Bandingkan posisi, arah, dan hubungan garis potong pada setiap lingkaran. Cari satu gambar yang susunannya berbeda dari empat gambar lainnya.",
+          penjelasan:
+            "Gambar A merupakan gambar yang memiliki pola berbeda dibandingkan gambar lainnya. Perbedaannya dapat diketahui dengan membandingkan posisi garis atau pada setiap lingkaran. Gambar B, C, D, dan E masih pola garis yang sama, sedangkan Gambar A tidak mengikuti pola tersebut.",
+        },
+        {
+          id: 6,
+          teks: "Metode yang digunakan dalam membuat nasi goreng harus bisa mengurutkan langkah-langkah secara logis, berurutan, teratur, mudah, dan rinci mulai dari proses awal pembuatan sampai dengan proses penyajiannya agar mudah dipahami oleh orang lain. Hal termasuk termasuk teknik... ",
+          opsi: ["a. Dekomposisi", "b. Pengenalan Pola", "c. Transaksi", "d. Abstraksi", "e. Algoritma"],
+          jawaban: 4,
+          clue: "Perhatikan kata kunci 'mengurutkan langkah-langkah secara logis, berurutan, teratur, dan rinci' dari awal pembuatan hingga penyajian.",
+          penjelasan:
+            "Pembuatan nasi goreng yang dilakukan melalui langkah-langkah yang logis, berurutan, teratur, dan rinci merupakan penerapan Algoritma. Algoritma adalah serangkaian langkah yang disusun secara sistematis untuk menyelesaikan suatu pekerjaan atau mencapai tujuan tertentu. Dalam kasus ini, langkah pembuatan nasi goreng dimulai dari proses awal seperti menyiapkan bahan, memasak, hingga menyajikannya secara berurutan agar mudah dipahami dan diikuti oleh orang lain.",
+        },
+        {
+          id: 7,
+          teks: "Tindakan berikut yang dapat dikategorikan sebagai proses pengenalan pola adalah.... ",
+          opsi: [
+            "a. Perawat sedang menulis identitas pasien",
+            "b. Membuat rencana perjalanan ke pantai bali",
+            "c. Membuat flowchart tata cara memasak mie instan",
+            "d. Pemain sepak bola mencari tahu kelemahan tim lawan dengan melihat video pertandingan sebelumnya",
+            "e. Membuat Teh",
+          ],
+          jawaban: 3,
+          clue: "Cari kegiatan yang dilakukan dengan mengamati data atau kejadian sebelumnya untuk menemukan kebiasaan, kesamaan, atau pola tertentu.",
+          penjelasan:
+            "Pemain sepak bola yang mempelajari video pertandingan sebelumnya dapat mengidentifikasi kebiasaan, strategi, serta kelemahan yang berulang dari tim lawan. Kegiatan mencari keteraturan dari data atau kejadian sebelumnya merupakan penerapan pengenalan pola.",
+        },
+        {
+          id: 8,
+          teks: `Soal Literasi-Numerasi
+                    <p class="indent-8 text-justify">
+                        Seorang siswa SMP sedang dihadapkan pada sebuah teka-teki bergambar yang menampilkan beberapa jenis buah, yaitu apel, pisang, dan kelapa. Setiap buah pada gambar tersebut memiliki nilai tertentu yang bisa ditentukan melalui perhitungan matematika. Gambar yang dimaksud adalah sebagai berikut. 
+                    </p>
+                    <div class="flex justify-center my-4">
+                        <img src="images/soal8.png" alt="Ilustrasi Rani" class="max-h-48 rounded-2xl border border-gray-200 shadow-lg object-contain">
+                    </div>
+                    <p class="indent-8 text-justify">
+                        Pada baris pertama, terlihat beberapa apel yang jika dijumlahkan menghasilkan angka tertentu. Baris berikutnya menampilkan kombinasi apel dan pisang yang juga membentuk sebuah persamaan. Dengan menganalisis setiap baris, siswa dapat menemukan pola dan nilai dari masing-masing buah.  
+                    </p>
+                    <p class="indent-8 text-justify">
+                        Setelah mengetahui nilai setiap buah, siswa diminta melanjutkan perhitungan pada baris terakhir yang merupakan kombinasi kelapa, apel, dan pisang. Perhitungan ini membutuhkan ketelitian agar tidak salah dalam menafsirkan jumlah buah yang ditampilkan. Siswa perlu menyusun langkah-langkah logis untuk menyelesaikan masalah tersebut dengan benar. Proses ini merupakan salah satu bentuk penerapan metode berpikir komputasional dalam kehidupan sehari-hari. Berdasarkan gambar tersebut, hasil akhir dari operasi perhitungan buah-buahan tersebut adalah ... 
+                    </p>`,
+          opsi: ["a. 18", "b. 16", "c. 17", "d. 15", "e. 14"],
+          jawaban: 1,
+          clue: "Tentukan nilai setiap jenis buah secara berurutan dari persamaan pertama hingga ketiga, kemudian gunakan nilainya pada operasi terakhir.",
+          penjelasan:
+            "Dari baris pertama diperoleh 3 apel = 30, sehingga 1 apel = 10. Selanjutnya, 1 apel + 2 pisang = 18. Karena apel bernilai 10, maka 2 pisang = 8 sehingga 1 pisang = 4. Pada persamaan berikutnya diperoleh nilai kelapa = 2. Dengan demikian, operasi terakhir adalah kelapa + apel + pisang = 2 + 10 + 4 = 16.",
+        },
+        {
+          id: 9,
+          teks: `Soal Literasi
+                    <p class="indent-8 text-justify">
+                        Pak Dengklek bermain sebuah puzzle klasik di mana ia harus menemukan 3 petak garis lurus berurutan yang memuat tulisan “OSN”. Ketiga petak ini bisa berurutan secara horizontal, vertikal, maupun diagonal; serta boleh dibaca ke 8 arah: atas, bawah, kiri, kanan, kanan-atas, kanan-bawah, kiri-atas, maupun kiri-bawah.  
+                    </p>
+                    <div class="flex justify-center my-4">
+                        <img src="images/soal9.png" alt="Ilustrasi Rani" class="max-h-48 rounded-2xl border border-gray-200 shadow-lg object-contain">
+                    </div>
+                    <p class="indent-8 text-justify">
+                        Diketahui bahwa hanya terdapat satu lokasi tulisan “OSN” pada puzzle tersebut. Pak Dengklek meminta bantuan kepadamu: di kolom ke berapakah petak huruf ‘O’ yang memuat tulisan “OSN” tersebut?   
+                    </p>`,
+          opsi: ["a. Kolom 5", "b. Kolom 8", "c. Kolom 9", "d. Kolom 14", "e. Kolom 17"],
+          jawaban: 2,
+          clue: "Mulailah dari setiap huruf O, kemudian periksa apakah terdapat huruf S dan N secara berurutan pada salah satu dari delapan arah yang diperbolehkan.",
+          penjelasan:
+            "Setelah seluruh huruf O diperiksa ke delapan kemungkinan arah, hanya terdapat satu rangkaian yang membentuk huruf O-S-N secara berurutan. Huruf O yang menjadi awal rangkaian tersebut berada pada kolom ke-9 dari kanan bawah ke kiri atas (Diagonal). Oleh karena itu, jawabannya adalah Kolom 9.",
+        },
+        {
+          id: 10,
+          teks: `Soal Literasi
+                    <p class="indent-8 text-justify">
+                        Pak Dengklek ingin membuat sebuah rutinitas malam. Ada 9 kegiatan yang perlu ia rancang, namun ia menemukan bahwa terkadang sebuah kegiatan harus dilakukan sebelum sebuah kegiatan lainnya. Berikut merupakan ilustrasi dari persyaratan 9 kegiatan Pak Dengklek. Jika ada panah dari kegiatan A menuju kegiatan B, artinya kegiatan B hanya bisa dilakukan jika kegiatan A sudah pernah dilakukan sebelumnya.  
+                    </p>
+                    <div class="flex justify-center my-4">
+                        <img src="images/soal10.png" alt="Ilustrasi Rani" class="max-h-48 rounded-2xl border border-gray-200 shadow-lg object-contain">
+                    </div>
+                    <p class="font-semibold pt-2">
+                        Berdasarkan bagan yang ada, kegiatan yang paling awal pada setiap urutan kegiatan adalah..... 
+                    </p>`,
+          opsi: ["a. Memasak Air", "b. Membuat sup", "c. Tidur", "d. Minum Teh", "e. Makan Sup"],
+          jawaban: 0,
+          clue: "Cari kegiatan yang tidak memiliki panah masuk dari kegiatan lain karena kegiatan tersebut tidak membutuhkan prasyarat.",
+          penjelasan:
+            "Pada diagram, Memasak Air merupakan kegiatan yang dapat dilakukan tanpa harus menunggu kegiatan lain selesai terlebih dahulu. Hal tersebut terlihat karena Memasak Air menjadi salah satu titik awal alur kegiatan dan menjadi prasyarat bagi kegiatan setelahnya. Oleh karena itu, kegiatan yang paling awal adalah Memasak Air.",
+        },
+        {
+          id: 11,
+          teks: `Soal Literasi-Numerasi
+                    <p class="indent-8 text-justify">
+                        Andi dan Rani suka sekali pizza. Pak Dengklek memesan 4 loyang pizza untuk mereka berdua: pizza tuna, pizza keju, pizza jagung, dan pizza sayur. Banyak potongan pizza masing-masing loyang pun berbeda-beda sebagai berikut. 
+                    </p>
+                    <div class="flex justify-center my-4">
+                        <img src="images/soal11.png" alt="Ilustrasi Rani" class="max-h-48 rounded-2xl border border-gray-200 shadow-lg object-contain">
+                    </div>
+                    <p class="indent-8 text-justify">
+                        Andi sebenarnya tidak mau makan pizza keju, sedangkan Rani sebenarnya tidak mau makan pizza tuna. Mereka tahu hal ini satu sama lain dan mereka ingin berebutan memakan sebanyak mungkin potongan pizza yang mereka sukai. Perhatikan bahwa mereka hanya fokus kepada banyaknya potongan dan tidak peduli dengan luas atau besarnya potongan tersebut.  
+                    </p>
+                    <p class="indent-8 text-justify">
+                        Jika dimulai dari Andi, Andi dan Rani berganti-gantian mengambil satu potong pizza berurutan dari tuna, keju, jagung dan yang terakhir sayur, maka berapa potong pizza paling banyak yang Andi bisa makan adalah ...   
+                    </p>`,
+          opsi: ["a. 8 potong", "b. 9 potong", "c. 10 potong", "d. 11 potong", "e. 13 potong"],
+          jawaban: 3,
+          clue: "Simulasikan giliran mulai dari Andi. Ikuti urutan pizza tuna, keju, jagung, lalu sayur sambil memperhatikan jenis pizza yang tidak ingin dimakan oleh masing-masing pemain.",
+          penjelasan:
+            "Untuk menentukan hasilnya, giliran pengambilan harus disimulasikan mulai dari Andi dan dilakukan secara bergantian sesuai urutan jenis pizza yang telah ditentukan. Dengan memperhatikan jumlah potongan pada gambar serta pizza yang disukai masing-masing pemain, jumlah maksimum potongan pizza yang dapat diperoleh Andi adalah 11 potong.",
+        },
+        {
+          id: 12,
+          teks: `Soal Literasi-Numerasi
+                    <p class="indent-8 text-justify">
+                        Pengenalan pola dalam berpikir komputasional adalah proses mengidentifikasi kesamaan, keteraturan, atau tren dalam data untuk membantu menyelesaikan masalah secara efektif. Dalam konteks ini, pengenalan pola adalah salah satu dari empat pilar berpikir komputasional, bersama dengan dekomposisi, abstraksi, dan algoritma. Dengan mengidentifikasi pola, seseorang dapat menemukan metode yang paling efisien untuk memecahkan masalah, mengategorikan informasi, dan membuat prediksi. 
+                    </p>
+                    <p class="indent-8 text-justify">
+                        Berikut ini terdapat sebuah pola yang harus dikenali dari sebuah teka teki yang akan diselesaikan kamu.
+                    </p>
+                    <!-- SISIPAN TABEL -->
+                    <div class="overflow-x-auto my-4 bg-gray-50 border border-gray-200 rounded-2xl p-3">
+                        <table class="w-full text-center border-collapse text-xs md:text-sm font-sans">
+                            <tbody class="text-gray-700">
+                                <tr class="bg-blue-100 text-brandGreen font-bold border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">4</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">3</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">2</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">[?]</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">3</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">2</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">2</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">2</td>
+                                </tr>
+                                <tr class="bg-blue-100 text-brandGreen font-bold border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">2</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">3</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">4</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">3</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">1</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">2</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">3</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">4</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="indent-8 text-justify">
+                        Jika kamu diperintahkan untuk mengisi kotak kosong di atas, angka yang tepat untuk mengisi kotak kosong tersebut adalah ...
+                    </p>`,
+          opsi: ["a. 1", "b. 2", "c. 3", "d. 4", "e. 5"],
+          jawaban: 0,
+          clue: "Amati baris pertama tabel dari kiri ke kanan: 4, 3, 2, .... Angka berkurang satu pada setiap langkah.",
+          penjelasan: "Pada baris pertama terlihat pola bilangan menurun satu per satu, yaitu 4, 3, 2, 1. Oleh karena itu, angka yang tepat untuk melanjutkan pola pada posisi [?] adalah 1.",
+        },
+        {
+          id: 13,
+          teks: `Soal Literasi-Numerasi
+                    <p class="indent-8 text-justify">
+                        Pengenalan pola dalam berpikir komputasional adalah proses mengidentifikasi kesamaan, keteraturan, atau tren dalam data untuk membantu menyelesaikan masalah secara efektif. Dalam konteks ini, pengenalan pola adalah salah satu dari empat pilar berpikir komputasional, bersama dengan dekomposisi, abstraksi, dan algoritma. Dengan mengidentifikasi pola, seseorang dapat menemukan metode yang paling efisien untuk memecahkan masalah, mengategorikan informasi, dan membuat prediksi.  
+                    </p>
+                    <p class="indent-8 text-justify">
+                        Berikut ini terdapat sebuah pola yang harus dikenali dari sebuah teka teki yang akan diselesaikan kamu.
+                    </p>
+                    <div class="overflow-x-auto my-4 bg-gray-50 border border-gray-200 rounded-2xl p-3">
+                        <table class="w-full text-center border-collapse text-xs md:text-sm font-sans">
+                            <tbody class="text-gray-700">
+                                <tr class="bg-blue-100 text-brandGreen font-bold border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">12</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">3</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">6</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">12</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">3</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">12</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">12</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">6</td>
+                                </tr>
+                                <tr class="bg-blue-100 text-brandGreen font-bold border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">5</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">2</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">1</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">2</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">[?]</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">72</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">72</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">144</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="indent-8 text-justify">
+                        Jika kamu diperintahkan untuk mengisi kotak kosong di atas, angka yang tepat untuk mengisi kotak kosong tersebut adalah ...
+                    </p>`,
+          opsi: ["a. 20", "b. 41", "c. 72", "d. 144", "e. 180"],
+          jawaban: 4,
+          clue: "Periksa hubungan tiga angka teratas dengan angka paling bawah pada setiap kolom. Cobalah mengalikan ketiga angka tersebut.",
+          penjelasan:
+            "Pola pada tabel adalah angka pada baris terakhir merupakan hasil perkalian tiga angka yang berada di atasnya pada kolom yang sama. Hal ini terlihat pada kolom kedua: 3 × 12 × 2 = 72, kolom ketiga: 6 × 12 × 1 = 72, dan kolom keempat: 12 × 6 × 2 = 144. Maka pada kolom pertama, 12 × 3 × 5 = 180. Jadi nilai [?] adalah 180.",
+        },
+        {
+          id: 14,
+          teks: "Dokter Indra membaca hasil rontgen paru-paru pasien. Kemudian, dokter membandingkan hasil rontgen tersebut dengan hasil rontgen pasien sebelumnya. Tindakan tersebut dapat dikategorikan sebagai proses …. ",
+          opsi: ["a. Dekomposisi", "b. Pengenalan pola", "c. Transaksi", "d. Abstraksi", "e. Algoritma"],
+          jawaban: 1,
+          clue: "Dokter membandingkan data saat ini dengan data sebelumnya untuk mencari kesamaan, perbedaan, atau perubahan tertentu.",
+          penjelasan:
+            "Tindakan dokter tersebut termasuk pengenalan pola karena dokter membandingkan hasil rontgen terbaru dengan hasil sebelumnya untuk mengenali kesamaan, perbedaan, atau perubahan kondisi paru-paru. Proses mengidentifikasi pola dari beberapa data merupakan salah satu bentuk pattern recognition.",
+        },
+        {
+          id: 15,
+          teks: `Soal Literasi
+                    <div class="text-center font-bold text-lg text-brandGreen mb-3">
+                        Struktur Data dalam Informatika
+                    </div>
+                    <p class="indent-8 text-justify">
+                        Dalam dunia komputasi/informatika, terkadang, kita perlu untuk menyimpan data/objek dalam suatu urutan tertentu, untuk kemudian/sewaktu-waktu diambil/dikeluarkan kembali, mungkin untuk diproses lebih lanjut atau untuk tujuan-tujuan lain. Ada dua cara utama kita dapat melakukan penyimpanan ini. Metode yang pertama adalah Antrean (queue). pada metode ini, objek-objek disimpan dalam metode penyimpanan yang berupa sebuah antrean sehingga objek yang pertama/lebih dulu datang, juga akan lebih dulu keluar/selesai, layaknya sebuah antrean di loket, pintu masuk. 
+                    </p>
+                    <p class="indent-8 text-justify">
+                        Metode yang kedua adalah Tumpukan (stack). Pada metode ini, objek-objek disimpan dalam metode penyimpanan yang menyerupai sebuah tumpukan (misal: tumpukan piring). Dengan demikian, objek yang pertama/lebih dulu disimpan justru akan menjadi yang terakhir keluar. Baik dalam kehidupan sehari-hari maupun dalam dunia informatika, kedua konsep urutan penyimpanan data tersebut memiliki peran dan kegunaan masing-masing. 
+                    </p>
+                    <p class="font-semibold pt-2">
+                        Berdasarkan paragraf di atas, prinsip yang digunakan pada metode Antrean (queue) sering disebut dengan prinsip ... 
+                    </p>`,
+          opsi: ["a. First In First Out", "b. First In Last Out", "c. Last In First Out", "d. First In Medium Out", "e. Last In Last Out"],
+          jawaban: 0,
+          clue: "Bayangkan antrean di loket: orang yang datang terlebih dahulu akan dilayani terlebih dahulu.",
+          penjelasan:
+            "Queue atau antrean menggunakan prinsip First In First Out (FIFO), yaitu data atau objek yang pertama kali masuk ke dalam antrean akan menjadi data yang pertama kali dikeluarkan atau diproses. Prinsip ini sama seperti antrean pada loket pelayanan.",
+        },
+        {
+          id: 16,
+          teks: `Soal Literasi
+                    <div class="text-center font-bold text-lg text-brandGreen mb-3">
+                        Struktur Data dalam Informatika
+                    </div>
+                    <p class="indent-8 text-justify">
+                        Dalam dunia komputasi/informatika, terkadang, kita perlu untuk menyimpan data/objek dalam suatu urutan tertentu, untuk kemudian/sewaktu-waktu diambil/dikeluarkan kembali, mungkin untuk diproses lebih lanjut atau untuk tujuan-tujuan lain. Ada dua cara utama kita dapat melakukan penyimpanan ini. Metode yang pertama adalah Antrean (queue). pada metode ini, objek-objek disimpan dalam metode penyimpanan yang berupa sebuah antrean sehingga objek yang pertama/lebih dulu datang, juga akan lebih dulu keluar/selesai, layaknya sebuah antrean di loket, pintu masuk. 
+                    </p>
+                    <p class="indent-8 text-justify">
+                        Metode yang kedua adalah Tumpukan (stack). Pada metode ini, objek-objek disimpan dalam metode penyimpanan yang menyerupai sebuah tumpukan (misal: tumpukan piring). Dengan demikian, objek yang pertama/lebih dulu disimpan justru akan menjadi yang terakhir keluar. Baik dalam kehidupan sehari-hari maupun dalam dunia informatika, kedua konsep urutan penyimpanan data tersebut memiliki peran dan kegunaan masing-masing.  
+                    </p>
+                    <p class="font-semibold pt-2">
+                        Berdasarkan paragraf di atas, prinsip yang digunakan pada metode tumpukan (stack) sering disebut dengan prinsip ... 
+                    </p>`,
+          opsi: ["a. First In First Out", "b. First In Last Out", "c. Last In First Out", "d. First In Medium Out", "e. Last In Last Out"],
+          jawaban: 2,
+          clue: "Bayangkan tumpukan piring: piring yang terakhir diletakkan di bagian atas akan menjadi piring yang pertama diambil.",
+          penjelasan:
+            "Stack atau tumpukan menggunakan prinsip Last In First Out (LIFO), yaitu data yang terakhir dimasukkan akan menjadi data yang pertama dikeluarkan. Prinsip ini menyerupai tumpukan piring, karena piring yang terakhir diletakkan di atas akan diambil terlebih dahulu.",
+        },
+        {
+          id: 17,
+          teks: `Soal Literasi
+                    <div class="text-center font-bold text-lg text-brandGreen mb-3">
+                        Penyimpanan Data Mesin Printer
+                    </div>
+                    <p class="indent-8 text-justify">
+                        Mesin printer bertugas untuk mencetak dokumen yang dikirimkan dari sebuah komputer. Satu buah printer dapat terhubung ke beberapa buah komputer sekaligus, dan semuanya dapat mengirim perintah kepada printer tersebut untuk mencetak dokumen yang berbeda-beda. Printer tersebut tentunya hanya bisa mencetak satu buah dokumen dalam satu waktu tertentu, dan mungkin membutuhkan beberapa detik/menit untuk menyelesaikan proses cetak satu dokumen. Oleh karena itu, ketika printer sedang sibuk mencetak sebuah dokumen dari sebuah komputer, kemudian datang permintaan mencetak dari beberapa komputer yang lain (yang berbeda). Printer tersebut harus menyimpan dokumen-dokumen yang baru datang tersebut agar nanti dapat dicetak ketika proses pencetakan yang sedang berjalan saat ini sudah selesai. 
+                    </p>
+                    <p class="font-semibold pt-2">
+                        Berdasarkan paragraf di atas prinsip struktur data yang dipakai pada sistem mesin printer adalah ...  
+                    </p>`,
+          opsi: ["a. First In First Out", "b. First In Last Out", "c. Last In First Out", "d. First In Medium Out", "e. Last In Last Out"],
+          jawaban: 0,
+          clue: "Perhatikan urutan dokumen yang masuk ke antrean printer: dokumen yang dikirim lebih dahulu akan mendapatkan giliran cetak lebih dahulu.",
+          penjelasan:
+            "Sistem antrean pencetakan pada printer menerapkan prinsip First In First Out (FIFO). Dokumen yang lebih dahulu masuk ke antrean pencetakan akan diproses lebih dahulu, sedangkan dokumen yang datang berikutnya akan menunggu giliran.",
+        },
+        {
+          id: 18,
+          teks: `Soal Literasi
+                    <div class="text-center font-bold text-lg text-brandGreen mb-3">
+                        Riwayat Pada Browser Web
+                    </div>
+                    <p class="indent-8 text-justify">
+                        Ketika menjelajah web/internet, kita menggunakan sebuah browser (misal Firefox, Chrome dll). Terdapat sebuah fitur yang memungkinkan kita untuk bergerak dari satu halaman yang sudah kita kunjungi ke halaman lainnya, yaitu dengan menekan tombol Back dan Forward. Misalnya, kita mengunjungi halaman A, kemudian B, lalu C. Jika kita kemudian menekan tombol Back, dari halaman C kita akan kembali ke halaman B. Jika kita tekan lagi tombol Back (pada saat ada di B), kita akan kembali ke A. Jika kemudian kita tekan tombol Forward, kita akan kembali halaman B, dan jika kita tekan sekali lagi tombol Forward, kita akan kembali ke halaman C. Oleh karena itu, aplikasi browser tersebut harus menyimpan (dan mengingat) semua halaman yang sudah pernah kita kunjungi sebelumnya (biasa disebut Riwayat atau History). 
+                    </p>
+                    <p class="font-semibold pt-2">
+                        Berdasarkan paragraf di atas prinsip yang dipakai pada sistem riwayat pada web browser adalah ...   
+                    </p>`,
+          opsi: ["a. First In First Out", "b. First In Last Out", "c. Last In First Out", "d. First In Medium Out", "e. Last In Last Out"],
+          jawaban: 2,
+          clue: "Saat tombol Back ditekan, halaman yang paling terakhir dikunjungi akan menjadi halaman pertama yang diakses kembali.",
+          penjelasan:
+            "Riwayat navigasi browser dapat menerapkan prinsip Last In First Out (LIFO). Misalnya pengguna membuka halaman A, lalu B, kemudian C. Ketika tombol Back ditekan dari C, halaman yang terakhir dikunjungi sebelumnya, yaitu B, akan diakses terlebih dahulu. Pola tersebut sesuai dengan prinsip stack, yaitu data terakhir yang masuk menjadi data pertama yang keluar.",
+        },
+        {
+          id: 19,
+          teks: `Soal Struktur Data
+                    <p class="pt-2">
+                        Andi dan Abi sedang bermain menggunakan simulator stack dan queue. Alat simulator ini memiliki perintah sebagai berikut. 
+                    </p>
+                    <div class="overflow-x-auto my-4 bg-gray-50 border border-gray-200 rounded-2xl p-3">
+                        <table class="w-full text-center border-collapse text-xs md:text-sm font-sans">
+                            <tbody class="text-gray-700">
+                                <tr class="bg-blue-100 text-brandGreen font-bold border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Perintah</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Hal yang dilakukan</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Push</td>
+                                    <td class="p-2 border border-gray-200 text-gray-800">Meng-input nilai atau angka pada simulator</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Pop Queue</td>
+                                    <td class="p-2 border border-gray-200 text-gray-800">Menghilangkan angka pada barisan pertama simulator</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Pop Stack</td>
+                                    <td class="p-2 border border-gray-200 text-gray-800">Menghilangkan angka pada barisan akhir simulator</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="pt-2">
+                        Andi memberikan perintah kepada simulator sebagai berikut. 
+                    </p>
+                    <div class="overflow-x-auto my-4 bg-gray-50 border border-gray-200 rounded-2xl p-3">
+                        <table class="w-full text-center border-collapse text-xs md:text-sm font-sans">
+                            <tbody class="text-gray-700">
+                                <tr class="bg-blue-100 text-brandGreen font-bold border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800"></td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Perintah Yang Diberikan</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Langkah 1</td>
+                                    <td class="p-2 border border-gray-200 text-gray-800">Push 3</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Langkah 2</td>
+                                    <td class="p-2 border border-gray-200 text-gray-800">Push 1</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Langkah 3</td>
+                                    <td class="p-2 border border-gray-200 text-gray-800">Push 9</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Langkah 4</td>
+                                    <td class="p-2 border border-gray-200 text-gray-800 font-semibold">Pop Queue</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Langkah 5</td>
+                                    <td class="p-2 border border-gray-200 text-gray-800">Push 5</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Langkah 6</td>
+                                    <td class="p-2 border border-gray-200 text-gray-800 font-semibold">Pop Stack</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Langkah 7</td>
+                                    <td class="p-2 border border-gray-200 text-gray-800">Push 6</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Langkah 8</td>
+                                    <td class="p-2 border border-gray-200 text-gray-800 font-semibold">Pop Queue</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="pt-2">
+                        Jika Abi harus menebak angka yang dihilangkan pada langkah ke enam, angka yang harus ditebak Abi adalah ... 
+                    </p>`,
+          opsi: ["a. 1", "b. 3", "c. 5", "d. 6", "e. 9"],
+          jawaban: 2,
+          clue: "Catat kondisi simulator setelah setiap langkah. Tepat sebelum langkah ke-6, perhatikan angka yang berada pada posisi paling akhir karena perintah yang digunakan adalah Pop Stack.",
+          penjelasan:
+            "Setelah Push 3, Push 1, dan Push 9, isi simulator adalah [3, 1, 9]. Langkah ke-4 adalah Pop Queue sehingga angka pertama, yaitu 3, dihilangkan dan tersisa [1, 9]. Langkah ke-5 melakukan Push 5 sehingga menjadi [1, 9, 5]. Pada langkah ke-6 dilakukan Pop Stack yang menghilangkan angka pada barisan paling akhir. Angka tersebut adalah 5.",
+        },
+        {
+          id: 20,
+          teks: `Soal Struktur Data
+                    <p class="pt-2">
+                        Andi dan Abi sedang bermain menggunakan simulator stack dan queue. Alat simulator ini memiliki perintah sebagai berikut. 
+                    </p>
+                    <div class="overflow-x-auto my-4 bg-gray-50 border border-gray-200 rounded-2xl p-3">
+                        <table class="w-full text-center border-collapse text-xs md:text-sm font-sans">
+                            <tbody class="text-gray-700">
+                                <tr class="bg-blue-100 text-brandGreen font-bold border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Perintah</td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Hal yang dilakukan</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Push</td>
+                                    <td class="p-2 border border-gray-200 text-gray-800">Meng-input nilai atau angka pada simulator</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Pop Queue</td>
+                                    <td class="p-2 border border-gray-200 text-gray-800">Menghilangkan angka pada barisan pertama simulator</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Pop Stack</td>
+                                    <td class="p-2 border border-gray-200 text-gray-800">Menghilangkan angka pada barisan akhir simulator</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="pt-2">
+                        Andi memberikan perintah kepada simulator sebagai berikut. 
+                    </p>
+                    <div class="overflow-x-auto my-4 bg-gray-50 border border-gray-200 rounded-2xl p-3">
+                        <table class="w-full text-center border-collapse text-xs md:text-sm font-sans">
+                            <tbody class="text-gray-700">
+                                <tr class="bg-blue-100 text-brandGreen font-bold border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800"></td>
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Perintah Yang Diberikan</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Langkah 1</td>
+                                    <td class="p-2 border border-gray-200 text-gray-800">Push 3</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Langkah 2</td>
+                                    <td class="p-2 border border-gray-200 text-gray-800">Push 1</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Langkah 3</td>
+                                    <td class="p-2 border border-gray-200 text-gray-800">Push 9</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Langkah 4</td>
+                                    <td class="p-2 border border-gray-200 text-gray-800 font-semibold">Pop Queue</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Langkah 5</td>
+                                    <td class="p-2 border border-gray-200 text-gray-800">Push 5</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Langkah 6</td>
+                                    <td class="p-2 border border-gray-200 text-gray-800 font-semibold">Pop Stack</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Langkah 7</td>
+                                    <td class="p-2 border border-gray-200 text-gray-800">Push 6</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition border-b border-gray-200">
+                                    <td class="p-2 border border-gray-200 font-semibold text-gray-800">Langkah 8</td>
+                                    <td class="p-2 border border-gray-200 text-gray-800 font-semibold">Pop Queue</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="pt-2">
+                        Jika Abi harus menebak angka yang keluar dari simulator, angka yang harus ditebak Abi adalah ... 
+                    </p>`,
+          opsi: ["a. 3 dan 1", "b. 1 dan 9", "c. 9 dan 5", "d. 9 dan 6", "e. 3, 5, dan 1"],
+          jawaban: 3,
+          clue: "Jalankan seluruh perintah satu per satu dan perhatikan angka yang masih tersisa di dalam simulator setelah langkah ke-8 selesai.",
+          penjelasan:
+            "Urutan perubahan isi simulator adalah sebagai berikut: Push 3 menjadi [3], Push 1 menjadi [3, 1], dan Push 9 menjadi [3, 1, 9]. Pop Queue menghilangkan angka pertama yaitu 3 sehingga tersisa [1, 9]. Push 5 menghasilkan [1, 9, 5], kemudian Pop Stack menghilangkan angka terakhir yaitu 5 sehingga kembali menjadi [1, 9]. Push 6 menghasilkan [1, 9, 6]. Terakhir, Pop Queue menghilangkan angka pertama yaitu 1 sehingga angka yang masih keluar atau tersisa pada simulator adalah 9 dan 6.",
+        },
+      ];
+
+      let activeSoalIndex = null;
+      let userAnswers = Array(databaseSoal.length).fill(null);
+
+      // Render Grid Buttons
+      const gridEl = document.getElementById("gridSoal");
+      databaseSoal.forEach((soal, idx) => {
+        const btn = document.createElement("button");
+        btn.id = `grid-btn-${idx}`;
+        btn.className =
+          "bg-brandCard border border-gray-200 hover:border-brandGreen hover:shadow-[0_0_15px_rgba(0,230,118,0.3)] text-gray-800 font-bold py-6 rounded-2xl text-xl transition-all flex flex-col items-center justify-center gap-1 group";
+        btn.innerHTML = `
+                <span class="text-2xl group-hover:scale-110 transition-transform text-brandGreen" id="grid-num-${idx}">${soal.id}</span>
+                <span class="text-[10px] text-textGray font-normal" id="grid-status-${idx}">Soal ${soal.id}</span>
+            `;
+        btn.onclick = () => bukaSoal(idx);
+        gridEl.appendChild(btn);
+      });
+
+      function bukaSoal(idx) {
+        activeSoalIndex = idx;
+        const data = databaseSoal[idx];
+
+        document.getElementById("modalNumberBadge").innerText = `Soal #${data.id}`;
+        document.getElementById("modalSoalTeks").innerHTML = data.teks;
+        document.getElementById("aiClueTeks").innerText = data.clue;
+        document.getElementById("aiClueBox").classList.add("hidden");
+
+        // Render Gambar
+        const gambarContainer = document.getElementById("modalGambarContainer");
+        if (data.gambarUrl) {
+          gambarContainer.innerHTML = `<img src="${data.gambarUrl}" alt="Gambar Soal ${data.id}" class="max-h-56 w-auto rounded-xl object-contain shadow-md">`;
+          gambarContainer.classList.remove("hidden");
+        } else {
+          gambarContainer.innerHTML = "";
+          gambarContainer.classList.add("hidden");
+        }
+
+        // Render Tabel (jika ada properti tabelHtml, tidak digunakan dalam data di atas)
+        const tabelContainer = document.getElementById("modalTabelContainer");
+        tabelContainer.innerHTML = "";
+        tabelContainer.classList.add("hidden");
+
+        const penjelasanBox = document.getElementById("penjelasanBox");
+        const opsiContainer = document.getElementById("modalOpsiContainer");
+        opsiContainer.innerHTML = "";
+
+        const sudahDijawab = userAnswers[idx] !== null;
+
+        data.opsi.forEach((opsiTeks, oIdx) => {
+          const btnOpsi = document.createElement("button");
+          btnOpsi.id = `opsi-btn-${oIdx}`;
+          btnOpsi.className = "w-full text-left p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 hover:border-gray-300 transition flex items-center justify-between";
+          btnOpsi.innerHTML = `<span>${opsiTeks}</span><span id="icon-opsi-${oIdx}"></span>`;
+
+          if (sudahDijawab) {
+            btnOpsi.disabled = true;
+            btnOpsi.classList.remove("hover:bg-gray-100", "hover:border-gray-300");
+            btnOpsi.classList.add("cursor-not-allowed");
+          } else {
+            btnOpsi.onclick = () => pilihJawaban(oIdx);
+          }
+
+          opsiContainer.appendChild(btnOpsi);
+        });
+
+        if (sudahDijawab) {
+          tampilkanHasilJawaban(userAnswers[idx].pilihan);
+        } else {
+          penjelasanBox.classList.add("hidden");
+        }
+
+        document.getElementById("modalOverlay").classList.remove("hidden");
+        document.getElementById("modalOverlay").classList.add("flex");
+      }
+
+      function pilihJawaban(pilihanIdx) {
+        if (activeSoalIndex === null) return;
+        const data = databaseSoal[activeSoalIndex];
+        const isCorrect = pilihanIdx === data.jawaban;
+
+        userAnswers[activeSoalIndex] = {
+          pilihan: pilihanIdx,
+          isCorrect: isCorrect,
+        };
+
+        tampilkanHasilJawaban(pilihanIdx);
+        updateGridButton(activeSoalIndex, isCorrect);
+      }
+
+      function tampilkanHasilJawaban(pilihanIdx) {
+        const data = databaseSoal[activeSoalIndex];
+        const isCorrect = pilihanIdx === data.jawaban;
+
+        data.opsi.forEach((_, oIdx) => {
+          const btn = document.getElementById(`opsi-btn-${oIdx}`);
+          btn.disabled = true;
+          btn.classList.remove("hover:bg-gray-100", "hover:border-gray-300");
+          btn.classList.add("cursor-not-allowed");
+        });
+
+        const btnTerpilih = document.getElementById(`opsi-btn-${pilihanIdx}`);
+        const btnKunci = document.getElementById(`opsi-btn-${data.jawaban}`);
+
+        if (isCorrect) {
+          btnTerpilih.classList.add("bg-blue-100", "border-brandGreen", "text-brandGreen", "font-bold");
+          document.getElementById(`icon-opsi-${pilihanIdx}`).innerText = "✅";
+        } else {
+          btnTerpilih.classList.add("bg-red-500/20", "border-red-500", "text-red-400", "line-through");
+          document.getElementById(`icon-opsi-${pilihanIdx}`).innerText = "❌";
+
+          btnKunci.classList.add("bg-blue-100", "border-brandGreen", "text-brandGreen", "font-bold");
+          document.getElementById(`icon-opsi-${data.jawaban}`).innerText = "✅";
+        }
+
+        const penjelasanBox = document.getElementById("penjelasanBox");
+        const penjelasanStatus = document.getElementById("penjelasanStatus");
+        const penjelasanTeks = document.getElementById("penjelasanTeks");
+
+        penjelasanBox.classList.remove("hidden");
+        if (isCorrect) {
+          penjelasanStatus.className = "font-bold mb-1 text-sm text-brandGreen flex items-center gap-1";
+          penjelasanStatus.innerText = "🎉 Jawaban Kamu Benar!";
+        } else {
+          penjelasanStatus.className = "font-bold mb-1 text-sm text-red-400 flex items-center gap-1";
+          penjelasanStatus.innerText = "❌ Jawaban Kurang Tepat!";
+        }
+
+        penjelasanTeks.innerText = data.penjelasan;
+      }
+
+      function updateGridButton(idx, isCorrect) {
+        const gridBtn = document.getElementById(`grid-btn-${idx}`);
+        const gridStatus = document.getElementById(`grid-status-${idx}`);
+
+        if (isCorrect) {
+          gridBtn.classList.remove("border-gray-200");
+          gridBtn.classList.add("border-brandGreen", "bg-blue-50");
+          gridStatus.innerText = "Benar ✅";
+          gridStatus.className = "text-[10px] text-brandGreen font-bold";
+        } else {
+          gridBtn.classList.remove("border-gray-200");
+          gridBtn.classList.add("border-red-500", "bg-red-500/10");
+          gridStatus.innerText = "Salah ❌";
+          gridStatus.className = "text-[10px] text-red-400 font-bold";
+        }
+      }
+
+      function tampilkanClue() {
+        document.getElementById("aiClueBox").classList.remove("hidden");
+      }
+
+      function tutupModal() {
+        document.getElementById("modalOverlay").classList.add("hidden");
+        document.getElementById("modalOverlay").classList.remove("flex");
+      }
+    </script>
+  </body>
+</html>

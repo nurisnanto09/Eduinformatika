@@ -1,0 +1,13 @@
+id="modalOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-brandCard border border-gray-200 rounded-3xl max-w-2xl w-full p-6 md:p-8 relative shadow-2xl glow-green max-h-[90vh] overflow-y-auto">
+          <!-- Close Button -->
+          <button onclick="tutupModal()" class="absolute top-5 right-6 text-textGray hover:text-gray-800 text-xl font-bold">✕</button>
+
+          <!-- Badge Header -->
+          <div class="flex items-center gap-3 mb-4">
+            <span id="modalNumberBadge" class="bg-brandGreen text-black font-bold px-3 py-1 rounded-full text-xs">Soal #1</span>
+            <span id="statusSoalBadge" class="text-xs text-textGray">Pilihan Ganda</span>
+          </div>
+
+          <!-- TEKS SOAL -->
+          <div id="modalSoalTeks" class="text-base md:text-lg font-no
