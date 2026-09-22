@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Materi Siswa - EduInformatika</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Poppins', sans-serif; }
+
+        body {
+            background: #8fa89a;
+            overflow-x: hidden;
+        }
+
+        /* Hero decorative blob */
+        .blob {
+            position: absolute;
+            border-radius: 50% 40% 60% 50%;
+            background: rgba(200, 215, 200, 0.5);
+            z-index: 0;
+        }
+
+        /* Smooth scroll */
+        html { scroll-behavior: smooth; }
+
+        /* Card hover */
+        .materi-card {
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .materi-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        /* Animate on scroll */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Books image float animation */
+        @keyframes floatBooks {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
+        .float-books {
+            animation: floatBooks 4s ease-in-out infinite;
+        }
+
+        /* Navbar glass */
+        .nav-glass {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* Sub-topic cards */
+        .sub-card {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+        }
+        .sub-card:hover {
+            background: rgba(255,255,255,1);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== NAVBAR ==================== -->
+    <nav class="fixed top-0 left-0 right-0 z-50 nav-glass border-b border-white/20">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gray-900 rounded-full flex items-center justify-center text-white">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+                <span class="text-lg font-bold text-white tracking-wide">EduInformatika</span>
+            </div>
+            <div class="flex items-center gap-6">
+                <a href="#materi-section" class="text-white/80 hover:text-white font-semibold text-sm transition hidden md:block">Materi</a>
+                <a href="index.html" class="bg-white/20 hover:bg-white/30 text-white font-bold text-sm px-5 py-2.5 rounded-full transition border border-white/30">
+                    <i class="fas fa-home mr-2"></i>Kembali ke LMS
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO SECTION ==================== -->
+    <section class="relative min-h-screen flex items-center overflow-hidden" style="background: linear-gradient(160deg, #7a9e8a 0%, #8fa89a 40%, #a4b8ab 70%, #c5d4c8 100%);">
+
+        <!-- Decorative blob -->
+        <div class="blob w-[500px] h-[500px] top-[-100px] right-[-50px] opacity-40"></div>
+        <div class="blob w-[300px] h-[300px] bottom-[50px] left-[-80px] opacity-30"></div>
+
+        <!-- Decorative curve shape (top right) -->
+        <div class="absolute top-0 right-0 w-[40%] h-full opacity-20 pointer-events-none" style="background: radial-gradient(ellipse at top right, rgba(200,220,200,0.8) 0%, transparent 70%);"></div>
+
+        <div class="max-w-7xl mx-auto px-6 md:px-12 pt-24 pb-16 relative z-10 w-full">
+            <div class="flex flex-col md:flex-row items-center gap-8 md:gap-4">
+
+                <!-- Left: Quote -->
+                <div class="w-full md:w-1/2 text-white">
+                    <div class="mb-6">
+                        <span class="text-6xl md:text-8xl font-black leading-none opacity-40 select-none">&ldquo;</span>
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-black leading-[1.1] mb-6 drop-shadow-lg">
+                        Bagaimana<br>Mungkin
+                    </h1>
+                    <div class="border-t-2 border-dashed border-white/40 pt-5 mb-4 max-w-md">
+                        <p class="text-base md:text-lg text-white/90 font-medium leading-relaxed">
+                            Bagaimana mungkin kau mendapatkan hal yang luar biasa, sedangkan kau belum mengubah kebiasaan-kebiasaan burukmu.
+                        </p>
+                    </div>
+                    <p class="text-sm font-bold text-white/70 tracking-wide">(Syeikh Ibnu Atha'illah)</p>
+
+                    <a href="#materi-section" class="inline-flex items-center gap-3 mt-10 bg-white text-gray-800 font-bold px-8 py-4 rounded-full shadow-lg hover:shadow-xl hover:bg-gray-50 transition-all group">
+                        <span>Mulai Belajar</span>
+                        <i class="fas fa-arrow-down group-hover:translate-y-1 transition-transform"></i>
+                    </a>
+                </div>
+
+                <!-- Right: Book Image -->
+                <div class="w-full md:w-1/2 flex justify-center md:justify-end">
+                    <img src="img/colorful_books.jpg" alt="Buku-buku berwarna" class="float-books w-full max-w-lg md:max-w-xl drop-shadow-2xl rounded-2xl">
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-white/60 animate-bounce">
+            <i class="fas fa-chevron-down text-2xl"></i>
+        </div>
+    </section>
+
+    <!-- ==================== MATERI SECTION ==================== -->
+    <section id="materi-section" class="relative py-20 px-6 md:px-12" style="background: linear-gradient(180deg, #c5d4c8 0%, #e8ede9 30%, #f0f4f1 100%);">
+
+        <div class="max-w-6xl mx-auto">
+
+            <!-- Section Header -->
+            <div class="text-center mb-16 fade-up">
+                <p class="text-sm font-bold uppercase tracking-[0.3em] text-emerald-700 mb-3">Pilih Kategori</p>
+                <h2 class="text-4xl md:text-5xl font-black text-gray-800 mb-4">Materi Pembelajaran</h2>
+                <p class="text-gray-500 font-medium max-w-xl mx-auto">Pelajari materi Informatika kelas X secara interaktif. Pilih salah satu kategori di bawah ini untuk memulai.</p>
+            </div>
+
+            <!-- 3 Main Category Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+
+                <!-- Card 1: Berpikir Komputasi -->
+                <div class="materi-card bg-white rounded-3xl shadow-lg overflow-hidden cursor-pointer fade-up" onclick="toggleCategory('komputasi')">
+                    <div class="h-3 bg-gradient-to-r from-purple-500 to-purple-700"></div>
+                    <div class="p-8">
+                        <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center text-purple-600 text-3xl mb-5">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Berpikir Komputasi</h3>
+                        <p class="text-gray-500 text-sm mb-5">Pelajari cara berpikir sistematis untuk menyelesaikan masalah seperti seorang programmer.</p>
+                        <div class="flex items-center text-purple-600 font-bold text-sm">
+                            <span>4 Sub-Materi</span>
+                            <i class="fas fa-chevron-down ml-2 transition-transform" id="icon-komputasi"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Dasar Algoritma & Struktur Data -->
+                <div class="materi-card bg-white rounded-3xl shadow-lg overflow-hidden cursor-pointer fade-up" onclick="toggleCategory('algoritma')" style="transition-delay: 0.1s;">
+                    <div class="h-3 bg-gradient-to-r from-blue-500 to-cyan-500"></div>
+                    <div class="p-8">
+                        <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 text-3xl mb-5">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Dasar Algoritma & Struktur Data</h3>
+                        <p class="text-gray-500 text-sm mb-5">Mengenal pencarian, pengurutan, serta konsep stack dan queue secara interaktif.</p>
+                        <div class="flex items-center text-blue-600 font-bold text-sm">
+                            <span>7 Sub-Materi</span>
+                            <i class="fas fa-chevron-down ml-2 transition-transform" id="icon-algoritma"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Notasi Algoritma -->
+                <div class="materi-card bg-white rounded-3xl shadow-lg overflow-hidden cursor-pointer fade-up" onclick="toggleCategory('notasi')" style="transition-delay: 0.2s;">
+                    <div class="h-3 bg-gradient-to-r from-teal-500 to-orange-400"></div>
+                    <div class="p-8">
+                        <div class="w-16 h-16 bg-teal-100 rounded-2xl flex items-center justify-center text-teal-600 text-3xl mb-5">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Notasi Algoritma</h3>
+                        <p class="text-gray-500 text-sm mb-5">Menuliskan dan memvisualisasikan algoritma melalui pseudocode, flowchart, dan bahasa pemrograman.</p>
+                        <div class="flex items-center text-teal-600 font-bold text-sm">
+                            <span>3 Sub-Materi</span>
+                            <i class="fas fa-chevron-down ml-2 transition-transform" id="icon-notasi"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ===== Expanded Sub-Materi Panels ===== -->
+
+            <!-- Panel: Berpikir Komputasi -->
+            <div id="panel-komputasi" class="hidden mb-10 fade-up">
+                <div class="bg-purple-50/60 border border-purple-200 rounded-3xl p-8">
+                    <h3 class="text-xl font-bold text-purple-800 mb-6 flex items-center gap-3">
+                        <i class="fas fa-brain"></i> Berpikir Komputasi — Sub-Materi
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="sub-komputasi"></div>
+                </div>
+            </div>
+
+            <!-- Panel: Algoritma & Struktur Data -->
+            <div id="panel-algoritma" class="hidden mb-10 fade-up">
+                <div class="bg-blue-50/60 border border-blue-200 rounded-3xl p-8">
+                    <h3 class="text-xl font-bold text-blue-800 mb-6 flex items-center gap-3">
+                        <i class="fas fa-project-diagram"></i> Dasar Algoritma & Struktur Data — Sub-Materi
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="sub-algoritma"></div>
+                </div>
+            </div>
+
+            <!-- Panel: Notasi Algoritma -->
+            <div id="panel-notasi" class="hidden mb-10 fade-up">
+                <div class="bg-teal-50/60 border border-orange-200 rounded-3xl p-8">
+                    <h3 class="text-xl font-bold text-teal-800 mb-6 flex items-center gap-3">
+                        <i class="fas fa-code"></i> Notasi Algoritma — Sub-Materi
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="sub-notasi"></div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="bg-gray-900 text-white/60 text-center py-8 px-6">
+        <div class="flex items-center justify-center gap-3 mb-3">
+            <div class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center text-white/80 text-sm">
+                <i class="fas fa-laptop-code"></i>
+            </div>
+            <span class="font-bold text-white/80">EduInformatika</span>
+        </div>
+        <p class="text-sm">Portal Materi Siswa &mdash; Informatika Kelas X</p>
+    </footer>
+
+    <!-- ==================== MODAL DETAIL ==================== -->
+    <div id="modal-detail" class="fixed inset-0 bg-gray-900/70 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity duration-300 flex justify-center items-start pt-10 md:items-center overflow-y-auto">
+        <div class="bg-white w-full max-w-2xl rounded-3xl p-6 md:p-8 m-4 shadow-2xl transform scale-95 transition-transform duration-300 flex flex-col max-h-[90vh]" id="modal-box">
+            <div class="flex justify-between items-start mb-5 pb-4 border-b border-gray-100">
+                <div class="flex items-center gap-4">
+                    <div id="m-icon" class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl text-white shadow-md"></div>
+                    <div>
+                        <p id="m-topic" class="text-xs font-bold text-blue-600 uppercase tracking-wider mb-1"></p>
+                        <h3 id="m-title" class="text-xl md:text-2xl font-black text-gray-800"></h3>
+                    </div>
+                </div>
+                <button onclick="closeModal()" class="w-10 h-10 bg-gray-100 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-full flex items-center justify-center transition-colors flex-shrink-0">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+            <div class="overflow-y-auto flex-1 pr-2">
+                <div id="m-content" class="text-gray-700 leading-relaxed mb-6 text-[15px]"></div>
+                <div id="m-sims" class="space-y-3">
+                    <h4 class="font-bold text-gray-800 flex items-center gap-2 border-t border-gray-100 pt-5 text-sm uppercase tracking-wider">
+                        <i class="fas fa-gamepad text-blue-500"></i> Simulasi Tersedia
+                    </h4>
+                    <div id="m-sim-list" class="flex flex-col gap-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+        // ======= DATA =======
+        const categories = {
+            komputasi: {
+                color: 'bg-purple-600',
+                items: [
+                    { id: 'dekomposisi', title: 'Dekomposisi', icon: 'fa-puzzle-piece', color: 'bg-purple-600', desc: 'Memecah masalah kompleks menjadi bagian kecil.', topic: 'Berpikir Komputasi', content: '<p><b>Dekomposisi</b> adalah memecah masalah besar dan kompleks menjadi masalah-masalah yang lebih kecil agar lebih mudah dikelola dan diselesaikan.</p><h4 class="font-bold mt-4 mb-2">Contoh dalam Kehidupan:</h4><ul class="list-disc ml-5 space-y-1 text-gray-600"><li>Memasak nasi goreng → memotong bahan, menumis bumbu, menggoreng nasi, menghias piring.</li><li>Membuat website → desain UI, buat HTML, tambah CSS, tulis JavaScript.</li></ul>', sims: [{ name: 'Simulasi Dekomposisi', url: 'simulasi_dekomposisi.html' }] },
+                    { id: 'pola', title: 'Pengenalan Pola', icon: 'fa-shapes', color: 'bg-purple-600', desc: 'Mencari pola dan kesamaan antar masalah.', topic: 'Berpikir Komputasi', content: '<p><b>Pengenalan Pola</b> adalah kemampuan melihat persamaan atau pola berulang yang ada di dalam atau antar masalah. Dengan mengenali pola, kita bisa mempercepat proses penyelesaian masalah.</p>', sims: [{ name: 'Simulasi Pola', url: 'simulasi_pola.html' }] },
+                    { id: 'abstraksi', title: 'Abstraksi', icon: 'fa-eye-slash', color: 'bg-purple-600', desc: 'Menyaring informasi yang tidak penting.', topic: 'Berpikir Komputasi', content: '<p><b>Abstraksi</b> adalah proses berfokus pada informasi penting saja, dengan mengabaikan detail-detail yang kurang relevan untuk menyelesaikan masalah.</p>', sims: [{ name: 'Simulasi Abstraksi', url: 'simulasi_abstraksi.html' }] },
+                    { id: 'algoritma-komp', title: 'Berpikir Algoritma', icon: 'fa-list-ol', color: 'bg-purple-600', desc: 'Menyusun langkah berurutan secara sistematis.', topic: 'Berpikir Komputasi', content: '<p><b>Berpikir Algoritma</b> adalah menyusun solusi menjadi serangkaian langkah-langkah atau instruksi yang teratur dan sistematis untuk menyelesaikan masalah.</p>', sims: [{ name: 'Simulasi Algoritma', url: 'simulasi_komputasional.html' }] },
+                ]
+            },
+            algoritma: {
+                color: 'bg-blue-600',
+                items: [
+                    { id: 'stack', title: 'Stack (Tumpukan)', icon: 'fa-layer-group', color: 'bg-indigo-600', desc: 'Metode LIFO (Last In First Out).', topic: 'Struktur Data', content: '<p><b>Stack</b> adalah struktur data yang menyerupai tumpukan benda. Elemen yang terakhir dimasukkan akan menjadi elemen pertama yang diambil (LIFO — Last In, First Out).</p>', sims: [{ name: 'Simulasi Stack (Tumpukan Piring)', url: 'stack_piring.html' }] },
+                    { id: 'queue', title: 'Queue (Antrean)', icon: 'fa-users', color: 'bg-indigo-600', desc: 'Metode FIFO (First In First Out).', topic: 'Struktur Data', content: '<p><b>Queue</b> adalah struktur data seperti antrean pada umumnya. Elemen yang pertama datang adalah yang pertama dilayani (FIFO — First In, First Out).</p>', sims: [{ name: 'Simulasi Queue (Kasir)', url: 'queue_kasir.html' }] },
+                    { id: 'simulator-sq', title: 'Simulator Stack & Queue', icon: 'fa-cogs', color: 'bg-indigo-600', desc: 'Simulasi Push, Pop, Enqueue, Dequeue.', topic: 'Struktur Data', content: '<p><b>Simulator Interaktif</b> untuk membandingkan secara langsung bagaimana operasi penyisipan dan penghapusan bekerja pada Stack (LIFO) dan Queue (FIFO).</p>', sims: [{ name: 'Buka Simulator', url: 'simulator_stack_queue.html' }] },
+                    { id: 'linear-search', title: 'Linear Search', icon: 'fa-search', color: 'bg-blue-600', desc: 'Pencarian data satu per satu.', topic: 'Algoritma Pencarian', content: '<p><b>Linear Search</b> (Pencarian Sekuensial) mencari elemen dengan memeriksa setiap elemen dari awal sampai akhir secara satu per satu.</p>', sims: [{ name: 'Simulasi Linear Search', url: 'linear_search_kunci.html' }] },
+                    { id: 'binary-search', title: 'Binary Search', icon: 'fa-search-plus', color: 'bg-blue-600', desc: 'Pencarian data dengan membagi dua.', topic: 'Algoritma Pencarian', content: '<p><b>Binary Search</b> mencari elemen pada data yang <i>sudah terurut</i> dengan cara membagi rentang pencarian menjadi dua secara terus menerus.</p>', sims: [{ name: 'Simulasi Binary Search', url: 'binary_search_kamus.html' }] },
+                    { id: 'bubble-sort', title: 'Bubble Sort', icon: 'fa-sort-amount-up', color: 'bg-cyan-600', desc: 'Pengurutan dengan gelembung.', topic: 'Algoritma Pengurutan', content: '<p><b>Bubble Sort</b> membandingkan dua elemen bersebelahan dan menukarnya jika urutannya salah. Perlahan membawa nilai terbesar ke akhir array layaknya gelembung udara.</p>', sims: [{ name: 'Simulasi Bubble Sort', url: 'bubble_sort_tinggi_badan.html' }] },
+                    { id: 'selection-sort', title: 'Selection Sort', icon: 'fa-sort-amount-up-alt', color: 'bg-cyan-600', desc: 'Pengurutan dengan memilih minimum.', topic: 'Algoritma Pengurutan', content: '<p><b>Selection Sort</b> bekerja dengan mencari nilai minimum dari data yang tersisa lalu menukarnya dengan posisi awal secara berulang.</p>', sims: [{ name: 'Simulasi Selection Sort', url: 'selection_sort_baju.html' }] },
+                    { id: 'insertion-sort', title: 'Insertion Sort', icon: 'fa-sort-numeric-up', color: 'bg-cyan-600', desc: 'Pengurutan dengan menyisipkan data.', topic: 'Algoritma Pengurutan', content: '<p><b>Insertion Sort</b> membangun array yang terurut satu per satu dengan cara mengambil elemen dan menyisipkannya ke posisi yang tepat.</p>', sims: [{ name: 'Simulasi Insertion Sort', url: 'insertion_sort_kartu.html' }] },
+                ]
+            },
+            notasi: {
+                color: 'bg-teal-600',
+                items: [
+                    { id: 'pseudocode', title: 'Pseudocode', icon: 'fa-file-code', color: 'bg-teal-600', desc: 'Menulis algoritma secara deskriptif.', topic: 'Notasi Algoritma', content: '<p><b>Pseudocode</b> berasal dari kata "Pseudo" (palsu/semu) dan "Code" (kode). Ini adalah cara menuliskan algoritma menggunakan bahasa deskriptif yang mudah dipahami manusia.</p><div class="bg-gray-800 text-gray-100 p-4 rounded-lg font-mono text-sm mt-3">INPUT nilai<br>IF nilai &gt; 75 THEN<br>&nbsp;&nbsp;PRINT "Lulus"<br>ELSE<br>&nbsp;&nbsp;PRINT "Remedial"<br>END IF</div>', sims: [{ name: 'Simulasi Pseudocode', url: 'simulasi_pseudocode.html' }] },
+                    { id: 'pengenalan-coding', title: 'Bahasa Pemrograman', icon: 'fa-laptop-code', color: 'bg-gray-800', desc: 'Konsep dasar pemrograman komputer.', topic: 'Notasi Algoritma', content: '<p><b>Bahasa Pemrograman</b> adalah kosa kata dan tata bahasa (sintaks) untuk menginstruksikan komputer agar melakukan tugas tertentu.</p><p>Komputer hanya mengerti biner (0 dan 1), dan bahasa pemrograman menerjemahkan logika manusia menjadi bahasa mesin.</p>', sims: [{ name: 'Simulasi Pemrograman', url: 'simulasi_pemrograman.html' }] },
+                    { id: 'flowchart', title: 'Diagram Alir (Flowchart)', icon: 'fa-sitemap', color: 'bg-orange-600', desc: 'Visualisasi algoritma dengan simbol.', topic: 'Notasi Algoritma', content: '<p><b>Flowchart</b> menggunakan simbol-simbol bangun datar khusus untuk menggambarkan langkah-langkah logika pemecahan masalah secara visual.</p>', sims: [{ name: 'Buka Portal Flowchart 🚀', url: 'page_flowchart.html' }] },
+                ]
+            }
+        };
+
+        // ======= RENDER SUB-CARDS =======
+        function renderSubCards() {
+            Object.keys(categories).forEach(catKey => {
+                const cat = categories[catKey];
+                const container = document.getElementById('sub-' + catKey);
+                
+                cat.items.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'sub-card rounded-2xl p-5 cursor-pointer border border-gray-100';
+                    card.onclick = () => openModal(catKey, item.id);
+                    
+                    card.innerHTML = `
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-xl ${item.color} text-white flex items-center justify-center text-lg shadow-sm">
+                                <i class="fas ${item.icon}"></i>
+                            </div>
+                            <h4 class="font-bold text-gray-800 flex-1">${item.title}</h4>
+                            <i class="fas fa-arrow-right text-gray-300 text-sm"></i>
+                        </div>
+                        <p class="text-sm text-gray-500">${item.desc}</p>
+                        ${item.sims.length > 0 ? '<div class="mt-3"><span class="text-[10px] font-bold uppercase tracking-wider bg-blue-50 px-2.5 py-1 rounded-full text-blue-600 border border-blue-100"><i class="fas fa-play mr-1"></i>Simulasi</span></div>' : ''}
+                    `;
+                    container.appendChild(card);
+                });
+            });
+        }
+
+        // ======= TOGGLE CATEGORY =======
+        function toggleCategory(catKey) {
+            const panel = document.getElementById('panel-' + catKey);
+            const icon = document.getElementById('icon-' + catKey);
+            const isHidden = panel.classList.contains('hidden');
+
+            // Close all panels
+            ['komputasi', 'algoritma', 'notasi'].forEach(k => {
+                document.getElementById('panel-' + k).classList.add('hidden');
+                document.getElementById('icon-' + k).style.transform = 'rotate(0deg)';
+            });
+
+            // Open if was hidden
+            if (isHidden) {
+                panel.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+                
+                // Scroll to panel
+                setTimeout(() => {
+                    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+        }
+
+        // ======= MODAL =======
+        function openModal(catKey, itemId) {
+            const item = categories[catKey].items.find(i => i.id === itemId);
+            if (!item) return;
+
+            document.getElementById('m-icon').className = `w-14 h-14 rounded-2xl flex items-center justify-center text-2xl text-white shadow-md ${item.color}`;
+            document.getElementById('m-icon').innerHTML = `<i class="fas ${item.icon}"></i>`;
+            document.getElementById('m-topic').innerText = item.topic;
+            document.getElementById('m-title').innerText = item.title;
+            document.getElementById('m-content').innerHTML = item.content;
+
+            const simList = document.getElementById('m-sim-list');
+            const simSection = document.getElementById('m-sims');
+            simList.innerHTML = '';
+
+            if (item.sims.length > 0) {
+                simSection.style.display = 'block';
+                item.sims.forEach(sim => {
+                    const a = document.createElement('a');
+                    a.href = sim.url;
+                    a.target = '_blank';
+                    a.className = 'bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 font-bold px-5 py-3 rounded-xl flex items-center justify-between transition-colors shadow-sm text-sm';
+                    a.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-external-link-alt text-blue-400"></i>
+                            <span>${sim.name}</span>
+                        </div>
+                        <i class="fas fa-arrow-right"></i>
+                    `;
+                    simList.appendChild(a);
+                });
+            } else {
+                simSection.style.display = 'none';
+            }
+
+            const modal = document.getElementById('modal-detail');
+            const box = document.getElementById('modal-box');
+            modal.classList.remove('hidden');
+            void modal.offsetWidth;
+            modal.classList.remove('opacity-0');
+            box.classList.remove('scale-95');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal-detail');
+            const box = document.getElementById('modal-box');
+            modal.classList.add('opacity-0');
+            box.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        // Close modal on backdrop click
+        document.getElementById('modal-detail').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ======= SCROLL ANIMATIONS =======
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSubCards();
+            document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+        });
+    </script>
+
+</body>
+</html>

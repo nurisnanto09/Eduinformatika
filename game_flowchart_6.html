@@ -77,10 +77,11 @@
         </div>
     </header>
 
-    <main class="flex-1 flex overflow-hidden relative">
+    <main class="flex-1 flex flex-col md:flex-row overflow-y-auto md:overflow-hidden relative">
         
         <!-- KIRI (25%) -->
-        <div class="w-1/4 bg-blue-50 border-r border-blue-200 p-4 flex flex-col shadow-inner z-10 overflow-y-auto min-w-[280px]">
+        <div class="w-full md:w-1/4 bg-blue-50 border-b md:border-b-0 md:border-r border-blue-200 p-4 flex flex-col shadow-inner z-10 overflow-visible md:overflow-y-auto min-w-[280px] order-2 md:order-1">
+            <div class="flex flex-col order-2 md:order-1 mt-6 md:mt-0">
             <h3 class="font-black text-amber-800 mb-2 text-sm border-b border-amber-200 pb-1 uppercase"><i class="fas fa-shapes mr-1"></i> 1. Pilihan Bentuk</h3>
             <div class="grid grid-cols-2 gap-3 mb-3">
                 <div class="bg-white border border-amber-200 p-2 rounded text-center clickable hover:border-amber-500" onclick="selectShape(this, 'oval')">
@@ -101,22 +102,26 @@
                 </div>
             </div>
 
+            </div>
+
+            <div class="flex flex-col flex-1 order-1 md:order-2">
             <h3 class="font-black text-blue-800 mb-2 text-sm border-b border-blue-200 pb-1 uppercase"><i class="fas fa-font mr-1"></i> 2. Pilihan Teks</h3>
             <div class="flex flex-col gap-2 pb-4 flex-1" id="text-pool">
-                <div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-0' onclick="selectText(this, 'Buang air rebusan pertama')">Buang air rebusan pertama</div>
-<div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-1' onclick="selectText(this, 'Buka tutup dan nikmati mie instan')">Buka tutup dan nikmati mie instan</div>
-<div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-2' onclick="selectText(this, 'Rebus mie dan telur di dalam panci')">Rebus mie dan telur di dalam panci</div>
-<div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-3' onclick="selectText(this, 'Tutup cup dan diamkan selama 3 menit')">Tutup cup dan diamkan selama 3 menit</div>
-<div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-4' onclick="selectText(this, 'Selesai')">Selesai</div>
-<div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-5' onclick="selectText(this, 'Tuang air panas ke dalam cup mie')">Tuang air panas ke dalam cup mie</div>
-<div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-6' onclick="selectText(this, 'Mulai')">Mulai</div>
-<div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-7' onclick="selectText(this, 'Apakah mie sudah mengembang dan empuk?')">Apakah mie sudah mengembang dan empuk?</div>
-
+                <div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-0' onclick="selectText(this, 'Buka tutup cup mie')">Buka tutup cup mie</div>
+<div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-1' onclick="selectText(this, 'Masukkan bumbu dan tuang air panas')">Masukkan bumbu dan tuang air panas</div>
+<div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-2' onclick="selectText(this, 'Tutup cup dan diamkan selama 3 menit')">Tutup cup dan diamkan selama 3 menit</div>
+<div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-3' onclick="selectText(this, 'Apakah mie sudah mengembang dan empuk?')">Apakah mie sudah mengembang dan empuk?</div>
+<div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-4' onclick="selectText(this, 'Buka tutup dan nikmati mie instan')">Buka tutup dan nikmati mie instan</div>
+<div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-5' onclick="selectText(this, 'Mulai')">Mulai</div>
+<div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-6' onclick="selectText(this, 'Selesai')">Selesai</div>
+<div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-7' onclick="selectText(this, 'Buang air rebusan pertama')">Buang air rebusan pertama</div>
+<div class='text-block bg-white border border-blue-200 p-2 rounded shadow-sm text-xs flex items-center justify-center text-center font-bold text-gray-700 clickable hover:border-blue-500 min-h-[40px]' id='txt-8' onclick="selectText(this, 'Rebus mie dan telur di dalam panci')">Rebus mie dan telur di dalam panci</div>
             </div>
         </div>
 
+            </div>
         <!-- TENGAH (50% - 1 Column Algorithm Board, slightly large) -->
-        <div class="w-2/4 bg-white py-2 px-4 overflow-y-auto relative flex flex-col items-center border-r border-gray-200">
+        <div class="w-full md:w-2/4 bg-white py-4 px-4 overflow-visible md:overflow-y-auto relative flex flex-col items-center border-b md:border-b-0 md:border-r border-gray-200 order-1 md:order-2 min-h-[550px]">
             
             <!-- Timer placed top right -->
             <div class="absolute top-2 right-4 bg-slate-800 text-white px-3 py-1.5 rounded-lg shadow-sm flex items-center z-20">
@@ -165,6 +170,13 @@
                     <div class="slot-placeholder"><span id="sl-5" class="transition-all duration-300 font-bold">Langkah 6</span></div>
                     <div class="rendered-shape hidden" id="rs-5"></div>
                     <div class="rendered-text" id="rt-5"></div>
+                </div>
+                <div class="arrow-down"></div>
+                
+                <div class="board-slot" id="slot-6" onclick="placeToZone(6)">
+                    <div class="slot-placeholder"><span id="sl-6" class="transition-all duration-300 font-bold">Langkah 7</span></div>
+                    <div class="rendered-shape hidden" id="rs-6"></div>
+                    <div class="rendered-text" id="rt-6"></div>
                 </div>
                 
             </div>
@@ -217,6 +229,7 @@
                         <option value="4">Langkah 4</option>
                         <option value="5">Langkah 5</option>
                         <option value="6">Langkah 6</option>
+                        <option value="7">Langkah 7</option>
                     </select>
                 </div>
             </div>
@@ -224,7 +237,7 @@
         </div>
         
         <!-- KANAN (25%) -->
-        <div class="w-1/4 bg-slate-50 p-4 flex flex-col z-10 overflow-y-auto min-w-[220px]">
+        <div class="w-full md:w-1/4 bg-slate-50 p-4 flex flex-col z-10 overflow-visible md:overflow-y-auto min-w-[220px] order-3">
             
             <!-- Target Misi -->
             <div class="bg-blue-100 border border-blue-200 rounded-xl p-3 mb-4 shadow-sm">
@@ -236,7 +249,7 @@
             <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-3 mb-4">
                 <div class="flex justify-between items-center mb-1">
                     <h4 class="text-[10px] font-bold text-gray-500 uppercase tracking-wider"><i class="fas fa-tasks mr-1"></i> Progress</h4>
-                    <span id="progress-text" class="text-[10px] font-black text-blue-600">0/6</span>
+                    <span id="progress-text" class="text-[10px] font-black text-blue-600">0/7</span>
                 </div>
                 <div class="w-full bg-gray-100 rounded-full h-2">
                     <div id="progress-bar" class="bg-blue-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
@@ -287,13 +300,13 @@
     </div>
 
     <script>
-        const correctAnswerTexts = ["Mulai", "Tuang air panas ke dalam cup mie", "Tutup cup dan diamkan selama 3 menit", "Apakah mie sudah mengembang dan empuk?", "Buka tutup dan nikmati mie instan", "Selesai"];
-        const correctAnswerShapes = ["oval", "jajar", "persegi", "ketupat", "jajar", "oval"];
-        const correctLoop = "3";
+        const correctAnswerTexts = ["Mulai", "Buka tutup cup mie", "Masukkan bumbu dan tuang air panas", "Tutup cup dan diamkan selama 3 menit", "Apakah mie sudah mengembang dan empuk?", "Buka tutup dan nikmati mie instan", "Selesai"];
+        const correctAnswerShapes = ["oval", "persegi", "jajar", "persegi", "ketupat", "jajar", "oval"];
+        const correctLoop = "4";
         
         let activeTextObj = null;
         let activeShapeObj = null;
-        let board = [{ text: null, shape: null }, { text: null, shape: null }, { text: null, shape: null }, { text: null, shape: null }, { text: null, shape: null }, { text: null, shape: null }];
+        let board = [{ text: null, shape: null }, { text: null, shape: null }, { text: null, shape: null }, { text: null, shape: null }, { text: null, shape: null }, { text: null, shape: null }, { text: null, shape: null }];
         let timeRemaining = 300;
         let timerInterval = null;
         let gameActive = true;
@@ -374,7 +387,7 @@
             if(val === 0) return;
             
             let decIdx = -1;
-            for(let i=0; i<6; i++) { if(board[i].shape === 'ketupat') decIdx = i; }
+            for(let i=0; i<7; i++) { if(board[i].shape === 'ketupat') decIdx = i; }
             if(decIdx === -1) return;
             
             let targetIdx = val - 1; 
@@ -395,7 +408,7 @@
             let decIdx = -1;
             document.getElementById('btn-mistakes').classList.add('hidden');
             
-            for(let i=0; i<6; i++) {
+            for(let i=0; i<7; i++) {
                 const z = board[i];
                 const rt = document.getElementById('rt-'+i);
                 const rs = document.getElementById('rs-'+i);
@@ -471,14 +484,14 @@
         
         function updateProgress() {
             let scoreProgress = 0;
-            for(let i=0; i<6; i++) {
+            for(let i=0; i<7; i++) {
                 if(board[i].shape) scoreProgress += 0.5;
                 if(board[i].text) scoreProgress += 0.5;
             }
             const pText = document.getElementById('progress-text');
             const pBar = document.getElementById('progress-bar');
-            pText.innerText = Math.floor(scoreProgress) + "/6";
-            pBar.style.width = (scoreProgress / 6 * 100) + "%";
+            pText.innerText = Math.floor(scoreProgress) + "/7";
+            pBar.style.width = (scoreProgress / 7 * 100) + "%";
         }
         
         function useHint() {
@@ -488,9 +501,9 @@
                 return;
             }
             let targetIdx = -1;
-            for(let i=0; i<6; i++) { if(!board[i].shape && !board[i].text) { targetIdx = i; break; } }
+            for(let i=0; i<7; i++) { if(!board[i].shape && !board[i].text) { targetIdx = i; break; } }
             if(targetIdx === -1) {
-                for(let i=0; i<6; i++) {
+                for(let i=0; i<7; i++) {
                     if(board[i].shape !== correctAnswerShapes[i] || board[i].text !== correctAnswerTexts[i]) {
                         targetIdx = i; break;
                     }
@@ -536,7 +549,7 @@
             }
             
             board = [{ text: null, shape: null }, { text: null, shape: null }, { text: null, shape: null },
-                     { text: null, shape: null }, { text: null, shape: null }, { text: null, shape: null }];
+                     { text: null, shape: null }, { text: null, shape: null }, { text: null, shape: null }, { text: null, shape: null }];
             document.querySelectorAll('.text-block').forEach(el => { el.style.opacity = '1'; el.classList.remove('selected-text'); });
             document.querySelectorAll('.clickable').forEach(el => { el.classList.remove('selected-shape'); });
             activeTextObj = null; activeShapeObj = null;
@@ -551,7 +564,7 @@
             if(!gameActive) return;
             
             let allFilled = true;
-            for(let i=0; i<6; i++) {
+            for(let i=0; i<7; i++) {
                 if(!board[i].text || !board[i].shape) allFilled = false;
             }
             
@@ -561,14 +574,16 @@
                 return;
             }
             
-            let shapeScore = 0; let textScore = 0; let loopScore = 0;
+            let shapeCorrect = 0; let textCorrect = 0; let loopScore = 0;
             
-            for(let i=0; i<6; i++) {
-                if(board[i].shape === correctAnswerShapes[i]) shapeScore += 10;
-                if(board[i].text === correctAnswerTexts[i]) textScore += 5;
+            for(let i=0; i<7; i++) {
+                if(board[i].shape === correctAnswerShapes[i]) shapeCorrect++;
+                if(board[i].text === correctAnswerTexts[i]) textCorrect++;
             }
             if(document.getElementById('loop-select').value === correctLoop) loopScore = 10;
             
+            let shapeScore = Math.floor(shapeCorrect / 7 * 60);
+            let textScore = Math.floor(textCorrect / 7 * 30);
             let total = shapeScore + textScore + loopScore;
             
             const sDisplay = document.getElementById('score-display');
@@ -586,8 +601,8 @@
             } else {
                 sDisplay.className = "text-5xl font-black text-amber-500 leading-none";
                 let errText = [];
-                if(shapeScore < 60) errText.push("Bentuk");
-                if(textScore < 30) errText.push("Urutan");
+                if(shapeCorrect < 7) errText.push("Bentuk");
+                if(textCorrect < 7) errText.push("Urutan");
                 if(loopScore === 0) errText.push("Looping");
                 sMsg.innerHTML = "Kesalahan di: " + errText.join(", ");
                 sMsg.className = "text-[10px] font-bold text-amber-600 mt-2 h-6";
@@ -597,7 +612,7 @@
         
         function showMistakes() {
             if(!gameActive) return;
-            for(let i=0; i<6; i++) {
+            for(let i=0; i<7; i++) {
                 const rs = document.getElementById('rs-'+i);
                 const rt = document.getElementById('rt-'+i);
                 
