@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Misi Logika Algoritma</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8fafc; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+    </style>
+</head>
+<body class="font-sans text-gray-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white shadow-lg py-8">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-4xl font-black mb-2"><i class="fas fa-code-branch mr-3"></i>Portal Misi Logika Algoritma</h1>
+            <p class="text-blue-200 text-lg">Pilih dan selesaikan misi khusus untuk kelompokmu!</p>
+        </div>
+    </header>
+
+    <!-- Floating Global Timer -->
+    <div onclick="resetTimer()" title="Klik untuk mereset waktu" class="fixed top-4 right-4 md:top-6 md:right-6 bg-slate-900 text-white border-2 border-amber-400 px-3 py-2 md:px-5 md:py-3 rounded-xl md:rounded-2xl shadow-2xl z-50 flex items-center justify-center cursor-pointer hover:bg-slate-800 transition-colors scale-90 md:scale-100 origin-top-right">
+        <i class="fas fa-stopwatch text-amber-400 text-xl md:text-2xl mr-2 md:mr-3 animate-pulse"></i>
+        <div class="flex flex-col">
+            <span class="text-[8px] md:text-[10px] font-bold text-slate-300 uppercase tracking-widest leading-none mb-1">Waktu Misi</span>
+            <span id="global-timer-display" class="font-mono font-black text-xl md:text-2xl leading-none">25:00</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-12 flex-grow">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Card 1 -->
+            <a href="game_koki_1.html" class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm transition-all duration-300 card-hover group flex flex-col h-full">
+                <div class="w-14 h-14 bg-yellow-100 text-yellow-600 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-yellow-600 group-hover:text-white transition-colors">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">Tugas Kelompok 1</h3>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Penentuan Kelulusan Ujian</h2>
+                <p class="text-gray-600 text-sm mb-4 flex-grow">Misi: Hitung nilai akhir dari skor. Jika nilai_akhir >= 75 maka lulus.</p>
+                <span class="text-blue-600 font-bold text-sm flex items-center group-hover:text-yellow-600">Mulai Misi <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i></span>
+            </a>
+
+            <!-- Card 2 -->
+            <a href="game_koki_2.html" class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm transition-all duration-300 card-hover group flex flex-col h-full">
+                <div class="w-14 h-14 bg-red-100 text-red-600 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-red-600 group-hover:text-white transition-colors">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">Tugas Kelompok 2</h3>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Diskon Belanja Swalayan</h2>
+                <p class="text-gray-600 text-sm mb-4 flex-grow">Misi: Hitung total belanja. Jika total_belanja >= Rp100.000 maka dapat diskon.</p>
+                <span class="text-blue-600 font-bold text-sm flex items-center group-hover:text-red-600">Mulai Misi <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i></span>
+            </a>
+
+            <!-- Card 3 -->
+            <a href="game_koki_3.html" class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm transition-all duration-300 card-hover group flex flex-col h-full">
+                <div class="w-14 h-14 bg-red-100 text-red-600 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-red-600 group-hover:text-white transition-colors">
+                    <i class="fas fa-thermometer-half"></i>
+                </div>
+                <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">Tugas Kelompok 3</h3>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Klasifikasi Suhu Tubuh</h2>
+                <p class="text-gray-600 text-sm mb-4 flex-grow">Misi: Konversi suhu ke Celcius. Jika suhu_celcius > 37.5 maka demam.</p>
+                <span class="text-blue-600 font-bold text-sm flex items-center group-hover:text-red-600">Mulai Misi <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i></span>
+            </a>
+
+            <!-- Card 4 -->
+            <a href="game_koki_4.html" class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm transition-all duration-300 card-hover group flex flex-col h-full">
+                <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                    <i class="fas fa-id-card"></i>
+                </div>
+                <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">Tugas Kelompok 4</h3>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Kategori Usia Pemilih Pemilu</h2>
+                <p class="text-gray-600 text-sm mb-4 flex-grow">Misi: Hitung umur dari tahun lahir. Jika umur >= 17 maka boleh memilih.</p>
+                <span class="text-blue-600 font-bold text-sm flex items-center group-hover:text-blue-600">Mulai Misi <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i></span>
+            </a>
+
+            <!-- Card 5 -->
+            <a href="game_koki_5.html" class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm transition-all duration-300 card-hover group flex flex-col h-full">
+                <div class="w-14 h-14 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-orange-600 group-hover:text-white transition-colors">
+                    <i class="fas fa-divide"></i>
+                </div>
+                <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">Tugas Kelompok 5</h3>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Validasi Angka Genap atau Ganjil</h2>
+                <p class="text-gray-600 text-sm mb-4 flex-grow">Misi: Hitung sisa bagi (MOD 2). Jika sisa_bagi == 0 maka bilangan genap.</p>
+                <span class="text-blue-600 font-bold text-sm flex items-center group-hover:text-orange-600">Mulai Misi <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i></span>
+            </a>
+
+            <!-- Card 6 -->
+            <a href="game_koki_6.html" class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm transition-all duration-300 card-hover group flex flex-col h-full">
+                <div class="w-14 h-14 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-orange-600 group-hover:text-white transition-colors">
+                    <i class="fas fa-elevator"></i>
+                </div>
+                <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">Tugas Kelompok 6</h3>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Cek Muatan Beban Lift</h2>
+                <p class="text-gray-600 text-sm mb-4 flex-grow">Misi: Hitung total berat. Jika berat_total > 500 kg maka lift berhenti.</p>
+                <span class="text-blue-600 font-bold text-sm flex items-center group-hover:text-orange-600">Mulai Misi <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i></span>
+            </a>
+
+            <!-- Card 7 -->
+            <a href="game_koki_7.html" class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm transition-all duration-300 card-hover group flex flex-col h-full">
+                <div class="w-14 h-14 bg-yellow-100 text-yellow-600 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-yellow-600 group-hover:text-white transition-colors">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">Tugas Kelompok 7</h3>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Penentuan Status Jam Masuk</h2>
+                <p class="text-gray-600 text-sm mb-4 flex-grow">Misi: Hitung keterlambatan. Jika keterlambatan > 0 menit maka terlambat.</p>
+                <span class="text-blue-600 font-bold text-sm flex items-center group-hover:text-yellow-600">Mulai Misi <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i></span>
+            </a>
+
+            <!-- Card 8 -->
+            <a href="game_koki_8.html" class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm transition-all duration-300 card-hover group flex flex-col h-full">
+                <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                    <i class="fas fa-traffic-light"></i>
+                </div>
+                <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">Tugas Kelompok 8</h3>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Lampu Lalu Lintas Otomatis</h2>
+                <p class="text-gray-600 text-sm mb-4 flex-grow">Misi: Hitung durasi lampu hijau. Jika durasi_hijau > 30 maka lampu merah.</p>
+                <span class="text-blue-600 font-bold text-sm flex items-center group-hover:text-emerald-600">Mulai Misi <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i></span>
+            </a>
+
+            <!-- Card 9 -->
+            <a href="game_koki_9.html" class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm transition-all duration-300 card-hover group flex flex-col h-full">
+                <div class="w-14 h-14 bg-red-100 text-red-600 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-red-600 group-hover:text-white transition-colors">
+                    <i class="fas fa-box-open"></i>
+                </div>
+                <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">Tugas Kelompok 9</h3>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Validasi Stok Barang Toko</h2>
+                <p class="text-gray-600 text-sm mb-4 flex-grow">Misi: Hitung sisa stok. Jika sisa_stok >= 0 maka pesanan diproses.</p>
+                <span class="text-blue-600 font-bold text-sm flex items-center group-hover:text-red-600">Mulai Misi <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i></span>
+            </a>
+</div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-6 text-center text-sm">
+        <p>&copy; 2024 Portal Misi Logika Algoritma - Media Pembelajaran Interaktif</p>
+    </footer>
+
+    <script>
+        // Logika Hitung Mundur (25 Menit) Global
+        function initGlobalTimer() {
+            const timerDisplay = document.getElementById("global-timer-display");
+            const DURATION = 25 * 60; // 25 menit dalam detik
+            
+            // Cek apakah sudah ada waktu end di local storage (agar tahan refresh)
+            let endTime = localStorage.getItem("mission_end_time");
+            
+            if (!endTime) {
+                // Set waktu selesai: Waktu Sekarang + 25 menit
+                endTime = Date.now() + (DURATION * 1000);
+                localStorage.setItem("mission_end_time", endTime);
+            }
+            
+            function updateTimer() {
+                const now = Date.now();
+                const remaining = Math.max(0, Math.floor((endTime - now) / 1000));
+                
+                const minutes = Math.floor(remaining / 60).toString().padStart(2, '0');
+                const seconds = (remaining % 60).toString().padStart(2, '0');
+                
+                timerDisplay.textContent = `${minutes}:${seconds}`;
+                
+                if (remaining > 0) {
+                    setTimeout(updateTimer, 1000);
+                } else {
+                    timerDisplay.textContent = "00:00";
+                    timerDisplay.classList.add("text-red-500");
+                    timerDisplay.parentElement.parentElement.classList.add("border-red-500");
+                    timerDisplay.parentElement.parentElement.querySelector('i').classList.add("text-red-500");
+                    timerDisplay.parentElement.parentElement.querySelector('i').classList.remove("text-amber-400");
+                }
+            }
+            
+            updateTimer();
+        }
+
+        function resetTimer() {
+            if(confirm("Apakah Anda yakin ingin mereset waktu misi kembali ke 25 menit?")) {
+                localStorage.removeItem("mission_end_time");
+                location.reload();
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", initGlobalTimer);
+    </script>
+</body>
+</html>

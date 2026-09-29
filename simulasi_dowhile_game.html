@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game DO-WHILE: Tebak Angka Rahasia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: transparent; }
+        .code-line { padding: 4px 8px; border-radius: 4px; font-family: monospace; font-size: 0.9rem; color: #d1d5db; border-left: 3px solid transparent; transition: all 0.2s; }
+        .active-line { background-color: rgba(59, 130, 246, 0.2); font-weight: bold; color: #93c5fd; border-left-color: #3b82f6; transform: scale(1.02); }
+        .highlight-eval { background-color: rgba(245, 158, 11, 0.2); font-weight: bold; color: #fcd34d; border-left-color: #f59e0b; transform: scale(1.02); }
+        
+        .chat-msg { animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+        
+        .confetti { position: absolute; width: 10px; height: 10px; background-color: #f00; animation: fall 3s linear forwards; }
+        @keyframes fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(500px) rotate(720deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="h-screen w-screen overflow-hidden m-0 p-0 bg-gray-900">
+    <div class="w-full h-full flex flex-col md:flex-row relative">
+        
+        <!-- Left Panel: Pseudocode execution -->
+        <div class="md:w-1/2 p-6 flex flex-col border-b md:border-b-0 md:border-r border-gray-700 bg-gray-900 relative">
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-50"></div>
+            
+            <div class="relative z-10 flex flex-col h-full">
+                <div class="flex items-center gap-3 mb-4 border-b border-gray-700 pb-4">
+                    <div class="w-10 h-10 rounded-full bg-blue-600 flex justify-center items-center text-white shadow-lg">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-white leading-tight">Otak Komputer</h2>
+                        <p class="text-xs text-blue-400 font-mono">mengeksekusi DO-WHILE loop</p>
+                    </div>
+                </div>
+                
+                <div class="flex-1 bg-black/50 rounded-xl p-4 font-mono text-sm shadow-inner border border-gray-800 overflow-y-auto" id="code-container">
+                    <div class="text-gray-500 mb-2 italic"># Program Tebak Angka (1-10)</div>
+                    <div id="line-0" class="code-line"><span class="text-blue-400 font-bold">Program</span> Tebak_Angka</div>
+                    <div id="line-1" class="code-line"><span class="text-orange-400 font-bold">Deklarasi:</span></div>
+                    <div id="line-2" class="code-line">&nbsp;&nbsp;rahasia, tebakan : integer</div>
+                    <div id="line-3" class="code-line"><span class="text-green-400 font-bold">Algoritma:</span></div>
+                    <div id="line-4" class="code-line">&nbsp;&nbsp;rahasia &lt;- <span class="text-purple-400">RANDOM(1, 10)</span></div>
+                    <div id="line-5" class="code-line text-yellow-300 font-bold">&nbsp;&nbsp;DO</div>
+                    <div id="line-6" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;READ tebakan</div>
+                    <div id="line-7" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;IF tebakan &lt; rahasia THEN</div>
+                    <div id="line-8" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PRINT "Terlalu Kecil!"</div>
+                    <div id="line-9" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;ELSE IF tebakan &gt; rahasia THEN</div>
+                    <div id="line-10" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PRINT "Terlalu Besar!"</div>
+                    <div id="line-11" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;END IF</div>
+                    <div id="line-12" class="code-line text-yellow-300 font-bold">&nbsp;&nbsp;WHILE tebakan != rahasia</div>
+                    <div id="line-13" class="code-line">&nbsp;&nbsp;PRINT "Selamat! Tebakan Benar!"</div>
+                </div>
+
+                <div class="mt-4 bg-blue-900/40 p-4 rounded-xl border border-blue-800 text-blue-200 text-sm flex gap-3 items-start">
+                    <i class="fas fa-info-circle text-blue-400 mt-0.5"></i>
+                    <div>
+                        <strong class="text-blue-300 block mb-1">Ciri Khas DO-WHILE:</strong>
+                        Blok kode di dalam <code>DO</code> akan selalu dikerjakan <strong>minimal 1 kali</strong> sebelum syarat di <code>WHILE</code> diperiksa. Cocok untuk input game!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel: Game UI -->
+        <div class="md:w-1/2 flex flex-col bg-gray-50 relative overflow-hidden" id="game-panel">
+            <!-- Top Header -->
+            <div class="bg-white p-4 border-b border-gray-200 shadow-sm flex justify-between items-center z-10">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-gamepad text-indigo-500 text-xl"></i>
+                    <h2 class="font-bold text-gray-800 text-lg">Konsol Permainan</h2>
+                </div>
+                <button onclick="startGame()" class="text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded font-bold transition">
+                    <i class="fas fa-sync-alt"></i> Reset
+                </button>
+            </div>
+
+            <!-- Chat / Terminal Area -->
+            <div class="flex-1 p-4 overflow-y-auto flex flex-col gap-3 relative" id="chat-container">
+                <!-- Messages go here -->
+            </div>
+
+            <!-- Input Area -->
+            <div class="p-4 bg-white border-t border-gray-200 z-10">
+                <div class="flex gap-2">
+                    <input type="number" id="guess-input" placeholder="Tebak angka (1-10)..." 
+                           class="flex-1 border-2 border-indigo-200 rounded-xl px-4 py-3 font-bold text-gray-700 focus:outline-none focus:border-indigo-500 transition-colors"
+                           disabled min="1" max="10">
+                    <button id="btn-submit" onclick="submitGuess()" disabled
+                            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-indigo-500/30 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                        Kirim <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM
+        const codeLines = document.querySelectorAll('.code-line');
+        const chatContainer = document.getElementById('chat-container');
+        const guessInput = document.getElementById('guess-input');
+        const btnSubmit = document.getElementById('btn-submit');
+        const gamePanel = document.getElementById('game-panel');
+
+        // State
+        let targetNumber = 0;
+        let currentGuess = 0;
+        let isGameOver = false;
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function setLine(index, type = 'active') {
+            codeLines.forEach(line => {
+                line.classList.remove('active-line', 'highlight-eval');
+            });
+            if (index >= 0) {
+                const el = document.getElementById(`line-${index}`);
+                if(type === 'active') el.classList.add('active-line');
+                else el.classList.add('highlight-eval');
+                
+                // Scroll code container
+                el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        function addBotMessage(text, type = 'normal') {
+            const div = document.createElement('div');
+            div.className = 'chat-msg flex items-start gap-3 w-full';
+            
+            let icon = '<i class="fas fa-robot"></i>';
+            let bg = 'bg-gray-200';
+            let color = 'text-gray-800';
+            
+            if (type === 'error') {
+                icon = '<i class="fas fa-exclamation-triangle"></i>';
+                bg = 'bg-red-100 border border-red-200';
+                color = 'text-red-800';
+            } else if (type === 'success') {
+                icon = '<i class="fas fa-check-circle"></i>';
+                bg = 'bg-green-100 border border-green-300';
+                color = 'text-green-800 font-bold text-lg';
+            }
+
+            div.innerHTML = `
+                <div class="w-8 h-8 rounded-full bg-indigo-500 flex justify-center items-center text-white shrink-0 text-sm shadow-sm">${icon}</div>
+                <div class="${bg} ${color} px-4 py-2 rounded-2xl rounded-tl-none shadow-sm max-w-[80%] text-sm">
+                    ${text}
+                </div>
+            `;
+            chatContainer.appendChild(div);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function addUserMessage(num) {
+            const div = document.createElement('div');
+            div.className = 'chat-msg flex items-start gap-3 w-full justify-end';
+            div.innerHTML = `
+                <div class="bg-indigo-600 text-white px-5 py-2 rounded-2xl rounded-tr-none shadow-sm font-bold text-lg">
+                    ${num}
+                </div>
+                <div class="w-8 h-8 rounded-full bg-gray-300 flex justify-center items-center text-gray-600 shrink-0 text-sm shadow-sm"><i class="fas fa-user"></i></div>
+            `;
+            chatContainer.appendChild(div);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function createConfetti() {
+            const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+            for(let i=0; i<30; i++) {
+                const conf = document.createElement('div');
+                conf.className = 'confetti';
+                conf.style.left = Math.random() * 100 + '%';
+                conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                conf.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                gamePanel.appendChild(conf);
+                setTimeout(() => conf.remove(), 4000);
+            }
+        }
+
+        // Add Enter key support
+        guessInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter' && !btnSubmit.disabled) {
+                submitGuess();
+            }
+        });
+
+        // Game Flow
+        async function startGame() {
+            // Reset
+            chatContainer.innerHTML = '';
+            guessInput.value = '';
+            guessInput.disabled = true;
+            btnSubmit.disabled = true;
+            isGameOver = false;
+            
+            // UI Init
+            addBotMessage("Sistem Memulai...", "normal");
+            
+            await sleep(500);
+            setLine(4); // rahasia <- RANDOM
+            targetNumber = Math.floor(Math.random() * 10) + 1;
+            console.log("Rahasia:", targetNumber); // For debugging
+            await sleep(1000);
+            
+            // Enter DO block
+            await loopDoBlock();
+        }
+
+        async function loopDoBlock() {
+            setLine(5); // DO
+            await sleep(600);
+            
+            setLine(6); // READ tebakan
+            addBotMessage("Masukkan angka tebakanmu (1-10)!", "normal");
+            
+            // Enable Input and Wait for user
+            guessInput.disabled = false;
+            btnSubmit.disabled = false;
+            guessInput.focus();
+        }
+
+        async function submitGuess() {
+            const val = parseInt(guessInput.value);
+            if (isNaN(val) || val < 1 || val > 10) {
+                guessInput.classList.add('shake');
+                setTimeout(() => guessInput.classList.remove('shake'), 500);
+                return;
+            }
+
+            // Disable input while processing
+            guessInput.disabled = true;
+            btnSubmit.disabled = true;
+            currentGuess = val;
+            
+            addUserMessage(val);
+            guessInput.value = '';
+
+            await sleep(800);
+            
+            // IF ELSE logic
+            setLine(7); // IF tebakan < rahasia
+            await sleep(800);
+
+            if (currentGuess < targetNumber) {
+                setLine(8); // PRINT Kecil
+                addBotMessage("Terlalu Kecil! Naikin lagi.", "error");
+                await sleep(1000);
+                setLine(11); // END IF
+            } else {
+                setLine(9); // ELSE IF tebakan > rahasia
+                await sleep(800);
+                
+                if (currentGuess > targetNumber) {
+                    setLine(10); // PRINT Besar
+                    addBotMessage("Terlalu Besar! Turunin sedikit.", "error");
+                    await sleep(1000);
+                } else {
+                    // Equal!
+                    // Although pseudocode doesn't explicitly PRINT in the ELSE here, it just falls through to END IF.
+                }
+                setLine(11); // END IF
+            }
+            
+            await sleep(800);
+
+            // WHILE CONDITION EVALUATION
+            setLine(12, 'eval'); // WHILE tebakan != rahasia
+            await sleep(1200);
+
+            if (currentGuess !== targetNumber) {
+                // True, repeat DO
+                await loopDoBlock();
+            } else {
+                // False, exit loop
+                setLine(13); // PRINT Selamat
+                addBotMessage(`Selamat! Tebakanmu Benar (${targetNumber}).`, "success");
+                createConfetti();
+                isGameOver = true;
+                
+                // Allow restarting easily
+                setTimeout(() => {
+                    addBotMessage("Klik tombol 'Reset' di sudut atas untuk bermain lagi.");
+                }, 2000);
+            }
+        }
+
+        // Start on load
+        window.addEventListener('DOMContentLoaded', startGame);
+
+    </script>
+</body>
+</html>

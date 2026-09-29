@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LMS Informatika</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         .menu-active { background-color: #EFF6FF; color: #1D4ED8; border-right: 4px solid #1D4ED8; font-weight: bold; }
         .menu-inactive { color: #4B5563; }
@@ -72,7 +72,7 @@
         
         <!-- DASHBOARD -->
         <div id="view-dashboard" class="view-section block animate-fade-in">
-            <h2 class="text-3xl font-black text-gray-800 mb-2">Selamat Datang di LMS! 👋</h2>
+            <h2 class="text-3xl font-black text-gray-800 mb-2">Selamat Datang di LMS! ðŸ‘‹</h2>
             <p class="text-gray-500 mb-8 font-medium">Pantau aktivitas kelas dan kelola materi pembelajaran interaktif.</p>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -326,13 +326,129 @@
             { id: 'insertion-sort', topic: 'Algoritma Sederhana', title: 'Insertion Sort', icon: 'fa-sort-numeric-up', color: 'bg-cyan-600', desc: 'Pengurutan dengan menyisipkan data.', content: '<p><b>Insertion Sort</b> membangun array yang terurut satu per satu dengan cara mengambil elemen dan menyisipkannya ke posisi yang tepat.</p>', simulations: [{ name: 'Simulasi Insertion Sort', url: 'insertion_sort_kartu.html' }] },
 
             // TOPIC: PSEUDOCODE
-            { id: 'pseudocode', topic: 'Pseudocode', title: 'Pseudocode', icon: 'fa-file-code', color: 'bg-teal-600', desc: 'Menulis algoritma secara deskriptif.', content: '<p><b>Pseudocode</b> berasal dari kata "Pseudo" (palsu/semu) dan "Code" (kode). Ini adalah cara menuliskan algoritma menggunakan bahasa deskriptif.</p><div class="bg-gray-800 text-gray-100 p-4 rounded-lg font-mono text-sm mt-2">INPUT nilai<br>IF nilai > 75 THEN<br>&nbsp;&nbsp;PRINT "Lulus"<br>ELSE<br>&nbsp;&nbsp;PRINT "Remedial"<br>END IF</div>', simulations: [{ name: 'Simulasi Pseudocode', url: 'simulasi_pseudocode.html' }] },
+            { id: 'pseudocode', topic: 'Pseudocode', title: 'Pseudocode', icon: 'fa-file-code', color: 'bg-teal-600', desc: 'Menulis algoritma secara deskriptif.', content: `<p><b>Pseudocode</b> berasal dari kata "Pseudo" (palsu/semu) dan "Code" (kode). Ini adalah cara menuliskan algoritma menggunakan bahasa deskriptif.</p>
+            
+            <div class="mt-6 mb-8 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <h3 class="text-xl font-bold text-gray-800 border-b border-gray-100 pb-2 mb-4"><i class="fas fa-layer-group text-teal-600 mr-2"></i> Bagian-bagian Pseudocode</h3>
+                <p class="text-gray-700 mb-4 text-sm">Secara umum, penulisan pseudocode yang baku (seperti notasi algoritmik) dibagi menjadi 3 bagian utama:</p>
+                <div class="space-y-4">
+                    <div class="flex gap-3 items-start">
+                        <div class="w-7 h-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-sm shrink-0 mt-0.5">1</div>
+                        <div>
+                            <h4 class="font-bold text-gray-800">Judul (Header)</h4>
+                            <p class="text-sm text-gray-600">Berisi nama algoritma dan penjelasan singkat. Biasanya diawali dengan kata <code>Program</code> atau <code>Algoritma</code>.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 items-start">
+                        <div class="w-7 h-7 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center font-bold text-sm shrink-0 mt-0.5">2</div>
+                        <div>
+                            <h4 class="font-bold text-gray-800">Kamus / Deklarasi</h4>
+                            <p class="text-sm text-gray-600">Bagian pendaftaran variabel. Semua variabel, konstanta, atau tipe data yang akan dipakai harus didata (dideklarasikan) di sini sebelum bisa digunakan.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 items-start">
+                        <div class="w-7 h-7 rounded-full bg-green-100 text-green-700 flex items-center justify-center font-bold text-sm shrink-0 mt-0.5">3</div>
+                        <div>
+                            <h4 class="font-bold text-gray-800">Algoritma / Deskripsi</h4>
+                            <p class="text-sm text-gray-600">Bagian inti tempat proses dijalankan (algoritma sebenarnya), seperti operasi hitung, percabangan, atau perulangan.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 bg-gray-900 text-gray-100 p-5 rounded-xl font-mono text-sm leading-relaxed border-l-4 border-teal-500 shadow-inner">
+                    <span class="text-blue-400 font-bold">Judul:</span> Program Menghitung_Luas_Persegi<br>
+                    <span class="text-gray-500 italic"># Menghitung luas persegi dari input sisi</span><br><br>
+                    <span class="text-orange-400 font-bold">Kamus / Deklarasi:</span><br>
+                    sisi : integer<br>
+                    luas : integer<br><br>
+                    <span class="text-green-400 font-bold">Algoritma / Deskripsi:</span><br>
+                    READ sisi<br>
+                    luas &lt;- sisi * sisi<br>
+                    PRINT luas
+                </div>
+            </div>
+            
+            <div class="mt-8 mb-8">
+                <h3 class="text-2xl font-bold text-gray-800 border-b border-gray-200 pb-2 mb-4">Struktur Dasar Algoritma</h3>
+                <p class="mb-4 text-gray-700">Algoritma umumnya dibangun menggunakan tiga struktur dasar. Berikut adalah contoh kasus dan penulisan pseudocode-nya:</p>
+                
+                <div class="space-y-6">
+                    <!-- 1. Sequence -->
+                    <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
+                        <h4 class="font-bold text-blue-700 text-lg flex items-center gap-2 mb-2"><i class="fas fa-arrow-down"></i> 1. Sequence (Sekuensial / Berurutan)</h4>
+                        <p class="text-sm text-gray-600 mb-3">Struktur yang mengeksekusi instruksi satu per satu dari atas ke bawah tanpa ada yang terlewat.<br><b>Kasus:</b> Menghitung luas persegi panjang.</p>
+                        <div class="bg-gray-800 text-gray-100 p-4 rounded-lg font-mono text-sm leading-relaxed">
+                            READ panjang<br>
+                            READ lebar<br>
+                            luas &lt;- panjang * lebar<br>
+                            PRINT luas
+                        </div>
+                    </div>
+
+                    <!-- 2. Selection -->
+                    <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
+                        <h4 class="font-bold text-orange-700 text-lg flex items-center gap-2 mb-2"><i class="fas fa-code-branch"></i> 2. Selection (Pilihan / Percabangan)</h4>
+                        <p class="text-sm text-gray-600 mb-3">Struktur yang memilih instruksi mana yang akan dieksekusi berdasarkan suatu kondisi (IF-ELSE).<br><b>Kasus:</b> Menentukan apakah sebuah angka bernilai positif atau negatif.</p>
+                        <div class="bg-gray-800 text-gray-100 p-4 rounded-lg font-mono text-sm leading-relaxed">
+                            READ angka<br>
+                            IF angka >= 0 THEN<br>
+                            &nbsp;&nbsp;PRINT "Positif"<br>
+                            ELSE<br>
+                            &nbsp;&nbsp;PRINT "Negatif"<br>
+                            END IF
+                        </div>
+                    </div>
+
+                    <!-- 3. Iteration -->
+                    <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
+                        <h4 class="font-bold text-green-700 text-lg flex items-center gap-2 mb-2"><i class="fas fa-sync-alt"></i> 3. Iteration (Pengulangan / Looping)</h4>
+                        <p class="text-sm text-gray-600 mb-3">Struktur yang mengeksekusi instruksi yang sama berulang kali selama kondisi terpenuhi (FOR, WHILE).<br><b>Kasus:</b> Menghitung mundur dari 5 sampai 1.</p>
+                        <div class="bg-gray-800 text-gray-100 p-4 rounded-lg font-mono text-sm leading-relaxed">
+                            FOR i &lt;- 5 DOWNTO 1 DO<br>
+                            &nbsp;&nbsp;PRINT i<br>
+                            END FOR<br>
+                            PRINT "Mulai!"
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 bg-indigo-50 p-6 rounded-2xl border border-indigo-100">
+                <h4 class="text-indigo-800 flex items-center gap-2 mt-0"><i class="fas fa-theater-masks"></i> Roleplay "Human Computer" (Teater Logika)</h4>
+                <p class="text-gray-700 mt-2">Siswa SMA kelas X sering kali kebingungan dengan konsep abstrak seperti "Variabel" atau perintah penugasan (assignment seperti X &lt;- X + 1). Metode ini mengubah mesin menjadi manusia.</p>
+                <p class="text-gray-700 mt-2"><b>Vibe:</b> Kinestetik, menyenangkan, dan sangat ampuh memecahkan miskonsepsi.</p>
+                
+                <h5 class="font-bold text-gray-800 mt-6 mb-2 text-lg">Cara Kerja:</h5>
+                <p class="text-gray-700 mb-3">Panggil 4 orang siswa ke depan kelas untuk menjadi "Komponen Komputer":</p>
+                <ul class="list-disc pl-6 text-gray-700 space-y-2 mb-6">
+                    <li><b>Siswa 1 (Layar/Output):</b> Hanya boleh berbicara jika ada perintah PRINT.</li>
+                    <li><b>Siswa 2 (User/Input):</b> Memberikan angka ke dalam sistem ketika ada perintah READ.</li>
+                    <li><b>Siswa 3 (RAM/Variabel):</b> Memegang kotak sepatu kosong atau papan tulis kecil. Dia bertugas menyimpan, menghapus, atau mengganti angka yang ada di dalam variabel.</li>
+                    <li><b>Siswa 4 (Prosesor/Otak):</b> Membaca baris Pseudocode di layar satu per satu dan menginstruksikan teman-temannya.</li>
+                </ul>
+
+                <h5 class="font-bold text-gray-800 mt-4 mb-3 text-lg">Skenario:</h5>
+                <div class="bg-white p-5 rounded-xl border border-gray-200 text-base space-y-3 font-mono shadow-sm">
+                    <p><span class="text-purple-600 font-bold">Prosesor:</span> "Baris 1: READ X. Hei User, beri angka!"</p>
+                    <p><span class="text-green-600 font-bold">User:</span> "Saya kasih angka 8!"</p>
+                    <p><span class="text-purple-600 font-bold">Prosesor:</span> "Oke, RAM, tulis angka 8 di papanmu sebagai X." <span class="text-gray-500 italic">(Siswa RAM menulis 8)</span>.</p>
+                    <p><span class="text-purple-600 font-bold">Prosesor:</span> "Baris 2: X &lt;- X + 2. Hei RAM, lihat angkamu sekarang, tambah 2, lalu hapus angka lama dan ganti dengan yang baru!" <span class="text-gray-500 italic">(Siswa RAM menghapus 8, menulis 10. Ini momen "AHA" bagi siswa yang bingung konsep assignment)</span>.</p>
+                    <p><span class="text-purple-600 font-bold">Prosesor:</span> "Baris 3: PRINT X. Hei Layar, sebutkan angka yang dipegang RAM!"</p>
+                    <p><span class="text-blue-600 font-bold">Layar:</span> "SEPULUH!"</p>
+                </div>
+
+                <div class="mt-6 bg-green-50 p-4 rounded-xl border border-green-200 flex items-start gap-3">
+                    <i class="fas fa-lightbulb text-green-600 text-xl mt-1"></i>
+                    <div>
+                        <h5 class="font-bold text-green-800 m-0 text-lg">Keunggulan:</h5>
+                        <p class="text-green-700 text-base mt-1">Membuat konsep abstrak pemrograman menjadi sangat nyata dan terlihat secara fisik.</p>
+                    </div>
+                </div>
+            </div>`, simulations: [{ name: 'Simulasi Pseudocode', url: 'simulasi_pseudocode.html' }, { name: 'Teater Logika', url: 'simulasi_teater_logika.html' }, { name: 'LKPD Pseudocode', url: 'lkpd_pseudocode.html' }, { name: 'Game DO-WHILE', url: 'simulasi_dowhile_game.html' }, { name: 'Misi Logika Algoritma', url: 'page_koki_algoritma.html' }] },
 
             // TOPIC: PENGENALAN BAHASA PEMROGRAMAN
             { id: 'pengenalan-coding', topic: 'Pengenalan Bahasa Pemrograman', title: 'Bahasa Pemrograman', icon: 'fa-laptop-code', color: 'bg-gray-800', desc: 'Konsep dasar pemrograman.', content: '<p><b>Bahasa Pemrograman</b> adalah kosa kata dan tata bahasa (sintaks) untuk menginstruksikan komputer agar melakukan tugas tertentu.</p><p>Komputer hanya mengerti biner, dan bahasa pemrograman menerjemahkan logika manusia menjadi bahasa mesin.</p>', simulations: [{ name: 'Simulasi Pemrograman', url: 'simulasi_pemrograman.html' }] },
 
             // TOPIC: FLOWCHART
-            { id: 'flowchart', topic: 'Flowchart', title: 'Diagram Alir (Flowchart)', icon: 'fa-sitemap', color: 'bg-orange-600', desc: 'Algoritma bangun datar.', content: '<p><b>Flowchart</b> menggunakan simbol-simbol bangun ruang khusus untuk menggambarkan langkah-langkah logika pemecahan masalah.</p>', simulations: [{ name: 'Buka Portal Flowchart 🚀', url: 'page_flowchart.html' }] }
+            { id: 'flowchart', topic: 'Flowchart', title: 'Diagram Alir (Flowchart)', icon: 'fa-sitemap', color: 'bg-orange-600', desc: 'Algoritma bangun datar.', content: '<p><b>Flowchart</b> menggunakan simbol-simbol bangun ruang khusus untuk menggambarkan langkah-langkah logika pemecahan masalah.</p>', simulations: [{ name: 'Buka Portal Flowchart ðŸš€', url: 'page_flowchart.html' }] }
         ];
 
         // Group data by topic (preserve insertion order of topics via tracking array)
@@ -417,10 +533,10 @@
                 materi.simulations.forEach((sim, index) => {
                     const btn = document.createElement('button');
                     btn.className = `px-5 py-2.5 rounded-xl font-bold transition-all border-2 text-sm ${index === 0 ? 'bg-blue-600 text-white border-blue-600 shadow-md' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'}`;
-                    btn.innerText = sim.name;
+                    btn.innerHTML = `<i class="fas fa-play-circle mr-2"></i>` + sim.name;
                     
                     btn.onclick = (e) => {
-                        if (sim.url === 'page_flowchart.html' || sim.url === 'simulator_stack_queue.html') {
+                        if (sim.url === 'page_flowchart.html' || sim.url === 'simulator_stack_queue.html' || sim.url === 'page_koki_algoritma.html') {
                             window.open(sim.url, '_blank');
                             return;
                         }

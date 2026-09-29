@@ -1,0 +1,422 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misi Kelompok 3 - Koki Algoritma</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #fffbeb; }
+        .block-item { transition: all 0.2s ease-in-out; }
+        .block-item:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .empty-slot { border: 2px dashed #cbd5e1; background-color: rgba(255,255,255,0.5); min-height: 48px; }
+        
+        .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        .bounce { animation: bounce 1s infinite; }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .cooking-overlay {
+            display: none;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 9999;
+            justify-content: center; align-items: center; flex-direction: column; color: white;
+            backdrop-filter: blur(5px);
+        }
+    </style>
+</head>
+<body class="h-screen w-screen overflow-hidden m-0 p-0 bg-white">
+
+    <div class="w-full h-full flex flex-col md:flex-row relative">
+        
+        <!-- Right Main Area: Gameplay -->
+        <div class="w-full flex flex-col bg-slate-50 relative h-full">
+            
+                        <!-- Header Level Info -->
+            <div class="bg-white p-5 border-b border-gray-200 flex justify-between items-center shadow-sm">
+                <div class="flex items-start gap-4">
+                    <div class="text-4xl bg-orange-100 p-3 rounded-full border-2 border-orange-300 shadow-sm" id="level-emoji">🎓</div>
+                    <div>
+                        <span id="level-concept" class="text-xs font-bold bg-blue-100 text-blue-800 px-2 py-1 rounded mb-1 inline-block">Sequence</span>
+                        <h2 id="level-title" class="text-xl font-bold text-gray-800">1. Teh Manis</h2>
+                        <p id="level-desc" class="text-sm text-gray-600 mt-1">Koki, tolong buatkan urutan algoritma yang benar untuk menyajikan secangkir teh manis!</p>
+                    </div>
+                </div>
+                
+                <!-- Right Actions: Home & Timer -->
+                <div class="flex items-center gap-4">
+                    <a href="page_koki_algoritma.html" class="flex flex-col items-center justify-center bg-blue-50 hover:bg-blue-600 text-blue-600 hover:text-white border-2 border-blue-200 hover:border-blue-600 p-2 rounded-xl transition-colors shadow-sm h-full" style="height: 100%; min-height: 72px; min-width: 72px;" title="Kembali ke Menu Utama">
+                        <i class="fas fa-home text-2xl mb-1"></i>
+                        <span class="text-[10px] font-bold uppercase tracking-wider">Kembali</span>
+                    </a>
+                    
+                    <!-- Timer -->
+                <div class="flex flex-col items-center bg-red-50 border-2 border-red-200 p-2 rounded-xl shadow-inner min-w-[120px]">
+                    <span class="text-xs font-bold text-red-500 uppercase tracking-wider mb-1"><i class="fas fa-stopwatch"></i> Sisa Waktu</span>
+                    <span id="timer-display" class="text-3xl font-mono font-bold text-red-700">05:00</span>
+                </div>
+                </div>
+            </div>
+
+
+            <!-- Workspace Layout (Two Columns) -->
+            <div class="flex-1 p-6 flex flex-col lg:flex-row gap-6 overflow-y-auto lg:overflow-hidden lg:h-full">
+                
+                <!-- Left Column -->
+                <div class="contents lg:flex lg:flex-col lg:gap-4 lg:min-h-0 lg:flex-1">
+                    <!-- Studi Kasus -->
+                    <div class="order-1 lg:order-none">
+                        <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-xl shadow-sm">
+                            <h3 class="text-sm font-bold text-indigo-800 mb-1 flex items-center gap-2">
+                                <i class="fas fa-book-open"></i> Studi Kasus
+                            </h3>
+                            <p class="text-sm text-indigo-900 leading-relaxed" id="level-story"></p>
+                        </div>
+                    </div>
+
+                    <!-- Kumpulan Blok -->
+                    <div class="order-4 lg:order-none flex-1 flex flex-col min-h-0">
+                        <h4 class="font-bold text-gray-700 mb-3 flex items-center gap-2">
+                            <i class="fas fa-layer-group text-orange-500"></i> Blok Tersedia
+                        </h4>
+                        <p class="text-xs text-gray-500 mb-3">Klik sebuah blok untuk menambahkannya ke lembar resep.</p>
+                        <div id="source-blocks" class="lg:flex-1 flex flex-col gap-2 p-4 bg-orange-100/50 rounded-xl border-2 border-dashed border-orange-200 min-h-[100px] lg:min-h-0 lg:overflow-y-auto transition-all duration-300">
+                            <!-- Source blocks injected here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="contents lg:flex lg:flex-col lg:gap-4 lg:min-h-0 lg:flex-1">
+                    <!-- Lembar Resep -->
+                    <div class="order-2 lg:order-none flex-1 flex flex-col min-h-0">
+                        <h4 class="font-bold text-blue-900 mb-3 flex items-center gap-2">
+                            <i class="fas fa-file-code text-blue-500"></i> Lembar Resep (Pseudocode)
+                        </h4>
+                        <p class="text-xs text-gray-500 mb-3">Klik blok di sini untuk mengembalikannya.</p>
+
+                        <div class="bg-slate-700 p-3 rounded-lg mb-3 shadow-inner">
+                            <div class="mb-2">
+                                <label class="text-xs font-bold text-slate-300">Nama Program <span class="text-red-400">*</span></label>
+                                <div class="flex mt-1">
+                                    <span class="bg-slate-800 text-blue-400 px-3 py-1.5 rounded-l text-sm font-bold border border-slate-600 border-r-0">PROGRAM</span>
+                                    <input type="text" id="input-program" class="bg-slate-900 text-white px-3 py-1.5 rounded-r text-sm font-mono border border-slate-600 w-full focus:outline-none focus:border-blue-500" placeholder="nama_program (tanpa spasi)">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-slate-300">Deklarasi Variabel <span class="text-red-400">*</span></label>
+                                <div class="flex mt-1">
+                                    <span class="bg-slate-800 text-blue-400 px-3 py-1.5 rounded-l text-sm font-bold border border-slate-600 border-r-0">DEKLARASI</span>
+                                    <input type="text" id="input-deklarasi" class="bg-slate-900 text-white px-3 py-1.5 rounded-r text-sm font-mono border border-slate-600 w-full focus:outline-none focus:border-blue-500" placeholder="Ketik variabel yang digunakan (contoh: var_nama)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="target-blocks" class="lg:flex-1 flex flex-col gap-2 p-4 bg-slate-800 rounded-xl border-2 border-slate-900 min-h-[150px] lg:min-h-0 shadow-inner lg:overflow-y-auto transition-all duration-300">
+                            <!-- Target blocks injected here -->
+                            <div class="text-center text-slate-500 text-sm mt-4 font-mono italic" id="empty-state">-- Lembar Masih Kosong --</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Bar (Bottom Right) -->
+                    <div class="order-3 lg:order-none flex justify-between items-center bg-white p-4 rounded-xl border border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] lg:mt-2 mt-0">
+                        <button onclick="resetWorkspace()" class="text-gray-600 hover:text-red-500 font-bold px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+                            <i class="fas fa-undo"></i> Kosongkan
+                        </button>
+                        <button onclick="masakPesanan()" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-orange-500/30 transition-transform active:scale-95 flex items-center gap-2 text-lg">
+                            <i class="fas fa-fire-burner"></i> Jalankan Program!
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+                </div>
+    </div>
+
+    <!-- Cooking Animation Overlay (Moved here so it's always on top and full screen) -->
+    <div id="cooking-overlay" class="cooking-overlay">
+        <div class="text-6xl mb-4 bounce" id="cooking-emoji">🌡️</div>
+        <h2 class="text-2xl font-bold mb-2 text-orange-300 text-center px-4" id="cooking-title">Sistem Sedang Memproses...</h2>
+        <p class="text-lg text-center px-4" id="cooking-desc">Mengeksekusi pseudocode baris demi baris...</p>
+    </div>
+
+    <script>
+        // Data Level (9 Topik)
+        const levels = [
+    {
+        "id": 3,
+        "emoji": "🌡️",
+        "concept": "Input & Proses -> IF-ELSE",
+        "title": "Klasifikasi Suhu Tubuh",
+        "desc": "Misi: Konversi suhu ke Celcius. Jika suhu_celcius > 37.5 maka demam.",
+        "story": "Sebuah puskesmas menggunakan alat pemindai suhu otomatis yang mengukur suhu dalam skala Fahrenheit (suhu_fahrenheit). Program harus mengubahnya terlebih dahulu ke Celcius (suhu_celcius). Jika suhu Celcius terdeteksi lebih dari 37.5 derajat, alat mengeluarkan peringatan demam. Jika tidak, alat menampilkan status normal.",
+        "vars": [
+            "suhu_fahrenheit",
+            "suhu_celcius"
+        ],
+        "correct": [
+            "INPUT suhu_fahrenheit",
+            "suhu_celcius <- (suhu_fahrenheit - 32) * 5/9",
+            "IF suhu_celcius > 37.5 THEN",
+            "  PRINT \"Peringatan: Suhu tubuh tinggi / Demam\"",
+            "ELSE",
+            "  PRINT \"Suhu tubuh normal dan sehat\"",
+            "END IF"
+        ],
+        "distractors": [
+            "IF suhu_celcius <= 37.5 THEN",
+            "suhu_celcius <- suhu_fahrenheit * 5/9"
+        ]
+    }
+];
+
+        let currentLevel = 0;
+        let targetWorkspace = []; // stores strings
+        let sourceWorkspace = []; // stores strings
+
+        const sourceContainer = document.getElementById('source-blocks');
+        const targetContainer = document.getElementById('target-blocks');
+        const emptyState = document.getElementById('empty-state');
+        const levelList = document.getElementById('level-list');
+
+        // Helper: Shuffle Array
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function initSidebar() {}
+
+        function loadLevel(idx) {
+            currentLevel = idx;
+            const lvl = levels[idx];
+            
+            // Update UI Header
+            document.getElementById('level-emoji').innerText = lvl.emoji;
+            document.getElementById('level-title').innerText = `${lvl.id}. ${lvl.title}`;
+            document.getElementById('level-concept').innerText = lvl.concept;
+            document.getElementById('level-desc').innerText = lvl.desc;
+            document.getElementById('level-story').innerText = lvl.story;
+
+            // Update Workspaces
+            targetWorkspace = [];
+            sourceWorkspace = [...lvl.correct, ...lvl.distractors];
+            shuffle(sourceWorkspace);
+
+            initSidebar();
+            renderWorkspaces();
+        }
+
+        function getIndentClass(text) {
+            // Count leading spaces to apply tailwind margin left for visually nested code
+            const spaces = text.match(/^\s*/)[0].length;
+            if (spaces >= 4) return 'ml-8';
+            if (spaces >= 2) return 'ml-4';
+            return '';
+        }
+
+        function formatBlockText(text) {
+            // Highlight keywords for better readability
+            let formatted = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const keywords = ['Program', 'Deklarasi', 'Algoritma', 'IF', 'THEN', 'ELSE', 'DO', 'WHILE', 'FOR', 'TO', 'END IF', 'END WHILE', 'END FOR', 'PRINT', 'READ', 'INPUT', 'AND', 'OR', 'MOD'];
+            keywords.forEach(kw => {
+                const regex = new RegExp(`\\b${kw}\\b`, 'g');
+                formatted = formatted.replace(regex, `<span class="text-blue-400 font-bold">${kw}</span>`);
+            });
+            return formatted;
+        }
+
+        function renderWorkspaces() {
+            // Render Source
+            sourceContainer.innerHTML = '';
+            sourceWorkspace.forEach((text, index) => {
+                const div = document.createElement('div');
+                div.className = 'block-item bg-white p-3 rounded-lg border border-gray-300 shadow-sm cursor-pointer hover:border-orange-500 font-mono text-sm text-gray-800 flex items-center gap-2';
+                div.innerHTML = `<i class="fas fa-plus-circle text-orange-400 opacity-50"></i> <span>${formatBlockText(text.trim())}</span>`;
+                div.onclick = () => moveToTarget(index);
+                sourceContainer.appendChild(div);
+            });
+
+            // Render Target
+            targetContainer.innerHTML = '';
+            if (targetWorkspace.length === 0) {
+                targetContainer.appendChild(emptyState);
+                emptyState.style.display = 'block';
+            } else {
+                emptyState.style.display = 'none';
+                targetWorkspace.forEach((text, index) => {
+                    const div = document.createElement('div');
+                    const indent = getIndentClass(text);
+                    div.className = `block-item bg-gray-900 p-2 px-3 rounded-md border-l-4 border-blue-500 cursor-pointer hover:bg-gray-800 font-mono text-sm text-gray-100 flex items-center justify-between group ${indent}`;
+                    div.innerHTML = `
+                        <span>${formatBlockText(text.trim())}</span>
+                        <i class="fas fa-times text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                    `;
+                    div.onclick = () => moveToSource(index);
+                    targetContainer.appendChild(div);
+                });
+            }
+        }
+
+        function moveToTarget(sourceIndex) {
+            const item = sourceWorkspace.splice(sourceIndex, 1)[0];
+            targetWorkspace.push(item);
+            renderWorkspaces();
+        }
+
+        function moveToSource(targetIndex) {
+            const item = targetWorkspace.splice(targetIndex, 1)[0];
+            sourceWorkspace.push(item);
+            renderWorkspaces();
+        }
+
+        function resetWorkspace() {
+            // Move all from target back to source
+            sourceWorkspace = [...sourceWorkspace, ...targetWorkspace];
+            targetWorkspace = [];
+            renderWorkspaces();
+        }
+
+        let isCooking = false;
+
+        let timeLeft = 300; // 5 menit
+        let timerInterval;
+
+        function startTimer() {
+            const display = document.getElementById('timer-display');
+            timerInterval = setInterval(() => {
+                if(isCooking) return; // pause timer while processing
+                
+                timeLeft--;
+                
+                let m = Math.floor(timeLeft / 60);
+                let s = timeLeft % 60;
+                display.innerText = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+                
+                if (timeLeft <= 60 && timeLeft > 0) {
+                    display.classList.add('animate-pulse');
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Waktu Habis! Mengulangi misi...");
+                    location.reload();
+                }
+            }, 1000);
+        }
+
+
+        function masakPesanan() {
+            if (isCooking) return;
+            
+            if (targetWorkspace.length === 0) {
+                alert("Lembar resep masih kosong! Masukkan minimal 1 baris kode.");
+                return;
+            }
+
+            const progName = document.getElementById('input-program').value.trim();
+            const progDecl = document.getElementById('input-deklarasi').value.trim();
+
+            if (!progName || !progDecl) {
+                alert("Gagal: Nama Program dan Deklarasi Variabel wajib diisi!");
+                return;
+            }
+
+            if (progName.includes(" ")) {
+                alert("Gagal: Nama Program tidak boleh mengandung spasi! Harus ditulis sambung.");
+                return;
+            }
+
+            let requiredVars = levels[currentLevel].vars || [];
+            
+            let isVarsCorrect = requiredVars.every(v => progDecl.includes(v));
+            if (!isVarsCorrect) {
+                alert("Gagal: Deklarasi variabel belum tepat! Pastikan kamu mendeklarasikan variabel yang persis sama dengan yang digunakan di blok (contoh: " + requiredVars.join(", ") + ").");
+                return;
+            }
+
+
+            isCooking = true;
+            const correctArr = levels[currentLevel].correct;
+            
+            // Check if lengths match
+            let isSuccess = true;
+            if (targetWorkspace.length !== correctArr.length) {
+                isSuccess = false;
+            } else {
+                // Check sequence
+                for (let i = 0; i < correctArr.length; i++) {
+                    if (targetWorkspace[i] !== correctArr[i]) {
+                        isSuccess = false;
+                        break;
+                    }
+                }
+            }
+
+            const overlay = document.getElementById('cooking-overlay');
+            const title = document.getElementById('cooking-title');
+            const desc = document.getElementById('cooking-desc');
+            const emoji = document.getElementById('cooking-emoji');
+            
+            overlay.style.display = 'flex';
+            title.innerText = "Sistem Sedang Memproses...";
+            title.className = "text-3xl font-bold mb-2 text-yellow-400";
+            desc.innerText = "Mengeksekusi pseudocode baris demi baris...";
+            emoji.innerText = levels[currentLevel].emoji;
+            emoji.className = "text-6xl mb-4 bounce";
+
+            setTimeout(() => {
+                if (isSuccess) {
+                    emoji.className = "text-6xl mb-4 shake";
+                    emoji.innerText = "🎉👏";
+                    title.innerText = "BERHASIL!";
+                    title.className = "text-4xl font-extrabold mb-2 text-green-400";
+                    desc.innerText = "Logika Pseudocode 100% Tepat! Berhasil!";
+                    
+                    // Auto next level after success
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                        isCooking = false;
+                        alert("Selamat! Anda telah menyelesaikan resep ini dengan sempurna!");
+                    }, 2500);
+
+                } else {
+                    emoji.className = "text-6xl mb-4 shake";
+                    emoji.innerText = "❌💀";
+                    title.innerText = "GAGAL / ERROR";
+                    title.className = "text-4xl font-extrabold mb-2 text-red-500";
+                    desc.innerText = "Ada baris kode yang salah urutan atau kurang tepat. Cek lagi ya!";
+                    
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                        isCooking = false;
+                        document.getElementById('target-blocks').classList.add('shake');
+                        setTimeout(() => document.getElementById('target-blocks').classList.remove('shake'), 500);
+                    }, 2000);
+                }
+            }, 1500);
+        }
+
+        // Init App
+        window.addEventListener('DOMContentLoaded', () => {
+            loadLevel(0);
+            startTimer();
+        });
+
+    </script>
+</body>
+</html>

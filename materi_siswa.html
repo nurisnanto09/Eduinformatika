@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal Materi Siswa - EduInformatika</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * { font-family: 'Poppins', sans-serif; }
@@ -214,7 +214,7 @@
             <div id="panel-komputasi" class="hidden mb-10 fade-up">
                 <div class="bg-purple-50/60 border border-purple-200 rounded-3xl p-8">
                     <h3 class="text-xl font-bold text-purple-800 mb-6 flex items-center gap-3">
-                        <i class="fas fa-brain"></i> Berpikir Komputasi — Sub-Materi
+                        <i class="fas fa-brain"></i> Berpikir Komputasi â€” Sub-Materi
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="sub-komputasi"></div>
                 </div>
@@ -224,7 +224,7 @@
             <div id="panel-algoritma" class="hidden mb-10 fade-up">
                 <div class="bg-blue-50/60 border border-blue-200 rounded-3xl p-8">
                     <h3 class="text-xl font-bold text-blue-800 mb-6 flex items-center gap-3">
-                        <i class="fas fa-project-diagram"></i> Dasar Algoritma & Struktur Data — Sub-Materi
+                        <i class="fas fa-project-diagram"></i> Dasar Algoritma & Struktur Data â€” Sub-Materi
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="sub-algoritma"></div>
                 </div>
@@ -234,7 +234,7 @@
             <div id="panel-notasi" class="hidden mb-10 fade-up">
                 <div class="bg-teal-50/60 border border-orange-200 rounded-3xl p-8">
                     <h3 class="text-xl font-bold text-teal-800 mb-6 flex items-center gap-3">
-                        <i class="fas fa-code"></i> Notasi Algoritma — Sub-Materi
+                        <i class="fas fa-code"></i> Notasi Algoritma â€” Sub-Materi
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="sub-notasi"></div>
                 </div>
@@ -288,7 +288,7 @@
             komputasi: {
                 color: 'bg-purple-600',
                 items: [
-                    { id: 'dekomposisi', title: 'Dekomposisi', icon: 'fa-puzzle-piece', color: 'bg-purple-600', desc: 'Memecah masalah kompleks menjadi bagian kecil.', topic: 'Berpikir Komputasi', content: '<p><b>Dekomposisi</b> adalah memecah masalah besar dan kompleks menjadi masalah-masalah yang lebih kecil agar lebih mudah dikelola dan diselesaikan.</p><h4 class="font-bold mt-4 mb-2">Contoh dalam Kehidupan:</h4><ul class="list-disc ml-5 space-y-1 text-gray-600"><li>Memasak nasi goreng → memotong bahan, menumis bumbu, menggoreng nasi, menghias piring.</li><li>Membuat website → desain UI, buat HTML, tambah CSS, tulis JavaScript.</li></ul>', sims: [{ name: 'Simulasi Dekomposisi', url: 'simulasi_dekomposisi.html' }] },
+                    { id: 'dekomposisi', title: 'Dekomposisi', icon: 'fa-puzzle-piece', color: 'bg-purple-600', desc: 'Memecah masalah kompleks menjadi bagian kecil.', topic: 'Berpikir Komputasi', content: '<p><b>Dekomposisi</b> adalah memecah masalah besar dan kompleks menjadi masalah-masalah yang lebih kecil agar lebih mudah dikelola dan diselesaikan.</p><h4 class="font-bold mt-4 mb-2">Contoh dalam Kehidupan:</h4><ul class="list-disc ml-5 space-y-1 text-gray-600"><li>Memasak nasi goreng â†’ memotong bahan, menumis bumbu, menggoreng nasi, menghias piring.</li><li>Membuat website â†’ desain UI, buat HTML, tambah CSS, tulis JavaScript.</li></ul>', sims: [{ name: 'Simulasi Dekomposisi', url: 'simulasi_dekomposisi.html' }] },
                     { id: 'pola', title: 'Pengenalan Pola', icon: 'fa-shapes', color: 'bg-purple-600', desc: 'Mencari pola dan kesamaan antar masalah.', topic: 'Berpikir Komputasi', content: '<p><b>Pengenalan Pola</b> adalah kemampuan melihat persamaan atau pola berulang yang ada di dalam atau antar masalah. Dengan mengenali pola, kita bisa mempercepat proses penyelesaian masalah.</p>', sims: [{ name: 'Simulasi Pola', url: 'simulasi_pola.html' }] },
                     { id: 'abstraksi', title: 'Abstraksi', icon: 'fa-eye-slash', color: 'bg-purple-600', desc: 'Menyaring informasi yang tidak penting.', topic: 'Berpikir Komputasi', content: '<p><b>Abstraksi</b> adalah proses berfokus pada informasi penting saja, dengan mengabaikan detail-detail yang kurang relevan untuk menyelesaikan masalah.</p>', sims: [{ name: 'Simulasi Abstraksi', url: 'simulasi_abstraksi.html' }] },
                     { id: 'algoritma-komp', title: 'Berpikir Algoritma', icon: 'fa-list-ol', color: 'bg-purple-600', desc: 'Menyusun langkah berurutan secara sistematis.', topic: 'Berpikir Komputasi', content: '<p><b>Berpikir Algoritma</b> adalah menyusun solusi menjadi serangkaian langkah-langkah atau instruksi yang teratur dan sistematis untuk menyelesaikan masalah.</p>', sims: [{ name: 'Simulasi Algoritma', url: 'simulasi_komputasional.html' }] },
@@ -297,8 +297,8 @@
             algoritma: {
                 color: 'bg-blue-600',
                 items: [
-                    { id: 'stack', title: 'Stack (Tumpukan)', icon: 'fa-layer-group', color: 'bg-indigo-600', desc: 'Metode LIFO (Last In First Out).', topic: 'Struktur Data', content: '<p><b>Stack</b> adalah struktur data yang menyerupai tumpukan benda. Elemen yang terakhir dimasukkan akan menjadi elemen pertama yang diambil (LIFO — Last In, First Out).</p>', sims: [{ name: 'Simulasi Stack (Tumpukan Piring)', url: 'stack_piring.html' }] },
-                    { id: 'queue', title: 'Queue (Antrean)', icon: 'fa-users', color: 'bg-indigo-600', desc: 'Metode FIFO (First In First Out).', topic: 'Struktur Data', content: '<p><b>Queue</b> adalah struktur data seperti antrean pada umumnya. Elemen yang pertama datang adalah yang pertama dilayani (FIFO — First In, First Out).</p>', sims: [{ name: 'Simulasi Queue (Kasir)', url: 'queue_kasir.html' }] },
+                    { id: 'stack', title: 'Stack (Tumpukan)', icon: 'fa-layer-group', color: 'bg-indigo-600', desc: 'Metode LIFO (Last In First Out).', topic: 'Struktur Data', content: '<p><b>Stack</b> adalah struktur data yang menyerupai tumpukan benda. Elemen yang terakhir dimasukkan akan menjadi elemen pertama yang diambil (LIFO â€” Last In, First Out).</p>', sims: [{ name: 'Simulasi Stack (Tumpukan Piring)', url: 'stack_piring.html' }] },
+                    { id: 'queue', title: 'Queue (Antrean)', icon: 'fa-users', color: 'bg-indigo-600', desc: 'Metode FIFO (First In First Out).', topic: 'Struktur Data', content: '<p><b>Queue</b> adalah struktur data seperti antrean pada umumnya. Elemen yang pertama datang adalah yang pertama dilayani (FIFO â€” First In, First Out).</p>', sims: [{ name: 'Simulasi Queue (Kasir)', url: 'queue_kasir.html' }] },
                     { id: 'simulator-sq', title: 'Simulator Stack & Queue', icon: 'fa-cogs', color: 'bg-indigo-600', desc: 'Simulasi Push, Pop, Enqueue, Dequeue.', topic: 'Struktur Data', content: '<p><b>Simulator Interaktif</b> untuk membandingkan secara langsung bagaimana operasi penyisipan dan penghapusan bekerja pada Stack (LIFO) dan Queue (FIFO).</p>', sims: [{ name: 'Buka Simulator', url: 'simulator_stack_queue.html' }] },
                     { id: 'linear-search', title: 'Linear Search', icon: 'fa-search', color: 'bg-blue-600', desc: 'Pencarian data satu per satu.', topic: 'Algoritma Pencarian', content: '<p><b>Linear Search</b> (Pencarian Sekuensial) mencari elemen dengan memeriksa setiap elemen dari awal sampai akhir secara satu per satu.</p>', sims: [{ name: 'Simulasi Linear Search', url: 'linear_search_kunci.html' }] },
                     { id: 'binary-search', title: 'Binary Search', icon: 'fa-search-plus', color: 'bg-blue-600', desc: 'Pencarian data dengan membagi dua.', topic: 'Algoritma Pencarian', content: '<p><b>Binary Search</b> mencari elemen pada data yang <i>sudah terurut</i> dengan cara membagi rentang pencarian menjadi dua secara terus menerus.</p>', sims: [{ name: 'Simulasi Binary Search', url: 'binary_search_kamus.html' }] },
@@ -312,7 +312,7 @@
                 items: [
                     { id: 'pseudocode', title: 'Pseudocode', icon: 'fa-file-code', color: 'bg-teal-600', desc: 'Menulis algoritma secara deskriptif.', topic: 'Notasi Algoritma', content: '<p><b>Pseudocode</b> berasal dari kata "Pseudo" (palsu/semu) dan "Code" (kode). Ini adalah cara menuliskan algoritma menggunakan bahasa deskriptif yang mudah dipahami manusia.</p><div class="bg-gray-800 text-gray-100 p-4 rounded-lg font-mono text-sm mt-3">INPUT nilai<br>IF nilai &gt; 75 THEN<br>&nbsp;&nbsp;PRINT "Lulus"<br>ELSE<br>&nbsp;&nbsp;PRINT "Remedial"<br>END IF</div>', sims: [{ name: 'Simulasi Pseudocode', url: 'simulasi_pseudocode.html' }] },
                     { id: 'pengenalan-coding', title: 'Bahasa Pemrograman', icon: 'fa-laptop-code', color: 'bg-gray-800', desc: 'Konsep dasar pemrograman komputer.', topic: 'Notasi Algoritma', content: '<p><b>Bahasa Pemrograman</b> adalah kosa kata dan tata bahasa (sintaks) untuk menginstruksikan komputer agar melakukan tugas tertentu.</p><p>Komputer hanya mengerti biner (0 dan 1), dan bahasa pemrograman menerjemahkan logika manusia menjadi bahasa mesin.</p>', sims: [{ name: 'Simulasi Pemrograman', url: 'simulasi_pemrograman.html' }] },
-                    { id: 'flowchart', title: 'Diagram Alir (Flowchart)', icon: 'fa-sitemap', color: 'bg-orange-600', desc: 'Visualisasi algoritma dengan simbol.', topic: 'Notasi Algoritma', content: '<p><b>Flowchart</b> menggunakan simbol-simbol bangun datar khusus untuk menggambarkan langkah-langkah logika pemecahan masalah secara visual.</p>', sims: [{ name: 'Buka Portal Flowchart 🚀', url: 'page_flowchart.html' }] },
+                    { id: 'flowchart', title: 'Diagram Alir (Flowchart)', icon: 'fa-sitemap', color: 'bg-orange-600', desc: 'Visualisasi algoritma dengan simbol.', topic: 'Notasi Algoritma', content: '<p><b>Flowchart</b> menggunakan simbol-simbol bangun datar khusus untuk menggambarkan langkah-langkah logika pemecahan masalah secara visual.</p>', sims: [{ name: 'Buka Portal Flowchart ðŸš€', url: 'page_flowchart.html' }] },
                 ]
             }
         };

@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Teater Logika</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: transparent; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .zone { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); filter: grayscale(40%) opacity(0.8); }
+        .zone.active-zone { filter: grayscale(0%) opacity(1); transform: scale(1.02); z-index: 10; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        
+        .bubble { position: absolute; top: -15px; left: 50%; transform: translateX(-50%) translateY(-10px); opacity: 0; background: white; border-radius: 12px; padding: 12px 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2); transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); pointer-events: none; width: max-content; max-width: 220px; text-align: center; z-index: 20; border: 2px solid; }
+        .bubble::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); border-width: 10px 10px 0; border-style: solid; border-color: inherit; border-left-color: transparent; border-right-color: transparent; border-bottom-color: transparent; }
+        
+        .bubble.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        
+        .code-line { padding: 2px 8px; border-radius: 4px; font-family: monospace; font-size: 0.80rem; color: #a1a1aa; border-left: 2px solid transparent; }
+        .active-code { background-color: rgba(168, 85, 247, 0.2); font-weight: bold; color: #d8b4fe; border-left-color: #a855f7; }
+        
+        .chalkboard { background: #2f4f4f; border: 8px solid #8b4513; border-radius: 4px; color: white; font-family: 'Comic Sans MS', cursive, sans-serif; }
+        
+        @keyframes floatUp {
+            0% { transform: translateY(10px); opacity: 0; }
+            50% { transform: translateY(-5px); opacity: 1; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        .aha-moment { animation: floatUp 0.6s ease-out forwards; }
+    </style>
+</head>
+<body class="p-4 h-full">
+    <div class="bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden flex flex-col md:flex-row h-full min-h-[550px]">
+        
+        <!-- Left: Visualization (4 Quadrants) -->
+        <div class="md:w-2/3 bg-gray-100 p-4 relative border-b md:border-b-0 md:border-r border-gray-200">
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+                <div class="bg-white px-4 py-1 rounded-full shadow-sm text-xs font-bold text-gray-400 uppercase tracking-widest border border-gray-200">Teater Logika</div>
+            </div>
+            
+            <div class="grid grid-cols-2 grid-rows-2 gap-4 h-full relative z-1">
+                
+                <!-- 1. PROSESOR ZONE -->
+                <div id="zone-prosesor" class="zone bg-purple-50 rounded-2xl border-2 border-purple-200 p-4 flex flex-col relative">
+                    <div id="bubble-prosesor" class="bubble border-purple-400 text-purple-800 text-sm font-bold"></div>
+                    
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center text-lg shadow-md shrink-0"><i class="fas fa-brain"></i></div>
+                        <div>
+                            <h3 class="font-black text-purple-900 text-sm leading-tight">Prosesor</h3>
+                            <p class="text-[10px] text-purple-600 font-bold uppercase tracking-wide">Membaca Kode</p>
+                        </div>
+                    </div>
+                    <div class="flex-1 bg-gray-900 rounded-xl p-2 flex flex-col justify-center border border-gray-700 shadow-inner" id="code-container">
+                        <!-- Code lines injected dynamically -->
+                    </div>
+                </div>
+
+                <!-- 2. USER ZONE -->
+                <div id="zone-user" class="zone bg-green-50 rounded-2xl border-2 border-green-200 p-4 flex flex-col relative">
+                    <div id="bubble-user" class="bubble border-green-400 text-green-800 text-sm font-bold"></div>
+                    
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-full bg-green-600 text-white flex items-center justify-center text-lg shadow-md shrink-0"><i class="fas fa-user-astronaut"></i></div>
+                        <div>
+                            <h3 class="font-black text-green-900 text-sm leading-tight">User</h3>
+                            <p class="text-[10px] text-green-600 font-bold uppercase tracking-wide">Pemberi Input</p>
+                        </div>
+                    </div>
+                    <div class="flex-1 bg-white rounded-xl flex items-center justify-center border-2 border-dashed border-green-300">
+                        <div id="user-input-prop" class="bg-green-100 text-green-700 px-4 py-2 rounded-lg font-bold border border-green-300 opacity-30 transition-all flex items-center gap-2">
+                            <i class="fas fa-keyboard"></i> <span id="user-value">Tunggu Input...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. RAM ZONE -->
+                <div id="zone-ram" class="zone bg-orange-50 rounded-2xl border-2 border-orange-200 p-4 flex flex-col relative">
+                    <div id="bubble-ram" class="bubble border-orange-400 text-orange-800 text-sm font-bold"></div>
+                    
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-full bg-orange-500 text-white flex items-center justify-center text-lg shadow-md shrink-0"><i class="fas fa-memory"></i></div>
+                        <div>
+                            <h3 class="font-black text-orange-900 text-sm leading-tight">RAM</h3>
+                            <p class="text-[10px] text-orange-600 font-bold uppercase tracking-wide">Penyimpan Variabel</p>
+                        </div>
+                    </div>
+                    <div class="flex-1 chalkboard flex flex-col p-2 relative shadow-inner">
+                        <div class="text-[10px] text-gray-300 mb-1 border-b border-gray-500 pb-1 w-full text-center">Papan Tulis</div>
+                        <div id="ram-board" class="text-xl font-bold flex-1 flex flex-col items-center justify-center relative w-full h-full text-yellow-300 opacity-50 space-y-1">
+                            <span id="ram-placeholder">Kosong</span>
+                        </div>
+                        <i class="fas fa-eraser absolute bottom-2 right-2 text-gray-400 opacity-50 transform rotate-12"></i>
+                    </div>
+                </div>
+
+                <!-- 4. LAYAR ZONE -->
+                <div id="zone-layar" class="zone bg-blue-50 rounded-2xl border-2 border-blue-200 p-4 flex flex-col relative">
+                    <div id="bubble-layar" class="bubble border-blue-400 text-blue-800 text-sm font-bold"></div>
+                    
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center text-lg shadow-md shrink-0"><i class="fas fa-desktop"></i></div>
+                        <div>
+                            <h3 class="font-black text-blue-900 text-sm leading-tight">Layar</h3>
+                            <p class="text-[10px] text-blue-600 font-bold uppercase tracking-wide">Penampil Output</p>
+                        </div>
+                    </div>
+                    <div class="flex-1 bg-black rounded-xl p-3 border-4 border-gray-800 flex flex-col justify-start relative overflow-hidden">
+                        <div class="w-full h-4 bg-gray-800 absolute top-0 left-0 flex items-center gap-1 px-2">
+                            <div class="w-2 h-2 rounded-full bg-red-500"></div><div class="w-2 h-2 rounded-full bg-yellow-500"></div><div class="w-2 h-2 rounded-full bg-green-500"></div>
+                        </div>
+                        <div id="layar-board" class="mt-4 font-mono text-green-400 font-bold text-sm flex flex-col gap-1 items-start">
+                            <span class="w-2 h-4 bg-green-400 animate-pulse inline-block" id="layar-cursor"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right: Controls -->
+        <div class="md:w-1/3 flex flex-col bg-gray-50 border-l border-gray-200">
+            <!-- Selector -->
+            <div class="p-4 bg-white border-b border-gray-200 shadow-sm z-10">
+                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Pilih Kasus:</label>
+                <select id="scenario-selector" class="w-full border-2 border-blue-200 rounded-lg p-2 font-bold text-blue-800 bg-blue-50 focus:outline-none focus:border-blue-400 cursor-pointer" onchange="changeScenario()">
+                    <option value="sequence">1. Sequence (Hitung Luas)</option>
+                    <option value="selection">2. Selection (Cek Positif)</option>
+                    <option value="iteration">3. Iteration (Hitung Mundur)</option>
+                </select>
+            </div>
+
+            <div class="p-6 flex flex-col h-full">
+                <h2 class="text-xl font-black text-gray-800 mb-4 flex items-center gap-2"><i class="fas fa-play-circle text-blue-600"></i> Narasi Drama</h2>
+                
+                <div class="flex-1 overflow-y-auto pr-2" id="narrative-container">
+                    <div class="bg-blue-50 p-5 rounded-2xl border border-blue-100 mb-4 transition-all" id="narration-box">
+                        <p id="status-text" class="text-gray-700 text-sm leading-relaxed">
+                            <b>Selamat datang!</b><br><br>Pilih kasus di atas, lalu klik <b>Mulai Drama</b> untuk mengeksekusi kode baris per baris.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="pt-4 border-t border-gray-200 mt-2">
+                    <button onclick="nextStep()" id="btn-next" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-blue-500/30 text-base transition-all active:scale-95 flex items-center justify-between">
+                        <span>Mulai Drama</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const btnNext = document.getElementById('btn-next');
+        const statusText = document.getElementById('status-text');
+        const narrationBox = document.getElementById('narration-box');
+        const codeContainer = document.getElementById('code-container');
+        
+        const bProsesor = document.getElementById('bubble-prosesor');
+        const bUser = document.getElementById('bubble-user');
+        const bRam = document.getElementById('bubble-ram');
+        const bLayar = document.getElementById('bubble-layar');
+        
+        const zProsesor = document.getElementById('zone-prosesor');
+        const zUser = document.getElementById('zone-user');
+        const zRam = document.getElementById('zone-ram');
+        const zLayar = document.getElementById('zone-layar');
+
+        const userInputProp = document.getElementById('user-input-prop');
+        const userValue = document.getElementById('user-value');
+        const ramBoard = document.getElementById('ram-board');
+        const layarBoard = document.getElementById('layar-board');
+        
+        let step = 0;
+        let currentScenario = 'sequence';
+
+        const scenarios = {
+            sequence: [
+                "<span class='text-blue-400 font-bold'>Judul:</span> Program Luas_Persegi",
+                "<span class='text-orange-400 font-bold'>Kamus:</span>",
+                "&nbsp;P, L, Luas : integer",
+                "<span class='text-green-400 font-bold'>Algoritma:</span>",
+                "&nbsp;READ P",
+                "&nbsp;READ L",
+                "&nbsp;Luas &lt;- P * L",
+                "&nbsp;PRINT Luas"
+            ],
+            selection: [
+                "<span class='text-blue-400 font-bold'>Judul:</span> Program Cek_Positif",
+                "<span class='text-orange-400 font-bold'>Kamus:</span>",
+                "&nbsp;angka : integer",
+                "<span class='text-green-400 font-bold'>Algoritma:</span>",
+                "&nbsp;READ angka",
+                "&nbsp;IF angka >= 0 THEN",
+                "&nbsp;&nbsp;&nbsp;PRINT 'Positif'",
+                "&nbsp;ELSE",
+                "&nbsp;&nbsp;&nbsp;PRINT 'Negatif'",
+                "&nbsp;END IF"
+            ],
+            iteration: [
+                "<span class='text-blue-400 font-bold'>Judul:</span> Program Hitung_Mundur",
+                "<span class='text-orange-400 font-bold'>Kamus:</span>",
+                "&nbsp;X : integer",
+                "<span class='text-green-400 font-bold'>Algoritma:</span>",
+                "&nbsp;X &lt;- 3",
+                "&nbsp;WHILE X > 0 DO",
+                "&nbsp;&nbsp;&nbsp;PRINT X",
+                "&nbsp;&nbsp;&nbsp;X &lt;- X - 1",
+                "&nbsp;END WHILE"
+            ]
+        };
+
+        function changeScenario() {
+            currentScenario = document.getElementById('scenario-selector').value;
+            step = 0;
+            renderCode();
+            resetState();
+        }
+
+        function renderCode() {
+            codeContainer.innerHTML = '';
+            scenarios[currentScenario].forEach((line, idx) => {
+                const div = document.createElement('div');
+                div.className = 'code-line';
+                div.id = `l-${idx}`;
+                div.innerHTML = line;
+                codeContainer.appendChild(div);
+            });
+        }
+
+        function resetState() {
+            // Reset Zones and Bubbles
+            [bProsesor, bUser, bRam, bLayar].forEach(b => b.classList.remove('show'));
+            [zProsesor, zUser, zRam, zLayar].forEach(z => z.classList.remove('active-zone'));
+            document.querySelectorAll('.code-line').forEach(c => c.classList.remove('active-code'));
+            
+            // Reset User
+            userInputProp.className = "bg-green-100 text-green-700 px-4 py-2 rounded-lg font-bold border border-green-300 opacity-30 transition-all flex items-center gap-2";
+            userValue.innerText = "Tunggu Input...";
+            
+            // Reset RAM
+            ramBoard.innerHTML = '<span id="ram-placeholder" class="text-gray-400">Kosong</span>';
+            ramBoard.classList.remove('opacity-100');
+            ramBoard.classList.add('opacity-50');
+            
+            // Reset Layar
+            layarBoard.innerHTML = '<span class="w-2 h-4 bg-green-400 animate-pulse inline-block" id="layar-cursor"></span>';
+            
+            setNarration("<b>Program Direset.</b><br><br>Komputer siap menerima instruksi baru dari awal. (Judul dan Deklarasi dilewati karena ini adalah informasi untuk programmer)", "bg-gray-50", "border-gray-200");
+            btnNext.className = "w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-blue-500/30 text-base transition-all active:scale-95 flex items-center justify-between";
+            btnNext.innerHTML = '<span>Mulai Drama</span> <i class="fas fa-arrow-right"></i>';
+        }
+
+        function setNarration(html, bgColor = 'bg-blue-50', borderColor = 'border-blue-100') {
+            narrationBox.className = `p-5 rounded-2xl border mb-4 transition-all ${bgColor} ${borderColor}`;
+            statusText.innerHTML = html;
+        }
+
+        function activateZone(zoneId, bubbleElement, text) {
+            document.getElementById(zoneId).classList.add('active-zone');
+            if(bubbleElement && text) {
+                bubbleElement.innerHTML = text;
+                bubbleElement.classList.add('show');
+            }
+        }
+
+        function setActiveCodeLine(lineIndex) {
+            document.querySelectorAll('.code-line').forEach(c => c.classList.remove('active-code'));
+            if(lineIndex >= 0) {
+                document.getElementById(`l-${lineIndex}`).classList.add('active-code');
+            }
+        }
+
+        function printToLayar(text) {
+            const cursor = document.getElementById('layar-cursor');
+            if(cursor) cursor.remove();
+            
+            const line = document.createElement('div');
+            line.innerHTML = `> ${text}`;
+            layarBoard.appendChild(line);
+            
+            const newCursor = document.createElement('span');
+            newCursor.className = "w-2 h-4 bg-green-400 animate-pulse inline-block mt-1";
+            newCursor.id = "layar-cursor";
+            layarBoard.appendChild(newCursor);
+        }
+
+        function setRam(varsObj) {
+            ramBoard.classList.remove('opacity-50');
+            ramBoard.classList.add('opacity-100');
+            ramBoard.innerHTML = '';
+            
+            for (const [key, value] of Object.entries(varsObj)) {
+                const item = document.createElement('div');
+                item.className = "w-full flex justify-between px-2 bg-yellow-900/30 rounded px-3 py-1 aha-moment";
+                item.innerHTML = `<span class="text-orange-200">${key}</span> <span class="text-white">${value}</span>`;
+                ramBoard.appendChild(item);
+            }
+        }
+        
+        function clearActiveZones() {
+            [zProsesor, zUser, zRam, zLayar].forEach(z => z.classList.remove('active-zone'));
+            [bProsesor, bUser, bRam, bLayar].forEach(b => b.classList.remove('show'));
+        }
+
+        function setButton(text) {
+            btnNext.innerHTML = `<span>${text}</span> <i class="fas fa-arrow-right"></i>`;
+        }
+        function setDoneButton() {
+            btnNext.className = "w-full bg-gray-800 hover:bg-gray-900 text-white font-bold py-3 px-4 rounded-xl shadow-lg text-base transition-all active:scale-95 flex items-center justify-between";
+            btnNext.innerHTML = '<span>Ulangi Skenario</span> <i class="fas fa-undo"></i>';
+        }
+
+        // ==========================================
+        // SCENARIO EXECUTIONS (Adjusted for +4 index offset)
+        // ==========================================
+
+        function runSequence() {
+            if(step === 1) {
+                setActiveCodeLine(4); activateZone('zone-prosesor', bProsesor, "READ P.<br>User, beri nilai Panjang!");
+                setNarration("<b>Prosesor</b> mengeksekusi instruksi pertama di blok Algoritma (Sequence).", "bg-purple-50", "border-purple-200");
+                setButton("User Input");
+            } else if(step === 2) {
+                activateZone('zone-user', bUser, "Panjang = 5");
+                userInputProp.className = "bg-green-200 text-green-800 px-4 py-2 rounded-lg font-bold border border-green-400 transition-all flex items-center gap-2 scale-110";
+                userValue.innerText = "5";
+                setNarration("User memberikan input angka 5.", "bg-green-50", "border-green-200");
+                setButton("Simpan ke RAM");
+            } else if(step === 3) {
+                setActiveCodeLine(4); activateZone('zone-ram', bRam, "Menulis P = 5"); activateZone('zone-prosesor', null, null);
+                setRam({ 'P': 5 });
+                setNarration("<b>RAM</b> menyimpan variabel P sesuai deklarasi awal.", "bg-orange-50", "border-orange-200");
+                setButton("Lanjut Baris Berikut");
+            } else if(step === 4) {
+                setActiveCodeLine(5); activateZone('zone-prosesor', bProsesor, "READ L.<br>User, beri nilai Lebar!");
+                setNarration("<b>Prosesor</b> mengeksekusi instruksi kedua.", "bg-purple-50", "border-purple-200");
+                setButton("User Input");
+            } else if(step === 5) {
+                activateZone('zone-user', bUser, "Lebar = 3");
+                userValue.innerText = "3";
+                setNarration("User memberikan input angka 3.", "bg-green-50", "border-green-200");
+                setButton("Simpan ke RAM");
+            } else if(step === 6) {
+                setActiveCodeLine(5); activateZone('zone-ram', bRam, "Menulis L = 3"); activateZone('zone-prosesor', null, null);
+                setRam({ 'P': 5, 'L': 3 });
+                setNarration("<b>RAM</b> menyimpan variabel L.", "bg-orange-50", "border-orange-200");
+                setButton("Lanjut Baris Berikut");
+            } else if(step === 7) {
+                setActiveCodeLine(6); activateZone('zone-prosesor', bProsesor, "Luas <- P * L.<br>RAM, hitung 5*3 dan simpan!");
+                setNarration("<b>Prosesor</b> menyuruh RAM untuk menghitung operasi assignment ini.", "bg-purple-50", "border-purple-200");
+                setButton("RAM Update");
+            } else if(step === 8) {
+                activateZone('zone-ram', bRam, "5 * 3 = 15.<br>Menulis Luas = 15!");
+                setRam({ 'P': 5, 'L': 3, 'Luas': 15 });
+                setNarration("<b>RAM</b> menambah variabel 'Luas' ke papan tulisnya.", "bg-yellow-50", "border-yellow-200");
+                setButton("Lanjut Baris Berikut");
+            } else if(step === 9) {
+                setActiveCodeLine(7); activateZone('zone-prosesor', bProsesor, "PRINT Luas.<br>Layar, tampilkan nilai Luas!");
+                setNarration("<b>Prosesor</b> memerintahkan Layar mencetak hasilnya.", "bg-purple-50", "border-purple-200");
+                setButton("Layar Cetak");
+            } else if(step === 10) {
+                activateZone('zone-layar', bLayar, "Mencetak: 15");
+                printToLayar("15");
+                setNarration("Selesai! Program berjalan berurutan dengan sukses.", "bg-blue-50", "border-blue-200");
+                setDoneButton();
+            } else { step = 0; resetState(); }
+        }
+
+        function runSelection() {
+            if(step === 1) {
+                setActiveCodeLine(4); activateZone('zone-prosesor', bProsesor, "READ angka.<br>User, minta angkamu!");
+                setNarration("<b>Prosesor</b> mengeksekusi instruksi pertama.", "bg-purple-50", "border-purple-200");
+                setButton("User Input");
+            } else if(step === 2) {
+                activateZone('zone-user', bUser, "Saya kasih -5");
+                userInputProp.className = "bg-green-200 text-green-800 px-4 py-2 rounded-lg font-bold border border-green-400 transition-all flex items-center gap-2 scale-110";
+                userValue.innerText = "-5";
+                setNarration("User mengetikkan bilangan negatif (-5).", "bg-green-50", "border-green-200");
+                setButton("Simpan ke RAM");
+            } else if(step === 3) {
+                setActiveCodeLine(4); activateZone('zone-ram', bRam, "Menyimpan angka = -5"); activateZone('zone-prosesor', null, null);
+                setRam({ 'angka': -5 });
+                setNarration("Nilai disimpan di memori.", "bg-orange-50", "border-orange-200");
+                setButton("Masuk IF");
+            } else if(step === 4) {
+                setActiveCodeLine(5); activateZone('zone-prosesor', bProsesor, "IF angka >= 0.<br>Mengecek RAM: Apakah -5 >= 0?");
+                setNarration("<b>Prosesor</b> mulai percabangan (Selection). Ia mengevaluasi kondisi IF.", "bg-purple-50", "border-purple-200");
+                setButton("Prosesor Evaluasi");
+            } else if(step === 5) {
+                activateZone('zone-prosesor', bProsesor, "SALAH!<br>Lewati baris IF, lompat ke ELSE.");
+                setNarration("Karena -5 bukan >= 0, maka isi blok IF dilewati (diabaikan).", "bg-red-50", "border-red-200");
+                setButton("Lompat ke ELSE");
+            } else if(step === 6) {
+                setActiveCodeLine(7); activateZone('zone-prosesor', bProsesor, "Masuk blok ELSE.");
+                setNarration("<b>Prosesor</b> mendarat di blok ELSE.", "bg-purple-50", "border-purple-200");
+                setButton("Lanjut Eksekusi");
+            } else if(step === 7) {
+                setActiveCodeLine(8); activateZone('zone-prosesor', bProsesor, "PRINT 'Negatif'.<br>Layar, cetak ini!");
+                setNarration("<b>Prosesor</b> memerintahkan Layar mencetak kata 'Negatif'.", "bg-purple-50", "border-purple-200");
+                setButton("Layar Cetak");
+            } else if(step === 8) {
+                activateZone('zone-layar', bLayar, "Mencetak tulisan...");
+                printToLayar("Negatif");
+                setNarration("Selesai! Program memilih satu cabang dan mengabaikan cabang lainnya.", "bg-blue-50", "border-blue-200");
+                setDoneButton();
+            } else { step = 0; resetState(); }
+        }
+
+        let loopCounter = 3;
+        function runIterationDynamic() {
+            if(step === 1) {
+                loopCounter = 3;
+                setActiveCodeLine(4); activateZone('zone-prosesor', bProsesor, "X <- 3.<br>RAM, simpan X = 3!");
+                setNarration("<b>Prosesor</b> mengeksekusi Assignment baris pertama dari Algoritma.", "bg-purple-50", "border-purple-200");
+                setButton("RAM Simpan");
+            } else if(step === 2) {
+                activateZone('zone-ram', bRam, "Menulis X = 3");
+                setRam({ 'X': loopCounter });
+                setNarration("Nilai awal loop diatur sesuai deklarasi.", "bg-orange-50", "border-orange-200");
+                setButton("Evaluasi WHILE");
+            } else {
+                let loopPhase = (step - 3) % 5; 
+                
+                if (loopCounter > 0) {
+                    if (loopPhase === 0) {
+                        setActiveCodeLine(5); activateZone('zone-prosesor', bProsesor, `WHILE X > 0.<br>Cek RAM: Apakah ${loopCounter} > 0? BENAR!`);
+                        setNarration(`<b>Prosesor</b> mengevaluasi kondisi. ${loopCounter} > 0 adalah Benar. Masuk loop!`, "bg-green-50", "border-green-200");
+                        setButton("Eksekusi PRINT");
+                    } else if (loopPhase === 1) {
+                        setActiveCodeLine(6); activateZone('zone-prosesor', bProsesor, "PRINT X.<br>Layar, cetak nilai X!");
+                        setNarration("<b>Prosesor</b> memerintahkan Layar mencetak nilai X saat ini.", "bg-purple-50", "border-purple-200");
+                        setButton("Layar Cetak");
+                    } else if (loopPhase === 2) {
+                        activateZone('zone-layar', bLayar, `Mencetak: ${loopCounter}`);
+                        printToLayar(loopCounter);
+                        setNarration(`Angka ${loopCounter} tercetak di layar.`, "bg-blue-50", "border-blue-200");
+                        setButton("Kurangi X");
+                    } else if (loopPhase === 3) {
+                        setActiveCodeLine(7); activateZone('zone-prosesor', bProsesor, "X <- X - 1.<br>RAM, kurangi nilaimu 1!");
+                        setNarration("<b>Prosesor</b> menyuruh RAM mengurangi nilai X sebanyak 1.", "bg-purple-50", "border-purple-200");
+                        setButton("RAM Update");
+                    } else if (loopPhase === 4) {
+                        loopCounter--;
+                        activateZone('zone-ram', bRam, `Hapus, ganti jadi ${loopCounter}`);
+                        setRam({ 'X': loopCounter });
+                        setNarration(`Nilai X sekarang adalah ${loopCounter}. Kita kembali ke atas (WHILE).`, "bg-yellow-50", "border-yellow-200");
+                        setButton("Evaluasi WHILE Lagi");
+                    }
+                } else {
+                    if (loopPhase === 0) {
+                        setActiveCodeLine(5); activateZone('zone-prosesor', bProsesor, `WHILE X > 0.<br>Apakah 0 > 0? SALAH!`);
+                        setNarration(`Kondisi bernilai SALAH (0 tidak lebih dari 0). Loop berhenti!`, "bg-red-50", "border-red-200");
+                        setButton("Selesai");
+                    } else {
+                        setNarration("Program perulangan selesai dengan sukses. Semua instruksi dieksekusi secara berulang.", "bg-blue-50", "border-blue-200");
+                        setDoneButton();
+                        step = -1; 
+                    }
+                }
+            }
+        }
+
+        function nextStep() {
+            clearActiveZones();
+            
+            if (currentScenario === 'sequence') {
+                step++;
+                runSequence();
+            } else if (currentScenario === 'selection') {
+                step++;
+                runSelection();
+            } else if (currentScenario === 'iteration') {
+                step++;
+                if (step <= 0) {
+                    step = 0; resetState(); 
+                } else {
+                    runIterationDynamic();
+                }
+            }
+        }
+
+        // Initialize on load
+        document.addEventListener("DOMContentLoaded", () => {
+            renderCode();
+        });
+    </script>
+</body>
+</html>
