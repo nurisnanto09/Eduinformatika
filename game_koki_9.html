@@ -42,7 +42,7 @@
         <div class="w-full flex flex-col bg-slate-50 relative h-full">
             
                         <!-- Header Level Info -->
-            <div class="bg-white p-5 border-b border-gray-200 flex justify-between items-center shadow-sm">
+            <div class="bg-white p-5 border-b border-gray-200 flex flex-col lg:flex-row justify-between items-start lg:items-center shadow-sm gap-4">
                 <div class="flex items-start gap-4">
                     <div class="text-4xl bg-orange-100 p-3 rounded-full border-2 border-orange-300 shadow-sm" id="level-emoji">🎓</div>
                     <div>
@@ -68,23 +68,34 @@
             </div>
 
 
+            
+            <!-- Mobile Studi Kasus (Hidden on Desktop) -->
+            <div class="block lg:hidden px-6 pt-4 pb-0">
+                <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-xl shadow-sm">
+                    <h3 class="text-sm font-bold text-indigo-800 mb-1 flex items-center gap-2">
+                        <i class="fas fa-book-open"></i> Studi Kasus
+                    </h3>
+                    <p class="text-sm text-indigo-900 leading-relaxed level-story-text"></p>
+                </div>
+            </div>
+
             <!-- Workspace Layout (Two Columns) -->
-            <div class="flex-1 p-6 flex flex-col lg:flex-row gap-6 overflow-y-auto lg:overflow-hidden lg:h-full">
+            <div class="flex-1 p-6 flex flex-col-reverse lg:flex-row gap-6 overflow-y-auto lg:overflow-hidden lg:h-full">
                 
                 <!-- Left Column -->
-                <div class="contents lg:flex lg:flex-col lg:gap-4 lg:min-h-0 lg:flex-1">
-                    <!-- Studi Kasus -->
-                    <div class="order-1 lg:order-none">
+                <div class="flex-1 flex flex-col gap-4 min-h-0">
+                    <!-- Desktop Studi Kasus (Hidden on Mobile) -->
+                    <div class="hidden lg:block">
                         <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-xl shadow-sm">
                             <h3 class="text-sm font-bold text-indigo-800 mb-1 flex items-center gap-2">
                                 <i class="fas fa-book-open"></i> Studi Kasus
                             </h3>
-                            <p class="text-sm text-indigo-900 leading-relaxed" id="level-story"></p>
+                            <p class="text-sm text-indigo-900 leading-relaxed level-story-text"></p>
                         </div>
                     </div>
 
                     <!-- Kumpulan Blok -->
-                    <div class="order-4 lg:order-none flex-1 flex flex-col min-h-0">
+                    <div class="flex-1 flex flex-col min-h-0">
                         <h4 class="font-bold text-gray-700 mb-3 flex items-center gap-2">
                             <i class="fas fa-layer-group text-orange-500"></i> Blok Tersedia
                         </h4>
@@ -96,9 +107,9 @@
                 </div>
 
                 <!-- Right Column -->
-                <div class="contents lg:flex lg:flex-col lg:gap-4 lg:min-h-0 lg:flex-1">
+                <div class="flex-1 flex flex-col gap-4 min-h-0">
                     <!-- Lembar Resep -->
-                    <div class="order-2 lg:order-none flex-1 flex flex-col min-h-0">
+                    <div class="flex-1 flex flex-col min-h-0">
                         <h4 class="font-bold text-blue-900 mb-3 flex items-center gap-2">
                             <i class="fas fa-file-code text-blue-500"></i> Lembar Resep (Pseudocode)
                         </h4>
@@ -128,7 +139,7 @@
                     </div>
                     
                     <!-- Action Bar (Bottom Right) -->
-                    <div class="order-3 lg:order-none flex justify-between items-center bg-white p-4 rounded-xl border border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] lg:mt-2 mt-0">
+                    <div class="flex justify-between items-center bg-white p-4 rounded-xl border border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] mt-0 lg:mt-2">
                         <button onclick="resetWorkspace()" class="text-gray-600 hover:text-red-500 font-bold px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
                             <i class="fas fa-undo"></i> Kosongkan
                         </button>
@@ -139,10 +150,7 @@
                 </div>
             </div>
 
-                </div>
-    </div>
-
-    <!-- Cooking Animation Overlay (Moved here so it's always on top and full screen) -->
+        <!-- Cooking Animation Overlay (Moved here so it's always on top and full screen) -->
     <div id="cooking-overlay" class="cooking-overlay">
         <div class="text-6xl mb-4 bounce" id="cooking-emoji">📦</div>
         <h2 class="text-2xl font-bold mb-2 text-orange-300 text-center px-4" id="cooking-title">Sistem Sedang Memproses...</h2>
@@ -210,7 +218,7 @@
             document.getElementById('level-title').innerText = `${lvl.id}. ${lvl.title}`;
             document.getElementById('level-concept').innerText = lvl.concept;
             document.getElementById('level-desc').innerText = lvl.desc;
-            document.getElementById('level-story').innerText = lvl.story;
+            document.querySelectorAll('.level-story-text').forEach(el => el.innerText = lvl.story);
 
             // Update Workspaces
             targetWorkspace = [];
