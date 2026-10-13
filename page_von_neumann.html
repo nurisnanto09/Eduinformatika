@@ -1,0 +1,2678 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arsitektur von Neumann & Dinamika IPO - Bilik Komputasi</title>
+  
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"Fira Code"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#f5f3ff',
+              100: '#ede9fe',
+              500: '#8b5cf6',
+              600: '#6366f1',
+              700: '#4f46e5',
+              800: '#4338ca',
+              900: '#312e81',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- html2pdf.js CDN for Direct Client-side PDF Generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fafc;
+      color: #1e293b;
+      overflow-x: hidden;
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* ========================================================
+       RESPONSIVE LKPD OPTIMIZATIONS FOR HP / MOBILE DEVICES
+       ======================================================== */
+    .auto-expand {
+      resize: none;
+      overflow: hidden;
+      min-height: 38px;
+      line-height: 1.45;
+      transition: height 0.1s ease;
+    }
+
+    /* Page break avoidance for PDF & Print */
+    .lkpd-avoid-break {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+    
+    table tr {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+
+    .page-break {
+      page-break-after: always !important;
+      break-after: page !important;
+    }
+
+    @media (max-width: 640px) {
+      .lkpd-sheet {
+        padding: 0.875rem !important;
+        border-radius: 1.25rem !important;
+      }
+      .lkpd-table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin-left: -0.25rem;
+        margin-right: -0.25rem;
+      }
+      .lkpd-table-wrapper table {
+        min-width: 500px;
+      }
+      .lkpd-table-wrapper th, .lkpd-table-wrapper td {
+        padding: 0.45rem 0.45rem !important;
+        font-size: 11px !important;
+      }
+      .lkpd-sheet input, .lkpd-sheet textarea {
+        font-size: 13.5px !important;
+      }
+      .feeling-option-btn {
+        padding: 0.6rem 0.35rem !important;
+      }
+      .feeling-option-btn span:first-child {
+        font-size: 1.5rem !important;
+      }
+    }
+
+    /* ========================================================
+       PRINT & DIRECT PDF GENERATION STYLES
+       ======================================================== */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 8mm 10mm;
+      }
+      body * {
+        visibility: hidden;
+      }
+      #print-lkpd-area, #print-lkpd-area * {
+        visibility: visible;
+      }
+      #print-lkpd-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background: white !important;
+        color: black !important;
+      }
+      .lkpd-sheet {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin-bottom: 0 !important;
+      }
+      .page-break {
+        page-break-after: always !important;
+        break-after: page !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+
+    /* Pulse Glow */
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(99, 102, 241, 0.4); }
+      50% { box-shadow: 0 0 25px rgba(99, 102, 241, 0.8); }
+    }
+    .pulse-glow {
+      animation: pulseGlow 2s infinite;
+    }
+    .pulse-glow {
+      animation: pulseGlow 2s infinite;
+    }
+
+    /* Bus Line Animation */
+    @keyframes busFlow {
+      0% { stroke-dashoffset: 40; }
+      100% { stroke-dashoffset: 0; }
+    }
+    .bus-active {
+      stroke-dasharray: 6 6;
+      animation: busFlow 1s linear infinite;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+  <!-- ========================================== -->
+  <!-- 1. TOP NAVBAR (BRAND BILIK KOMPUTASI) -->
+  <!-- ========================================== -->
+  <header class="bg-white border-b border-slate-200/80 sticky top-0 z-50 shadow-sm no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <!-- Logo Left -->
+      <a href="materi_siswa.html" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white text-xl shadow-md shadow-indigo-600/30 group-hover:scale-105 transition">
+          <i class="fas fa-brain"></i>
+        </div>
+        <div class="flex items-baseline">
+          <span class="text-xl font-extrabold text-slate-900 tracking-tight">Bilik&nbsp;</span>
+          <span class="text-xl font-extrabold text-indigo-600 tracking-tight">Komputasi</span>
+        </div>
+      </a>
+
+      <!-- Center Navigation Links -->
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="index.html" class="text-slate-600 hover:text-indigo-600 font-semibold text-sm flex items-center gap-2 transition">
+          <i class="fas fa-home text-slate-400"></i> Beranda
+        </a>
+        <a href="materi_siswa.html" class="text-indigo-600 font-bold text-sm flex items-center gap-2 bg-indigo-50/80 px-3.5 py-1.5 rounded-full transition">
+          <i class="fas fa-book-open text-indigo-600"></i> Materi
+        </a>
+        <button onclick="openLeaderboardModal()" class="text-slate-600 hover:text-amber-600 font-semibold text-sm flex items-center gap-2 transition">
+          <i class="fas fa-trophy text-amber-500"></i> Leaderboard
+        </button>
+      </nav>
+
+      <!-- Right Action Button: Portal Guru -->
+      <div class="flex items-center gap-3">
+        <a href="kisi.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-indigo-200 text-indigo-600 bg-white hover:bg-indigo-50 text-sm font-semibold shadow-sm hover:shadow transition">
+          <i class="fas fa-id-card-alt"></i>
+          <span>Portal Guru</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================================================== -->
+  <!-- 2. ORANGE CURVED HERO & FLOATING TOP NAVIGATION TAB -->
+  <!-- ================================================== -->
+  <div class="relative bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 pt-7 pb-14 px-4 sm:px-6 lg:px-8 text-white no-print">
+    <!-- Subtle pattern overlay -->
+    <div class="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+    
+    <div class="max-w-7xl mx-auto relative z-10 text-center mb-6">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white/20 backdrop-blur-sm text-white mb-2">
+        <i class="fas fa-microchip"></i> Sistem Komputer • Kelas X
+      </span>
+      <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight drop-shadow-sm">
+        Arsitektur von Neumann & Dinamika I-P-O
+      </h1>
+      <p class="text-orange-100 text-sm sm:text-base max-w-2xl mx-auto mt-1 font-medium">
+        Membedah rahasia siklus nyata data komputer: Mengapa CPU itu "Sombong" dan peran vital RAM sebagai Transit Hub.
+      </p>
+    </div>
+
+    <!-- FLOATING TOP MODULE TABS (PERSIS TAMPILAN SCREENSHOT) -->
+    <div class="max-w-5xl mx-auto relative z-20 -mb-20">
+      <div class="bg-white rounded-2xl shadow-xl border border-slate-200/90 p-2 flex flex-wrap sm:flex-nowrap items-center justify-between gap-1 text-slate-600 text-sm font-semibold">
+        
+        <!-- Tab 1: Pre-Test -->
+        <button onclick="switchMainTab('pretest')" id="main-tab-pretest" class="main-tab-btn flex-1 min-w-[120px] py-2.5 px-3 rounded-xl text-center transition hover:text-orange-600 hover:bg-orange-50/70">
+          Pre-Test
+        </button>
+
+        <!-- Tab 2: Materi Inti (Active by default sesuai screenshot) -->
+        <button onclick="switchMainTab('materi')" id="main-tab-materi" class="main-tab-btn flex-1 min-w-[120px] py-2.5 px-3 rounded-xl text-center transition bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold shadow-md shadow-orange-500/30">
+          Materi Inti
+        </button>
+
+        <!-- Tab 3: Simulasi -->
+        <button onclick="switchMainTab('simulasi')" id="main-tab-simulasi" class="main-tab-btn flex-1 min-w-[120px] py-2.5 px-3 rounded-xl text-center transition hover:text-orange-600 hover:bg-orange-50/70">
+          Simulasi
+        </button>
+
+        <!-- Tab 4: Game -->
+        <button onclick="switchMainTab('game')" id="main-tab-game" class="main-tab-btn flex-1 min-w-[120px] py-2.5 px-3 rounded-xl text-center transition hover:text-orange-600 hover:bg-orange-50/70">
+          Game
+        </button>
+
+        <!-- Tab 5: LKPD Digital -->
+        <button onclick="switchMainTab('lkpd')" id="main-tab-lkpd" class="main-tab-btn flex-1 min-w-[120px] py-2.5 px-3 rounded-xl text-center transition hover:text-orange-600 hover:bg-orange-50/70">
+          LKPD Digital
+        </button>
+
+        <!-- Tab 6: Post-Test -->
+        <button onclick="switchMainTab('posttest')" id="main-tab-posttest" class="main-tab-btn flex-1 min-w-[120px] py-2.5 px-3 rounded-xl text-center transition hover:text-orange-600 hover:bg-orange-50/70">
+          Post-Test
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Space filler for floating bar -->
+  <div class="h-16 no-print"></div>
+
+  <!-- ================================================== -->
+  <!-- 3. MAIN CONTENT CONTAINER                          -->
+  <!-- ================================================== -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+
+    <!-- ========================================================= -->
+    <!-- VIEW 1: MATERI INTI (LAYOUT 2 KOLOM PERSIS SCREENSHOT)   -->
+    <!-- ========================================================= -->
+    <div id="view-materi" class="view-panel block">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- KOLOM KIRI: SIDEBAR SUB-MATERI (A - G) -->
+        <div class="lg:col-span-4 xl:col-span-3 sticky top-24 z-10">
+          <div class="bg-white rounded-2xl p-3 sm:p-4 shadow-sm border border-slate-200/90 flex flex-col gap-2">
+            
+            <!-- A. Model I-P-O -->
+            <button onclick="switchSubTopic('sub-a')" id="btn-sub-a" class="subtopic-nav-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50 transition border border-transparent hover:border-slate-200">
+              <i class="fas fa-exchange-alt w-5 text-center text-slate-400"></i>
+              <span>A. Model I-P-O</span>
+            </button>
+
+            <!-- B. 4 Komponen Utama -->
+            <button onclick="switchSubTopic('sub-b')" id="btn-sub-b" class="subtopic-nav-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50 transition border border-transparent hover:border-slate-200">
+              <i class="fas fa-puzzle-piece w-5 text-center text-slate-400"></i>
+              <span>B. 4 Komponen Utama</span>
+            </button>
+
+            <!-- C. Mengenal CPU & Register (ACTIVE PERSIS SCREENSHOT) -->
+            <button onclick="switchSubTopic('sub-c')" id="btn-sub-c" class="subtopic-nav-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-bold bg-indigo-600 text-white shadow-md shadow-indigo-600/30 transition">
+              <i class="fas fa-microchip w-5 text-center text-white"></i>
+              <span>C. Mengenal CPU & Register</span>
+            </button>
+
+            <!-- D. Siklus Fetch-Decode-Execute -->
+            <button onclick="switchSubTopic('sub-d')" id="btn-sub-d" class="subtopic-nav-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50 transition border border-transparent hover:border-slate-200">
+              <i class="fas fa-sync-alt w-5 text-center text-slate-400"></i>
+              <span>D. Siklus Fetch-Decode-Execute</span>
+            </button>
+
+            <!-- E. Bus Sistem -->
+            <button onclick="switchSubTopic('sub-e')" id="btn-sub-e" class="subtopic-nav-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50 transition border border-transparent hover:border-slate-200">
+              <i class="fas fa-project-diagram w-5 text-center text-slate-400"></i>
+              <span>E. Bus Sistem</span>
+            </button>
+
+            <!-- F. Dinamika I-P-O -->
+            <button onclick="switchSubTopic('sub-f')" id="btn-sub-f" class="subtopic-nav-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50 transition border border-transparent hover:border-slate-200">
+              <i class="fas fa-wave-square w-5 text-center text-slate-400"></i>
+              <span>F. Dinamika I-P-O</span>
+            </button>
+
+            <!-- G. Istilah Penting -->
+            <button onclick="switchSubTopic('sub-g')" id="btn-sub-g" class="subtopic-nav-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50 transition border border-transparent hover:border-slate-200">
+              <i class="fas fa-book-bookmark w-5 text-center text-slate-400"></i>
+              <span>G. Istilah Penting</span>
+            </button>
+
+          </div>
+
+          <!-- Quick Tip Card -->
+          <div class="mt-4 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs hidden lg:block">
+            <div class="font-bold flex items-center gap-2 mb-1 text-amber-800">
+              <i class="fas fa-lightbulb text-amber-500"></i> Tips Belajar
+            </div>
+            Pelajari konsep di tab ini, lalu buktikan pemahamanmu secara langsung di tab <b>Simulasi</b> dan <b>Game</b>!
+          </div>
+        </div>
+
+        <!-- KOLOM KANAN: KONTEN MATERI (CARD DENGAN BORDER KIRI TEBAL) -->
+        <div class="lg:col-span-8 xl:col-span-9">
+          <div class="bg-white rounded-3xl p-6 sm:p-8 lg:p-10 shadow-sm border border-slate-200/90">
+
+            <!-- ============================================== -->
+            <!-- SUB-MATERI C: MENGENAL CPU & REGISTER (DEFAULT) -->
+            <!-- ============================================== -->
+            <div id="content-sub-c" class="subtopic-content block animate-fadeIn">
+              <!-- Judul Utama -->
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-4">
+                C. MENGENAL CPU & REGISTER: TIM 3 PEMAIN
+              </h2>
+              
+              <!-- Pengantar Sesuai Slide 13 & 14 -->
+              <p class="text-slate-600 text-base sm:text-lg leading-relaxed mb-8">
+                CPU (Central Processing Unit) bukan satu unit tunggal, melainkan <strong class="text-slate-900 font-bold">tim 3 pemain</strong> yang saling bekerja sama memproses miliaran operasi per detik: <strong>Control Unit (CU)</strong>, <strong>Arithmetic Logic Unit (ALU)</strong>, dan <strong>Register</strong>.
+              </p>
+
+              <!-- Sub-heading -->
+              <h3 class="text-lg sm:text-xl font-bold text-slate-800 flex items-center gap-2 mb-6">
+                <span class="text-indigo-600">🧩</span> Tiga Bagian Utama CPU
+              </h3>
+
+              <!-- KARTU 1: CONTROL UNIT (CU) - MANDOR / SUTRADARA -->
+              <div class="border-l-4 border-l-rose-500 border border-slate-200/90 rounded-2xl p-6 bg-white shadow-sm hover:shadow-md transition mb-6">
+                <div class="flex items-start gap-4">
+                  <div class="w-12 h-12 rounded-xl bg-rose-500 text-white flex items-center justify-center text-xl flex-shrink-0 shadow-sm">
+                    <i class="fas fa-compass"></i>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between flex-wrap gap-2 mb-1">
+                      <h4 class="text-xl font-bold text-slate-900">Control Unit (CU)</h4>
+                      <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800">Sky • Mandor</span>
+                    </div>
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+                      Otak pengatur aliran instruksi dan pengirim sinyal kontrol. CU bertugas mengambil instruksi via Fetch, menerjemahkannya (Decode), dan mengatur urutan siklus kerja: <em>"ALU hitung! Register simpan!"</em>. CU <strong>tidak melakukan perhitungan</strong>, melainkan mengarahkan semua komponen bekerja terkoordinasi.
+                    </p>
+                    <div class="mt-4">
+                      <span class="inline-flex items-center gap-2 bg-rose-50 text-rose-700 font-semibold text-xs sm:text-sm px-3.5 py-1.5 rounded-full border border-rose-100">
+                        <i class="fas fa-user-tie"></i> Analogi: Mandor proyek — teriak "angkat bata!" / Sutradara film
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- KARTU 2: ARITHMETIC LOGIC UNIT (ALU) - MESIN HITUNG -->
+              <div class="border-l-4 border-l-blue-600 border border-slate-200/90 rounded-2xl p-6 bg-white shadow-sm hover:shadow-md transition mb-6">
+                <div class="flex items-start gap-4">
+                  <div class="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center text-xl flex-shrink-0 shadow-sm">
+                    <i class="fas fa-calculator"></i>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between flex-wrap gap-2 mb-1">
+                      <h4 class="text-xl font-bold text-slate-900">Arithmetic Logic Unit (ALU)</h4>
+                      <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800">Emerald • Mesin Hitung</span>
+                    </div>
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+                      Pusat eksekusi komputasi nyata. Bertanggung jawab mengeksekusi operasi matematika dasar ($+$, $-$, $\times$, $\div$) dan evaluasi logika perbandingan (AND, OR, NOT, $>$, $<$, $=$). Contoh: $25 + 15 = 40$ atau memeriksa apakah nilai $> 75$. ALU mampu mengeksekusi miliaran operasi per detik.
+                    </p>
+                    <div class="mt-4">
+                      <span class="inline-flex items-center gap-2 bg-blue-50 text-blue-700 font-semibold text-xs sm:text-sm px-3.5 py-1.5 rounded-full border border-blue-100">
+                        <i class="fas fa-calculator"></i> Analogi: Kalkulator super cepat — miliaran operasi per detik
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- KARTU 3: REGISTER - MEMORI KILAT / CATATAN SAKU -->
+              <div class="border-l-4 border-l-amber-500 border border-slate-200/90 rounded-2xl p-6 bg-white shadow-sm hover:shadow-md transition mb-8">
+                <div class="flex items-start gap-4">
+                  <div class="w-12 h-12 rounded-xl bg-amber-500 text-white flex items-center justify-center text-xl flex-shrink-0 shadow-sm">
+                    <i class="fas fa-bolt"></i>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between flex-wrap gap-2 mb-1">
+                      <h4 class="text-xl font-bold text-slate-900">Register (Memori Kilat)</h4>
+                      <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800">Amber • Saku Cepat</span>
+                    </div>
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+                      Memori paling cepat di seluruh komputer (100x lebih cepat dari RAM, akses ~0.3 nanodetik), tetapi berukuran super kecil. Berfungsi menyimpan alamat memori, data aktif yang sedang dikerjakan, dan hasil perhitungan sementara sebelum disetor balik ke RAM.
+                    </p>
+                    <div class="mt-4">
+                      <span class="inline-flex items-center gap-2 bg-amber-50 text-amber-700 font-semibold text-xs sm:text-sm px-3.5 py-1.5 rounded-full border border-amber-100">
+                        <i class="fas fa-bolt"></i> Analogi: Buku catatan saku di kantong mandor — "Ambil di rak A3"
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- RINGKASAN KERJA TIM (SLIDE 13) -->
+              <div class="bg-indigo-50/70 border border-indigo-200 rounded-2xl p-5 mb-8">
+                <div class="text-xs font-bold text-indigo-900 uppercase tracking-wider mb-2 flex items-center gap-2">
+                  <i class="fas fa-users-cog text-indigo-600"></i> Cara Kerja Bareng Tim 3 Pemain CPU:
+                </div>
+                <p class="text-slate-700 text-sm leading-relaxed">
+                  <strong>CU = Sutradara / Mandor</strong> yang memberi aba-aba, <strong>ALU = Aktor / Mesin Hitung</strong> yang melakukan komputasi, dan <strong>REGISTER = Catatan di kantong saku</strong>. Siklus ini berulang terus-menerus setiap siklus Fetch-Decode-Execute hingga perintah <code>HALT</code> (selesai).
+                </p>
+              </div>
+
+              <!-- 5 REGISTER KUNCI -->
+              <div class="bg-slate-50 border border-slate-200/90 rounded-2xl p-6">
+                <h4 class="font-bold text-slate-900 text-base mb-4 flex items-center gap-2">
+                  <i class="fas fa-microchip text-indigo-600"></i> 5 Register Kunci dalam CPU yang Wajib Diketahui:
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                  <div class="bg-white p-3.5 rounded-xl border border-slate-200">
+                    <span class="font-bold text-indigo-600">PC (Program Counter):</span>
+                    <p class="text-slate-600 mt-1">Menyimpan alamat memori instruksi berikutnya di RAM yang akan diambil.</p>
+                  </div>
+                  <div class="bg-white p-3.5 rounded-xl border border-slate-200">
+                    <span class="font-bold text-indigo-600">IR (Instruction Register):</span>
+                    <p class="text-slate-600 mt-1">Menyimpan instruksi yang sedang didecode dan dianalisis oleh CU.</p>
+                  </div>
+                  <div class="bg-white p-3.5 rounded-xl border border-slate-200">
+                    <span class="font-bold text-indigo-600">MAR (Memory Address Register):</span>
+                    <p class="text-slate-600 mt-1">Menampung alamat lokasi kotak memori di RAM yang akan dibaca atau ditulis.</p>
+                  </div>
+                  <div class="bg-white p-3.5 rounded-xl border border-slate-200">
+                    <span class="font-bold text-indigo-600">MDR (Memory Data Register):</span>
+                    <p class="text-slate-600 mt-1">Menampung muatan data aktual yang baru ditarik dari RAM atau akan dikirim ke RAM.</p>
+                  </div>
+                  <div class="bg-white p-3.5 rounded-xl border border-slate-200 md:col-span-2">
+                    <span class="font-bold text-indigo-600">ACC (Accumulator):</span>
+                    <p class="text-slate-600 mt-1">Tempat penampungan hasil sementara operasi perhitungan matematika yang baru dieksekusi ALU.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- SUB-MATERI A: MODEL I-P-O & ALUR 5 TAHAP       -->
+            <!-- ============================================== -->
+            <div id="content-sub-a" class="subtopic-content hidden animate-fadeIn">
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-4">
+                A. MODEL I-P-O & ALUR RESMI 5 TAHAP
+              </h2>
+              <p class="text-slate-600 text-base sm:text-lg leading-relaxed mb-6">
+                <strong>Arsitektur</strong> adalah desain/strukturnya (seperti denah rumah, bukan batanya). Sedangkan <strong>Dinamika</strong> adalah alur/perjalanan datanya yang bergerak melintasi desain tersebut (I-P-O yang hidup).
+              </p>
+
+              <!-- DIAGRAM ALUR RESMI 5 TAHAP (SLIDE 6) -->
+              <div class="mb-8 p-6 rounded-2xl bg-gradient-to-r from-slate-900 to-indigo-950 text-white shadow-md">
+                <div class="text-xs font-bold text-indigo-300 uppercase tracking-wider mb-2">
+                  Alur Resmi Fisik Komputer:
+                </div>
+                <div class="text-center font-mono font-extrabold text-base sm:text-xl py-3 px-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 tracking-wider text-amber-300">
+                  INPUT &rarr; [RAM] &rarr; CPU &rarr; [RAM] &rarr; OUTPUT
+                </div>
+                <p class="text-xs sm:text-sm text-slate-300 mt-3 text-center">
+                  *Semua data <strong>WAJIB lewat RAM</strong> — baik saat masuk maupun keluar. Tidak ada jalan pintas Input &rarr; CPU!
+                </p>
+              </div>
+
+              <!-- 3 PRINSIP WAJIB DIINGAT (SLIDE 11) -->
+              <h3 class="text-lg sm:text-xl font-bold text-slate-800 flex items-center gap-2 mb-4">
+                <span class="text-indigo-600">📌</span> 3 Prinsip yang Wajib Diingat:
+              </h3>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <!-- Prinsip 1 -->
+                <div class="border-l-4 border-l-emerald-500 border border-slate-200 p-5 rounded-2xl bg-white shadow-sm">
+                  <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm mb-2">1</div>
+                  <h4 class="font-bold text-slate-900 text-base mb-1">RAM adalah HUB</h4>
+                  <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                    Pusat pertemuan data. Input dan Output tidak boleh langsung ke CPU. Semua pertukaran wajib lewat RAM.
+                  </p>
+                  <div class="mt-3 text-[11px] font-mono text-rose-600 font-bold">Input ↛ CPU & CPU ↛ Output</div>
+                </div>
+
+                <!-- Prinsip 2 -->
+                <div class="border-l-4 border-l-blue-600 border border-slate-200 p-5 rounded-2xl bg-white shadow-sm">
+                  <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-sm mb-2">2</div>
+                  <h4 class="font-bold text-slate-900 text-base mb-1">CPU Fokus Mengolah</h4>
+                  <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                    Hanya 2 arah dengan RAM via Bus: pinjam data mentah & kembalikan hasil jadi. Tidak mengurus keyboard/layar.
+                  </p>
+                  <div class="mt-3 text-[11px] font-mono text-blue-600 font-bold">RAM &rlarr; CPU via Bus Sistem</div>
+                </div>
+
+                <!-- Prinsip 3 -->
+                <div class="border-l-4 border-l-cyan-500 border border-slate-200 p-5 rounded-2xl bg-white shadow-sm">
+                  <div class="w-8 h-8 rounded-lg bg-cyan-100 text-cyan-700 flex items-center justify-center font-bold text-sm mb-2">3</div>
+                  <h4 class="font-bold text-slate-900 text-base mb-1">Layar Ambil dari RAM</h4>
+                  <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                    Monitor bukan menerima gambar dari CPU. Monitor melakukan polling RAM 60x/detik lalu merender piksel tampilan.
+                  </p>
+                  <div class="mt-3 text-[11px] font-mono text-cyan-600 font-bold">RAM &rarr; Output = Tampil Hasil</div>
+                </div>
+              </div>
+
+              <!-- ATURAN KRITIS (SLIDE 5) -->
+              <div class="bg-rose-50 border border-rose-200 rounded-2xl p-6">
+                <h4 class="text-base font-bold text-rose-900 mb-2 flex items-center gap-2">
+                  <i class="fas fa-crown text-amber-500"></i> Aturan Emas: CPU itu "Sombong"!
+                </h4>
+                <p class="text-slate-700 text-sm leading-relaxed">
+                  CPU bersifat eksklusif. Perangkat input (keyboard/mouse) berjalan sangat lambat dalam milidetik, sementara CPU berdetak dalam hitungan nanodetik. Jika CPU menunggu input langsung, miliaran siklus kerja CPU akan terbuang percuma (idle). Karena itu, <strong>CPU hanya mau berurusan dengan RAM sebagai perantara sentral!</strong>
+                </p>
+              </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- SUB-MATERI B: 4 KOMPONEN UTAMA                 -->
+            <!-- ============================================== -->
+            <div id="content-sub-b" class="subtopic-content hidden animate-fadeIn">
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-4">
+                B. 4 KOMPONEN UTAMA KOMPUTER VON NEUMANN
+              </h2>
+              
+              <!-- SEJARAH SINGKAT (SLIDE 3) -->
+              <div class="mb-8 p-6 rounded-2xl bg-slate-50 border border-slate-200">
+                <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider block mb-1">Latar Belakang Sejarah (1945)</span>
+                <h3 class="text-lg font-bold text-slate-900 mb-2">Dari Cabut Kabel Berhari-hari &rarr; Load File dalam Hitungan Detik</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm mt-3">
+                  <div class="bg-white p-4 rounded-xl border border-rose-200">
+                    <span class="font-bold text-rose-700 block mb-1">❌ Sebelum 1945 • Era ENIAC</span>
+                    Ganti tugas = cabut-pasang kabel fisik. Operator harus melakukan <em>rewiring</em> manual selama berjam-jam hingga berhari-hari hanya untuk menjalankan 1 program baru.
+                  </div>
+                  <div class="bg-white p-4 rounded-xl border border-emerald-200">
+                    <span class="font-bold text-emerald-700 block mb-1">✅ Sesudah 1945 • Stored Program</span>
+                    Ide jenius John von Neumann: <em>"Kenapa instruksi program tidak disimpan saja bersamaan dengan datanya di dalam memori?"</em> Ganti program cukup muat file baru dalam hitungan detik!
+                  </div>
+                </div>
+              </div>
+
+              <!-- 4 KOMPONEN (SLIDE 4) -->
+              <h3 class="text-lg sm:text-xl font-bold text-slate-800 flex items-center gap-2 mb-4">
+                <span class="text-indigo-600">🧩</span> 4 Pilar Arsitektur Komputer:
+              </h3>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <!-- 1. INPUT -->
+                <div class="border-l-4 border-l-amber-500 border border-slate-200 p-5 rounded-2xl bg-white shadow-sm">
+                  <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-bold text-slate-900 text-base flex items-center gap-2">
+                      <i class="fas fa-keyboard text-amber-500"></i> 1. Input Device
+                    </h4>
+                    <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-700">Amber • Masuk</span>
+                  </div>
+                  <p class="text-slate-600 text-sm leading-relaxed mb-3">
+                    Pintu masuk data tempat pengguna memberikan perintah. Mengubah aksi fisik menjadi sinyal listrik yang dititipkan dulu ke RAM.
+                  </p>
+                  <div class="text-xs text-slate-500">Contoh: Keyboard, Mouse, Touchscreen, Mic, Scanner, Sensor IoT.</div>
+                </div>
+
+                <!-- 2. MEMORI / RAM -->
+                <div class="border-l-4 border-l-emerald-500 border border-slate-200 p-5 rounded-2xl bg-white shadow-sm">
+                  <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-bold text-slate-900 text-base flex items-center gap-2">
+                      <i class="fas fa-memory text-emerald-500"></i> 2. Main Memory (RAM)
+                    </h4>
+                    <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">Emerald • Hub</span>
+                  </div>
+                  <p class="text-slate-600 text-sm leading-relaxed mb-3">
+                    Gudang sementara & meja kerja volatile. Setiap sel memori memiliki alamat unik (seperti kotak 100, 200, 300).
+                  </p>
+                  <div class="text-xs text-slate-500">Karakteristik: Volatile (hilang tanpa listrik), Super Cepat (~10ns), Akses Acak.</div>
+                </div>
+
+                <!-- 3. CPU -->
+                <div class="border-l-4 border-l-sky-500 border border-slate-200 p-5 rounded-2xl bg-white shadow-sm">
+                  <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-bold text-slate-900 text-base flex items-center gap-2">
+                      <i class="fas fa-microchip text-sky-500"></i> 3. Central Processing Unit
+                    </h4>
+                    <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-700">Sky • Otak</span>
+                  </div>
+                  <p class="text-slate-600 text-sm leading-relaxed mb-3">
+                    Otak komputer — pusat hitung dan olah data yang mengeksekusi miliaran operasi per detik. Terdiri dari CU, ALU, dan Register.
+                  </p>
+                  <div class="text-xs text-slate-500">Aturan: Hanya mengambil data dari RAM dan mengembalikan hasil ke RAM.</div>
+                </div>
+
+                <!-- 4. OUTPUT -->
+                <div class="border-l-4 border-l-cyan-500 border border-slate-200 p-5 rounded-2xl bg-white shadow-sm">
+                  <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-bold text-slate-900 text-base flex items-center gap-2">
+                      <i class="fas fa-tv text-cyan-500"></i> 4. Output Device
+                    </h4>
+                    <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-cyan-50 text-cyan-700">Cyan • Keluar</span>
+                  </div>
+                  <p class="text-slate-600 text-sm leading-relaxed mb-3">
+                    Pintu keluar hasil yang menampilkan data hasil olahan dari RAM, bukan langsung dari CPU.
+                  </p>
+                  <div class="text-xs text-slate-500">Contoh: Monitor, Layar HP, Speaker, Printer, Projector, Lampu LED.</div>
+                </div>
+              </div>
+
+              <!-- ANALOGI RAM VS STORAGE (SLIDE 8) -->
+              <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6">
+                <h4 class="font-bold text-slate-900 mb-3 flex items-center gap-2 text-base">
+                  <i class="fas fa-table text-indigo-600"></i> Analogi Dokumen: RAM (Meja Kerja) vs Storage (Gudang Arsip)
+                </h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                  <div class="bg-white p-4 rounded-xl border border-emerald-200">
+                    <span class="font-bold text-emerald-700 block mb-1">RAM = Meja Kerja Dokumen Aktif</span>
+                    Hanya memuat berkas dokumen yang sedang dibuka dan dikerjakan saat itu juga. Berukuran terbatas tapi sangat cepat dijangkau tangan (~10 nanodetik). Bersifat <em>volatile</em>.
+                  </div>
+                  <div class="bg-white p-4 rounded-xl border border-slate-300">
+                    <span class="font-bold text-slate-800 block mb-1">Storage (HDD/SSD) = Lemari / Gudang Arsip Raksasa</span>
+                    Menyimpan seluruh file dokumen dan OS secara permanen walau listrik mati (<em>non-volatile</em>). Kapasitasnya raksasa, tetapi butuh waktu lebih lama untuk mengambilnya (~10 milidetik).
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- SUB-MATERI D: SIKLUS FDE                       -->
+            <!-- ============================================== -->
+            <div id="content-sub-d" class="subtopic-content hidden animate-fadeIn">
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-4">
+                D. SIKLUS FETCH - DECODE - EXECUTE (FDE)
+              </h2>
+              <p class="text-slate-600 text-base sm:text-lg leading-relaxed mb-8">
+                Bagaimana CPU mengolah data? Jantung CPU berdetak miliaran kali per detik melalui <strong>Siklus Mesin Von Neumann</strong> yang berulang:
+              </p>
+
+              <div class="space-y-4">
+                <!-- FASE 1: FETCH -->
+                <div class="border-l-4 border-l-sky-500 border border-slate-200 rounded-2xl p-5 bg-white shadow-sm">
+                  <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-sky-500 text-white flex items-center justify-center font-bold text-base flex-shrink-0">1</div>
+                    <div class="flex-1">
+                      <div class="flex items-center justify-between mb-1">
+                        <h4 class="text-lg font-bold text-slate-900">FASE 1: FETCH (Ambil Instruksi)</h4>
+                        <span class="text-xs font-semibold px-2 py-0.5 rounded bg-sky-50 text-sky-700">MAR &rarr; IR</span>
+                      </div>
+                      <p class="text-slate-600 text-sm leading-relaxed">
+                        CPU mengambil instruksi biner dari RAM berdasarkan alamat kotak memori yang ditunjuk oleh Program Counter (PC), lalu menyalinnya ke Instruction Register (IR).
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- FASE 2: DECODE -->
+                <div class="border-l-4 border-l-purple-500 border border-slate-200 rounded-2xl p-5 bg-white shadow-sm">
+                  <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-purple-500 text-white flex items-center justify-center font-bold text-base flex-shrink-0">2</div>
+                    <div class="flex-1">
+                      <div class="flex items-center justify-between mb-1">
+                        <h4 class="text-lg font-bold text-slate-900">FASE 2: DECODE (Terjemahkan Perintah)</h4>
+                        <span class="text-xs font-semibold px-2 py-0.5 rounded bg-purple-50 text-purple-700">Analisis CU</span>
+                      </div>
+                      <p class="text-slate-600 text-sm leading-relaxed">
+                        Mandor Control Unit (CU) membedah instruksi: <em>Perintah apa yang diminta? Datanya ada di mana? Operasi apa yang harus dijalankan?</em>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- FASE 3: EXECUTE -->
+                <div class="border-l-4 border-l-emerald-500 border border-slate-200 rounded-2xl p-5 bg-white shadow-sm">
+                  <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center font-bold text-base flex-shrink-0">3</div>
+                    <div class="flex-1">
+                      <div class="flex items-center justify-between mb-1">
+                        <h4 class="text-lg font-bold text-slate-900">FASE 3: EXECUTE (Eksekusi Komputasi)</h4>
+                        <span class="text-xs font-semibold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">Eksekusi ALU</span>
+                      </div>
+                      <p class="text-slate-600 text-sm leading-relaxed">
+                        Mesin hitung ALU mengeksekusi aksi nyata: melakukan perhitungan angka, memindahkan data antar register, atau melakukan percabangan keputusan logika.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- FASE 4: WRITE-BACK -->
+                <div class="border-l-4 border-l-rose-500 border border-slate-200 rounded-2xl p-5 bg-white shadow-sm">
+                  <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-rose-500 text-white flex items-center justify-center font-bold text-base flex-shrink-0">4</div>
+                    <div class="flex-1">
+                      <div class="flex items-center justify-between mb-1">
+                        <h4 class="text-lg font-bold text-slate-900">FASE 4: WRITE-BACK / STORE (Setor Hasil)</h4>
+                        <span class="text-xs font-semibold px-2 py-0.5 rounded bg-rose-50 text-rose-700">ACC &rarr; RAM</span>
+                      </div>
+                      <p class="text-slate-600 text-sm leading-relaxed">
+                        Hasil akhir dari Accumulator disetor kembali ke RAM melalui Data Bus agar siap dijemput oleh pengontrol layar monitor.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- SUB-MATERI E: BUS SISTEM                       -->
+            <!-- ============================================== -->
+            <div id="content-sub-e" class="subtopic-content hidden animate-fadeIn">
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-4">
+                E. BUS SISTEM: JALUR KOMUNIKASI DATA
+              </h2>
+              <p class="text-slate-600 text-base sm:text-lg leading-relaxed mb-8">
+                Semua komponen terhubung lewat <strong>Bus Sistem</strong> di motherboard, tapi CPU hanya boleh berkomunikasi lewat RAM — tidak pernah langsung ke Input/Output.
+              </p>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- DATA BUS -->
+                <div class="border-l-4 border-l-indigo-600 border border-slate-200 rounded-2xl p-6 bg-white shadow-sm">
+                  <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-lg mb-3">
+                    <i class="fas fa-arrows-alt-h"></i>
+                  </div>
+                  <h4 class="font-bold text-slate-900 text-lg mb-1">Data Bus</h4>
+                  <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 mb-3">Dua Arah (Bi-directional)</span>
+                  <p class="text-slate-600 text-sm leading-relaxed">
+                    Membawa muatan aktual data dan instruksi bolak-balik antara CPU dan RAM (misal mengirim angka 3 dan 5, lalu menyetor kembali angka 8).
+                  </p>
+                </div>
+
+                <!-- ADDRESS BUS -->
+                <div class="border-l-4 border-l-emerald-500 border border-slate-200 rounded-2xl p-6 bg-white shadow-sm">
+                  <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg mb-3">
+                    <i class="fas fa-arrow-right"></i>
+                  </div>
+                  <h4 class="font-bold text-slate-900 text-lg mb-1">Address Bus</h4>
+                  <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 mb-3">Satu Arah (CPU &rarr; RAM)</span>
+                  <p class="text-slate-600 text-sm leading-relaxed">
+                    CPU menentukan alamat kotak memori di RAM yang ingin dibaca atau ditulis (misal: Alamat 100, 200, atau 300).
+                  </p>
+                </div>
+
+                <!-- CONTROL BUS -->
+                <div class="border-l-4 border-l-amber-500 border border-slate-200 rounded-2xl p-6 bg-white shadow-sm">
+                  <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-lg mb-3">
+                    <i class="fas fa-traffic-light"></i>
+                  </div>
+                  <h4 class="font-bold text-slate-900 text-lg mb-1">Control Bus</h4>
+                  <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 mb-3">Sinyal Pengendali</span>
+                  <p class="text-slate-600 text-sm leading-relaxed">
+                    Membawa sinyal komando sinkronisasi dari CU, seperti sinyal READ, WRITE, detak CLOCK pulsa, dan sinyal interupsi.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- SUB-MATERI F: DINAMIKA I-P-O                   -->
+            <!-- ============================================== -->
+            <div id="content-sub-f" class="subtopic-content hidden animate-fadeIn">
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-4">
+                F. DINAMIKA I-P-O: STUDI KASUS KALKULATOR
+              </h2>
+              <p class="text-slate-600 text-base sm:text-lg leading-relaxed mb-6">
+                Mari kita bedah perjalanan nyata data saat pengguna menghitung <code>3 + 5 = 8</code> pada sistem kalkulator komputer!
+              </p>
+
+              <!-- TIMELINE FISIK SESUAI SLIDE 6, 7, 10 -->
+              <div class="relative pl-6 border-l-2 border-indigo-200 space-y-6 mb-8">
+                <div class="relative">
+                  <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-amber-500 border-4 border-white shadow"></div>
+                  <h4 class="font-bold text-slate-900 text-base">Langkah 1: Mengetik Angka 3</h4>
+                  <p class="text-slate-600 text-sm mt-1">Sinyal tombol '3' dari keyboard dititipkan dulu di <strong>RAM Alamat 100</strong>.</p>
+                </div>
+
+                <div class="relative">
+                  <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-blue-500 border-4 border-white shadow"></div>
+                  <h4 class="font-bold text-slate-900 text-base">Langkah 2: Mengetik Operator '+'</h4>
+                  <p class="text-slate-600 text-sm mt-1">Kode operasi penambahan (ADD) disimpan di <strong>RAM Alamat 200</strong>.</p>
+                </div>
+
+                <div class="relative">
+                  <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-amber-500 border-4 border-white shadow"></div>
+                  <h4 class="font-bold text-slate-900 text-base">Langkah 3: Mengetik Angka 5</h4>
+                  <p class="text-slate-600 text-sm mt-1">Sinyal tombol '5' disimpan di <strong>RAM Alamat 101</strong>.</p>
+                </div>
+
+                <div class="relative">
+                  <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-purple-600 border-4 border-white shadow"></div>
+                  <h4 class="font-bold text-slate-900 text-base">Langkah 4: CPU Menarik Data & MENUNGGU Perintah '='</h4>
+                  <p class="text-slate-600 text-sm mt-1">Data ditarik ke Register A dan B. <strong>CPU TIDAK LANGSUNG MENJUMLAHKAN!</strong> Mandor CU menahan eksekusi menunggu pemicu tombol '=' ditekan.</p>
+                </div>
+
+                <div class="relative">
+                  <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-emerald-500 border-4 border-white shadow"></div>
+                  <h4 class="font-bold text-slate-900 text-base">Langkah 5: Tombol '=' Ditekan &rarr; ALU Mengeksekusi</h4>
+                  <p class="text-slate-600 text-sm mt-1">CU mengirim perintah hitung ke ALU &rarr; ALU menjumlahkan $3 + 5 = 8$ di Register Accumulator.</p>
+                </div>
+
+                <div class="relative">
+                  <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-rose-500 border-4 border-white shadow"></div>
+                  <h4 class="font-bold text-slate-900 text-base">Langkah 6: Setor Balik ke RAM Alamat 300</h4>
+                  <p class="text-slate-600 text-sm mt-1">Hasil angka 8 ditulis balik ke <strong>RAM Alamat 300</strong> via Data Bus. CPU tidak pernah mengirim langsung ke monitor!</p>
+                </div>
+
+                <div class="relative">
+                  <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-cyan-500 border-4 border-white shadow"></div>
+                  <h4 class="font-bold text-slate-900 text-base">Langkah 7: Layar Monitor Melakukan Polling RAM</h4>
+                  <p class="text-slate-600 text-sm mt-1">Display controller membaca RAM Alamat 300 (polling 60x/detik) &rarr; matriks LED/LCD menyala membentuk angka '8' dalam tempo kurang dari 1 milidetik!</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- SUB-MATERI G: ISTILAH PENTING                  -->
+            <!-- ============================================== -->
+            <div id="content-sub-g" class="subtopic-content hidden animate-fadeIn">
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-4">
+                G. ISTILAH PENTING (GLOSARIUM)
+              </h2>
+              <p class="text-slate-600 text-base sm:text-lg leading-relaxed mb-8">
+                Glosarium konsep esensial Arsitektur Sistem Komputer berdasarkan modul pembelajaran John von Neumann:
+              </p>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                  <div class="font-bold text-indigo-700 text-base mb-1">Stored-Program Concept</div>
+                  <p class="text-slate-600 text-sm">Prinsip John von Neumann (1945) di mana instruksi program dan data disimpan bersama di RAM, menggantikan proses rewiring kabel manual era ENIAC.</p>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                  <div class="font-bold text-rose-700 text-base mb-1">CPU itu Sombong</div>
+                  <p class="text-slate-600 text-sm">Prinsip sentralisasi memori di mana CPU hanya mau berkomunikasi langsung dengan RAM via Bus Sistem, dan menolak berhubungan langsung dengan I/O.</p>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                  <div class="font-bold text-emerald-700 text-base mb-1">Transit Hub (RAM)</div>
+                  <p class="text-slate-600 text-sm">Peran RAM sebagai titik temu sentral wajib tempat semua data masuk dititipkan sebelum diambil CPU, dan tempat hasil olahan disimpan sebelum ditampilkan ke layar.</p>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                  <div class="font-bold text-amber-700 text-base mb-1">Volatile vs Non-Volatile</div>
+                  <p class="text-slate-600 text-sm">RAM bersifat <em>volatile</em> (data lenyap saat mati listrik), sedangkan Storage HDD/SSD bersifat <em>non-volatile</em> (data tersimpan permanen).</p>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                  <div class="font-bold text-sky-700 text-base mb-1">Polling Layar</div>
+                  <p class="text-slate-600 text-sm">Mekanisme di mana display controller memeriksa kotak memori RAM secara berkala (misal 60 kali per detik) untuk merender piksel ke monitor.</p>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                  <div class="font-bold text-purple-700 text-base mb-1">Tim 3 Pemain CPU</div>
+                  <p class="text-slate-600 text-sm">Tiga unit inti di dalam CPU: Control Unit (CU sebagai mandor pengarah), ALU (sebagai mesin hitung), dan Register (sebagai catatan saku cepat).</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- VIEW 2: SIMULASI (SIMULATOR KALKULATOR & PRAKTIK SUSUN)   -->
+    <!-- ========================================================= -->
+    <div id="view-simulasi" class="view-panel hidden">
+      <div class="space-y-8">
+        
+        <!-- HEADER SIMULASI -->
+        <div class="bg-gradient-to-r from-indigo-900 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
+          <div>
+            <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-indigo-500/30 text-indigo-300 border border-indigo-400/30">
+              Interactive Lab • Laboratorium Virtual
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold mt-2">Simulator Kalkulator $3 + 5 = 8$</h2>
+            <p class="text-slate-300 text-sm mt-1 max-w-xl">
+              Perhatikan bagaimana data transit 2 kali di RAM dan CPU menunggu instruksi tombol '=' sebelum menghitung!
+            </p>
+          </div>
+          <div class="flex items-center gap-3">
+            <button onclick="calcStepAuto()" id="btn-calc-auto" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 font-bold text-sm shadow-md transition flex items-center gap-2">
+              <i class="fas fa-play"></i> Auto Play
+            </button>
+            <button onclick="resetCalcSim()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-semibold text-sm border border-slate-700 transition flex items-center gap-2">
+              <i class="fas fa-undo"></i> Reset
+            </button>
+          </div>
+        </div>
+
+        <!-- PIPELINE 5 TAHAP VISUAL -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/90">
+          <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center justify-between">
+            <span>Visual Pipeline Alur Data Fisik</span>
+            <span id="calc-step-badge" class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-mono text-xs">Step 0 / 7</span>
+          </div>
+
+          <div class="grid grid-cols-5 gap-2 sm:gap-4 text-center">
+            <!-- Node 1: Input -->
+            <div id="pipe-node-1" class="pipe-box border-2 border-slate-200 rounded-2xl p-3 sm:p-4 bg-slate-50 transition">
+              <i class="fas fa-keyboard text-2xl text-slate-400 mb-2"></i>
+              <div class="font-bold text-xs sm:text-sm text-slate-800">1. Input</div>
+              <div id="pipe-val-1" class="text-xs text-slate-500 font-mono mt-1">-</div>
+            </div>
+
+            <!-- Node 2: RAM In -->
+            <div id="pipe-node-2" class="pipe-box border-2 border-slate-200 rounded-2xl p-3 sm:p-4 bg-slate-50 transition">
+              <i class="fas fa-memory text-2xl text-slate-400 mb-2"></i>
+              <div class="font-bold text-xs sm:text-sm text-slate-800">2. RAM (Transit 1)</div>
+              <div id="pipe-val-2" class="text-xs text-slate-500 font-mono mt-1">-</div>
+            </div>
+
+            <!-- Node 3: CPU -->
+            <div id="pipe-node-3" class="pipe-box border-2 border-slate-200 rounded-2xl p-3 sm:p-4 bg-slate-50 transition">
+              <i class="fas fa-microchip text-2xl text-slate-400 mb-2"></i>
+              <div class="font-bold text-xs sm:text-sm text-slate-800">3. CPU Core</div>
+              <div id="pipe-val-3" class="text-xs text-slate-500 font-mono mt-1">IDLE</div>
+            </div>
+
+            <!-- Node 4: RAM Out -->
+            <div id="pipe-node-4" class="pipe-box border-2 border-slate-200 rounded-2xl p-3 sm:p-4 bg-slate-50 transition">
+              <i class="fas fa-memory text-2xl text-slate-400 mb-2"></i>
+              <div class="font-bold text-xs sm:text-sm text-slate-800">4. RAM (Transit 2)</div>
+              <div id="pipe-val-4" class="text-xs text-slate-500 font-mono mt-1">-</div>
+            </div>
+
+            <!-- Node 5: Output -->
+            <div id="pipe-node-5" class="pipe-box border-2 border-slate-200 rounded-2xl p-3 sm:p-4 bg-slate-50 transition">
+              <i class="fas fa-tv text-2xl text-slate-400 mb-2"></i>
+              <div class="font-bold text-xs sm:text-sm text-slate-800">5. Layar Output</div>
+              <div id="pipe-val-5" class="text-xs text-slate-500 font-mono mt-1">-</div>
+            </div>
+          </div>
+
+          <!-- STATUS & NARRATIVE BOX -->
+          <div class="mt-6 p-5 rounded-2xl bg-indigo-50 border border-indigo-200 flex items-start gap-4">
+            <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center flex-shrink-0 text-lg">
+              <i class="fas fa-info-circle"></i>
+            </div>
+            <div>
+              <div id="calc-narrative-title" class="font-bold text-indigo-950 text-base">Status Sistem: Siap Mulai</div>
+              <p id="calc-narrative-desc" class="text-slate-600 text-sm mt-0.5">
+                Klik tombol angka '3' di Keypad di bawah atau klik tombol "Step Berikutnya" untuk menjalankan siklus simulasi.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- KALKULATOR HARDWARE VIEW -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- KEYPAD INPUT & DISPLAY (4 COLS) -->
+          <div class="lg:col-span-4 bg-white rounded-3xl p-6 shadow-sm border border-slate-200/90 flex flex-col justify-between">
+            <div>
+              <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Perangkat Input & Layar</div>
+              <!-- Mini Screen -->
+              <div class="bg-slate-900 rounded-2xl p-4 text-right font-mono mb-4 border border-slate-800 shadow-inner">
+                <div class="text-xs text-slate-500">CRT DISPLAY BUFFER</div>
+                <div id="calc-screen-val" class="text-3xl text-emerald-400 font-bold tracking-wider mt-1">0</div>
+              </div>
+
+              <!-- Keypad Buttons -->
+              <div class="grid grid-cols-4 gap-2">
+                <button onclick="pressKey('7')" class="p-3 bg-slate-100 hover:bg-slate-200 rounded-xl font-bold text-slate-700">7</button>
+                <button onclick="pressKey('8')" class="p-3 bg-slate-100 hover:bg-slate-200 rounded-xl font-bold text-slate-700">8</button>
+                <button onclick="pressKey('9')" class="p-3 bg-slate-100 hover:bg-slate-200 rounded-xl font-bold text-slate-700">9</button>
+                <button onclick="pressKey('/')" class="p-3 bg-amber-100 hover:bg-amber-200 text-amber-800 rounded-xl font-bold">&divide;</button>
+
+                <button onclick="pressKey('4')" class="p-3 bg-slate-100 hover:bg-slate-200 rounded-xl font-bold text-slate-700">4</button>
+                <button onclick="pressKey('5')" id="key-5" class="p-3 bg-slate-100 hover:bg-indigo-100 hover:text-indigo-600 rounded-xl font-bold text-slate-700 transition">5</button>
+                <button onclick="pressKey('6')" class="p-3 bg-slate-100 hover:bg-slate-200 rounded-xl font-bold text-slate-700">6</button>
+                <button onclick="pressKey('*')" class="p-3 bg-amber-100 hover:bg-amber-200 text-amber-800 rounded-xl font-bold">&times;</button>
+
+                <button onclick="pressKey('1')" class="p-3 bg-slate-100 hover:bg-slate-200 rounded-xl font-bold text-slate-700">1</button>
+                <button onclick="pressKey('2')" class="p-3 bg-slate-100 hover:bg-slate-200 rounded-xl font-bold text-slate-700">2</button>
+                <button onclick="pressKey('3')" id="key-3" class="p-3 bg-slate-100 hover:bg-indigo-100 hover:text-indigo-600 rounded-xl font-bold text-slate-700 transition">3</button>
+                <button onclick="pressKey('-')" class="p-3 bg-amber-100 hover:bg-amber-200 text-amber-800 rounded-xl font-bold">-</button>
+
+                <button onclick="pressKey('C')" class="p-3 bg-rose-100 hover:bg-rose-200 text-rose-700 rounded-xl font-bold">C</button>
+                <button onclick="pressKey('0')" class="p-3 bg-slate-100 hover:bg-slate-200 rounded-xl font-bold text-slate-700">0</button>
+                <button onclick="pressKey('+')" id="key-plus" class="p-3 bg-amber-100 hover:bg-amber-200 text-amber-800 rounded-xl font-bold transition">+</button>
+                <button onclick="pressKey('=')" id="key-equal" class="p-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-md transition">=</button>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
+              <button onclick="calcStepNext()" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow transition">
+                <i class="fas fa-step-forward mr-2"></i> Step Berikutnya
+              </button>
+            </div>
+          </div>
+
+          <!-- RAM CELLS VIEW (4 COLS) -->
+          <div class="lg:col-span-4 bg-white rounded-3xl p-6 shadow-sm border border-slate-200/90">
+            <div class="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-2 flex items-center justify-between">
+              <span><i class="fas fa-memory mr-1"></i> RAM (Main Memory)</span>
+              <span class="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">Transit Hub</span>
+            </div>
+            <div class="space-y-3 font-mono text-xs">
+              <div id="ram-cell-100" class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between transition">
+                <span class="text-slate-500">Alamat [100] (Data 1):</span>
+                <span id="ram-val-100" class="font-bold text-slate-700">-</span>
+              </div>
+              <div id="ram-cell-200" class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between transition">
+                <span class="text-slate-500">Alamat [200] (Opcode):</span>
+                <span id="ram-val-200" class="font-bold text-slate-700">-</span>
+              </div>
+              <div id="ram-cell-101" class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between transition">
+                <span class="text-slate-500">Alamat [101] (Data 2):</span>
+                <span id="ram-val-101" class="font-bold text-slate-700">-</span>
+              </div>
+              <div id="ram-cell-300" class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between transition">
+                <span class="text-slate-500">Alamat [300] (Hasil):</span>
+                <span id="ram-val-300" class="font-bold text-slate-700">-</span>
+              </div>
+            </div>
+            <p class="text-xs text-slate-500 mt-4 leading-relaxed">
+              *RAM menampung kedua nilai input dan menerima hasil akhir kembali sebelum diteruskan ke monitor.
+            </p>
+          </div>
+
+          <!-- CPU CORE INTERNALS (4 COLS) -->
+          <div class="lg:col-span-4 bg-white rounded-3xl p-6 shadow-sm border border-slate-200/90">
+            <div class="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-2 flex items-center justify-between">
+              <span><i class="fas fa-microchip mr-1"></i> CPU Internal</span>
+              <span id="cpu-state-badge" class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">IDLE</span>
+            </div>
+
+            <!-- CU State -->
+            <div class="p-3 rounded-xl border border-rose-200 bg-rose-50/50 mb-3 text-xs">
+              <div class="font-bold text-rose-900 flex items-center justify-between">
+                <span>Control Unit (CU)</span>
+                <span id="cu-status-text" class="text-rose-600 font-semibold">Menunggu</span>
+              </div>
+              <div id="cu-desc-text" class="text-slate-600 mt-1">Belum ada perintah eksekusi.</div>
+            </div>
+
+            <!-- ALU State -->
+            <div class="p-3 rounded-xl border border-blue-200 bg-blue-50/50 mb-3 text-xs">
+              <div class="font-bold text-blue-900 flex items-center justify-between">
+                <span>ALU (Math Engine)</span>
+                <span id="alu-status-text" class="text-blue-600 font-semibold">Standby</span>
+              </div>
+              <div id="alu-desc-text" class="text-slate-600 mt-1">Operasi: -</div>
+            </div>
+
+            <!-- Registers -->
+            <div class="p-3 rounded-xl border border-amber-200 bg-amber-50/50 text-xs font-mono">
+              <div class="font-bold text-amber-900 mb-2 font-sans flex items-center justify-between">
+                <span>Registers CPU</span>
+                <span class="text-[10px] text-amber-700">0.3ns Access</span>
+              </div>
+              <div class="flex justify-between text-slate-600 border-b border-amber-200/60 pb-1 mb-1">
+                <span>Reg A:</span>
+                <span id="reg-a-val" class="font-bold text-slate-900">-</span>
+              </div>
+              <div class="flex justify-between text-slate-600 border-b border-amber-200/60 pb-1 mb-1">
+                <span>Reg B:</span>
+                <span id="reg-b-val" class="font-bold text-slate-900">-</span>
+              </div>
+              <div class="flex justify-between text-slate-600">
+                <span>Accumulator (ACC):</span>
+                <span id="reg-acc-val" class="font-bold text-emerald-600">-</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ============================================== -->
+        <!-- PRAKTIK INTERAKTIF: MERAKIT KOMPONEN KOMPUTER  -->
+        <!-- ============================================== -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/90 mt-10">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">
+              Eksperimen Murid • Analisis Arsitektur
+            </span>
+            <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">
+              🧩 Praktik Susun Komponen: Apa yang Terjadi Jika...?
+            </h3>
+            <p class="text-slate-600 text-sm mt-1">
+              Pilih komponen yang ingin kamu pasang di sistem, lalu uji coba alur data untuk melihat diagnosa kerja sistem komputer!
+            </p>
+          </div>
+
+          <!-- Checkbox Toggle Komponen -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+            <!-- 1. Keyboard -->
+            <label class="p-4 rounded-2xl border-2 border-slate-200 bg-slate-50 cursor-pointer flex items-center gap-3 transition hover:border-indigo-400 has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/50">
+              <input type="checkbox" id="comp-keyboard" checked class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500">
+              <div>
+                <div class="font-bold text-sm text-slate-800">Keyboard</div>
+                <div class="text-[11px] text-slate-500">Input Device</div>
+              </div>
+            </label>
+
+            <!-- 2. RAM -->
+            <label class="p-4 rounded-2xl border-2 border-slate-200 bg-slate-50 cursor-pointer flex items-center gap-3 transition hover:border-indigo-400 has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/50">
+              <input type="checkbox" id="comp-ram" checked class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500">
+              <div>
+                <div class="font-bold text-sm text-slate-800">RAM</div>
+                <div class="text-[11px] text-slate-500">Transit Hub</div>
+              </div>
+            </label>
+
+            <!-- 3. CPU -->
+            <label class="p-4 rounded-2xl border-2 border-slate-200 bg-slate-50 cursor-pointer flex items-center gap-3 transition hover:border-indigo-400 has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/50">
+              <input type="checkbox" id="comp-cpu" checked class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500">
+              <div>
+                <div class="font-bold text-sm text-slate-800">CPU</div>
+                <div class="text-[11px] text-slate-500">Pemroses Utama</div>
+              </div>
+            </label>
+
+            <!-- 4. Layar / Monitor -->
+            <label class="p-4 rounded-2xl border-2 border-slate-200 bg-slate-50 cursor-pointer flex items-center gap-3 transition hover:border-indigo-400 has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/50">
+              <input type="checkbox" id="comp-monitor" checked class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500">
+              <div>
+                <div class="font-bold text-sm text-slate-800">Monitor</div>
+                <div class="text-[11px] text-slate-500">Output Device</div>
+              </div>
+            </label>
+          </div>
+
+          <!-- Tombol Kasus Cepat (Quick Presets) -->
+          <div class="flex flex-wrap items-center gap-2 mb-6">
+            <span class="text-xs font-bold text-slate-500 mr-2">Coba Kasus Khusus:</span>
+            <button onclick="applyAssemblyPreset('only-io')" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">
+              Kasus A: Hanya Keyboard + Layar
+            </button>
+            <button onclick="applyAssemblyPreset('no-ram')" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">
+              Kasus B: Tanpa RAM (CPU + I/O)
+            </button>
+            <button onclick="applyAssemblyPreset('no-cpu')" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">
+              Kasus C: Tanpa CPU (RAM + I/O)
+            </button>
+            <button onclick="applyAssemblyPreset('complete')" class="px-3 py-1.5 rounded-lg bg-indigo-100 hover:bg-indigo-200 text-indigo-700 text-xs font-semibold">
+              Kasus D: Lengkap Sempurna
+            </button>
+          </div>
+
+          <div class="flex items-center gap-3 mb-6">
+            <button onclick="runAssemblyCheck()" class="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-md transition flex items-center gap-2">
+              <i class="fas fa-play"></i> Uji Coba Alur Data
+            </button>
+          </div>
+
+          <!-- Kotak Hasil Diagnosa -->
+          <div id="assembly-diagnose-box" class="p-6 rounded-2xl bg-slate-50 border border-slate-200 transition">
+            <div class="flex items-start gap-4">
+              <div id="assembly-status-icon" class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-xl flex-shrink-0">
+                <i class="fas fa-check"></i>
+              </div>
+              <div>
+                <h4 id="assembly-status-title" class="text-lg font-bold text-slate-900 mb-1">
+                  Sistem Lengkap: Siap Beroperasi
+                </h4>
+                <p id="assembly-status-desc" class="text-slate-600 text-sm leading-relaxed">
+                  Semua 4 komponen utama terpasang sempurna. Ketukan tombol pada keyboard akan transit ke RAM, diolah oleh CPU, ditulis balik ke RAM, dan ditampilkan secara jernih di monitor!
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- VIEW 3: GAME EDUKATIF (TANTANGAN JALUR DATA)             -->
+    <!-- ========================================================= -->
+    <div id="view-game" class="view-panel hidden">
+      <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-slate-200/90 max-w-4xl mx-auto text-center">
+        
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-purple-100 text-purple-700 mb-4">
+          <i class="fas fa-gamepad"></i> Mini-Game Tantangan
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
+          Mini-Game: Susun Jalur Data von Neumann!
+        </h2>
+        <p class="text-slate-600 text-sm sm:text-base max-w-xl mx-auto mb-8">
+          Susun urutan perjalanan sebutir data angka dari saat pertama kali diketik hingga akhirnya tampil di layar! Urutkan dari langkah 1 sampai 5.
+        </p>
+
+        <!-- Papan Game -->
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-left mb-8">
+          <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4 flex items-center justify-between">
+            <span>Slot Urutan Jalur Data (Klik kartu di bawah untuk mengisi):</span>
+            <span id="game-score-badge" class="font-bold text-indigo-600 font-mono text-sm">Skor: 0</span>
+          </div>
+
+          <!-- Slots Target -->
+          <div class="grid grid-cols-1 sm:grid-cols-5 gap-3 mb-6">
+            <div id="game-slot-1" class="h-24 rounded-xl border-2 border-dashed border-slate-300 bg-white p-2 flex flex-col items-center justify-center text-center text-xs text-slate-400 font-semibold">
+              Slot 1 (Awal)
+            </div>
+            <div id="game-slot-2" class="h-24 rounded-xl border-2 border-dashed border-slate-300 bg-white p-2 flex flex-col items-center justify-center text-center text-xs text-slate-400 font-semibold">
+              Slot 2
+            </div>
+            <div id="game-slot-3" class="h-24 rounded-xl border-2 border-dashed border-slate-300 bg-white p-2 flex flex-col items-center justify-center text-center text-xs text-slate-400 font-semibold">
+              Slot 3 (Proses)
+            </div>
+            <div id="game-slot-4" class="h-24 rounded-xl border-2 border-dashed border-slate-300 bg-white p-2 flex flex-col items-center justify-center text-center text-xs text-slate-400 font-semibold">
+              Slot 4
+            </div>
+            <div id="game-slot-5" class="h-24 rounded-xl border-2 border-dashed border-slate-300 bg-white p-2 flex flex-col items-center justify-center text-center text-xs text-slate-400 font-semibold">
+              Slot 5 (Akhir)
+            </div>
+          </div>
+
+          <!-- Opsi Kartu yang Bisa Diklik -->
+          <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Pilihan Tahap:</div>
+          <div id="game-cards-pool" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <button onclick="pickGameCard('Input Keyboard')" class="game-pick-btn p-3 bg-white hover:bg-indigo-50 border border-slate-200 rounded-xl text-left font-semibold text-slate-800 text-xs shadow-sm transition">
+              ⌨️ Input Keyboard
+            </button>
+            <button onclick="pickGameCard('RAM (Transit Masuk)')" class="game-pick-btn p-3 bg-white hover:bg-indigo-50 border border-slate-200 rounded-xl text-left font-semibold text-slate-800 text-xs shadow-sm transition">
+              💾 RAM (Transit Masuk)
+            </button>
+            <button onclick="pickGameCard('CPU Menghitung')" class="game-pick-btn p-3 bg-white hover:bg-indigo-50 border border-slate-200 rounded-xl text-left font-semibold text-slate-800 text-xs shadow-sm transition">
+              🧠 CPU Menghitung
+            </button>
+            <button onclick="pickGameCard('RAM (Transit Keluar)')" class="game-pick-btn p-3 bg-white hover:bg-indigo-50 border border-slate-200 rounded-xl text-left font-semibold text-slate-800 text-xs shadow-sm transition">
+              💾 RAM (Transit Keluar)
+            </button>
+            <button onclick="pickGameCard('Layar Output')" class="game-pick-btn p-3 bg-white hover:bg-indigo-50 border border-slate-200 rounded-xl text-left font-semibold text-slate-800 text-xs shadow-sm transition">
+              🖥️ Layar Output
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-center gap-3">
+          <button onclick="checkGameSequence()" class="px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-sm shadow-md transition">
+            <i class="fas fa-check-circle mr-2"></i> Periksa Jawaban
+          </button>
+          <button onclick="resetGameSequence()" class="px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition">
+            <i class="fas fa-redo mr-1"></i> Ulangi
+          </button>
+        </div>
+
+        <div id="game-feedback-msg" class="mt-4 text-sm font-bold hidden"></div>
+
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- VIEW 4: LKPD DIGITAL (LEMBAR KERJA SISWA INTERAKTIF)     -->
+    <!-- ========================================================= -->
+    <div id="view-lkpd" class="view-panel hidden">
+      <div class="max-w-4xl mx-auto">
+        
+        <!-- Action Bar (No-Print) -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 no-print bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-sm">
+          <div>
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 mb-1">
+              <i class="fas fa-file-signature"></i> Lembar Kerja Siswa Digital
+            </div>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">LKPD — Arsitektur Von Neumann</h2>
+            <p class="text-slate-500 text-xs sm:text-sm mt-0.5">Isi lembar kerja langsung dari HP/Laptop, lalu unduh dokumen PDF resminya.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+            <!-- Tombol Unduh PDF Langsung -->
+            <button onclick="downloadLKPDAsPDF()" id="btn-download-pdf" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-indigo-600/30 transition flex items-center justify-center gap-2">
+              <i class="fas fa-file-pdf text-amber-300"></i>
+              <span>Unduh PDF Langsung</span>
+            </button>
+            <!-- Tombol Cetak / Print -->
+            <button onclick="window.print()" class="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs sm:text-sm transition flex items-center justify-center gap-1.5">
+              <i class="fas fa-print"></i>
+              <span class="hidden sm:inline">Cetak</span>
+            </button>
+            <!-- Tombol Reset Isian -->
+            <button onclick="resetLKPDForm()" class="px-3 py-2.5 rounded-xl bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-500 text-xs sm:text-sm transition" title="Bersihkan Form">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- NOTIFIKASI AUTO-SAVE (HP/DESKTOP) -->
+        <div id="lkpd-autosave-toast" class="mb-4 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3.5 py-2 rounded-xl flex items-center gap-2 no-print transition">
+          <i class="fas fa-check-circle text-emerald-600"></i>
+          <span>Jawaban tersimpan otomatis di perangkat ini (Auto-save aktif).</span>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- DOKUMEN LKPD PRINTABLE (PERSIS STRUKTUR 2 HALAMAN PDF)   -->
+        <!-- ======================================================== -->
+        <div id="print-lkpd-area" class="space-y-6 text-slate-800">
+          
+          <!-- ==================== HALAMAN 1 ==================== -->
+          <div class="lkpd-sheet bg-white p-5 sm:p-8 lg:p-10 rounded-3xl border border-slate-200/90 shadow-sm relative">
+            
+            <!-- Top Header Strip Halaman 1 -->
+            <div class="bg-indigo-600 text-white px-4 sm:px-6 py-2.5 rounded-xl flex items-center justify-between mb-4 shadow-sm">
+              <div>
+                <div class="font-extrabold text-sm sm:text-base tracking-wide">Bilik Komputasi</div>
+                <div class="text-[10px] sm:text-xs text-indigo-100">LKPD — Arsitektur Von Neumann & I-P-O (Sub-Bab 5)</div>
+              </div>
+              <div class="text-[11px] sm:text-xs font-bold bg-white/20 px-3 py-1 rounded-full whitespace-nowrap">
+                Halaman 1
+              </div>
+            </div>
+
+            <!-- Banner Utama Judul LKPD -->
+            <div class="bg-indigo-700 text-white px-4 sm:px-6 py-3.5 rounded-2xl mb-6 shadow-sm">
+              <h3 class="text-base sm:text-xl font-extrabold tracking-wide uppercase">
+                LKPD — ARSITEKTUR VON NEUMANN
+              </h3>
+              <p class="text-xs sm:text-sm text-indigo-200 mt-0.5">
+                Komponen Komputer & Dinamika Alur I-P-O
+              </p>
+            </div>
+
+            <!-- BAGIAN A: IDENTITAS -->
+            <div class="mb-6 lkpd-avoid-break">
+              <div class="flex items-center gap-2.5 mb-3">
+                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-indigo-600 text-white font-extrabold flex items-center justify-center text-xs sm:text-sm shadow-sm flex-shrink-0">
+                  A
+                </div>
+                <h4 class="font-extrabold text-base sm:text-lg text-slate-900">Identitas</h4>
+              </div>
+
+              <!-- Tabel Identitas Siswa (2 Orang) -->
+              <div class="border border-slate-300 rounded-xl overflow-hidden bg-white text-xs sm:text-sm shadow-sm">
+                <!-- Baris Anggota 1 -->
+                <div class="bg-indigo-50/70 px-3.5 py-1.5 border-b border-slate-200 text-[11px] font-bold text-indigo-900 uppercase tracking-wider flex items-center gap-1.5">
+                  <i class="fas fa-user-graduate text-indigo-600"></i> Anggota Kelompok 1
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-slate-200">
+                  <div class="p-2 sm:p-2.5 flex items-center gap-2">
+                    <span class="w-24 sm:w-28 font-bold text-slate-700 flex-shrink-0">Nama Murid 1</span>
+                    <span class="text-slate-400">:</span>
+                    <input type="text" id="lkpd-name-1" placeholder="Nama Lengkap Siswa 1..." class="flex-1 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 font-semibold outline-none text-xs sm:text-sm">
+                  </div>
+                  <div class="p-2 sm:p-2.5 flex items-center gap-2">
+                    <span class="w-24 sm:w-28 font-bold text-slate-700 flex-shrink-0">Absen / NIS 1</span>
+                    <span class="text-slate-400">:</span>
+                    <input type="text" id="lkpd-nis-1" placeholder="No. Absen / NIS 1..." class="flex-1 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 font-semibold outline-none text-xs sm:text-sm">
+                  </div>
+                </div>
+
+                <!-- Baris Anggota 2 -->
+                <div class="bg-indigo-50/70 px-3.5 py-1.5 border-y border-slate-200 text-[11px] font-bold text-indigo-900 uppercase tracking-wider flex items-center gap-1.5">
+                  <i class="fas fa-user-graduate text-indigo-600"></i> Anggota Kelompok 2
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-slate-200">
+                  <div class="p-2 sm:p-2.5 flex items-center gap-2">
+                    <span class="w-24 sm:w-28 font-bold text-slate-700 flex-shrink-0">Nama Murid 2</span>
+                    <span class="text-slate-400">:</span>
+                    <input type="text" id="lkpd-name-2" placeholder="Nama Lengkap Siswa 2..." class="flex-1 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 font-semibold outline-none text-xs sm:text-sm">
+                  </div>
+                  <div class="p-2 sm:p-2.5 flex items-center gap-2">
+                    <span class="w-24 sm:w-28 font-bold text-slate-700 flex-shrink-0">Absen / NIS 2</span>
+                    <span class="text-slate-400">:</span>
+                    <input type="text" id="lkpd-nis-2" placeholder="No. Absen / NIS 2..." class="flex-1 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 font-semibold outline-none text-xs sm:text-sm">
+                  </div>
+                </div>
+
+                <!-- Kelas & Tanggal -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-slate-200 border-t border-slate-200 bg-slate-50/50">
+                  <div class="p-2 sm:p-2.5 flex items-center gap-2">
+                    <span class="w-24 sm:w-28 font-bold text-slate-700 flex-shrink-0">Kelas</span>
+                    <span class="text-slate-400">:</span>
+                    <input type="text" id="lkpd-class" placeholder="X-1 / X-2..." class="flex-1 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white focus:ring-2 focus:ring-indigo-500 font-semibold outline-none text-xs sm:text-sm">
+                  </div>
+                  <div class="p-2 sm:p-2.5 flex items-center gap-2">
+                    <span class="w-24 sm:w-28 font-bold text-slate-700 flex-shrink-0">Tanggal</span>
+                    <span class="text-slate-400">:</span>
+                    <input type="date" id="lkpd-date" class="flex-1 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white focus:ring-2 focus:ring-indigo-500 font-semibold outline-none text-xs sm:text-sm">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- BAGIAN 1: IDENTIFIKASI KOMPONEN (TP 1) -->
+            <div class="mb-6 lkpd-avoid-break">
+              <div class="flex items-center gap-2.5 mb-3">
+                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-indigo-600 text-white font-extrabold flex items-center justify-center text-xs sm:text-sm shadow-sm flex-shrink-0">
+                  1
+                </div>
+                <h4 class="font-extrabold text-base sm:text-lg text-slate-900">
+                  Identifikasi Komponen Von Neumann (TP 1)
+                </h4>
+              </div>
+
+              <!-- Tabel TP 1 (Header Biru Sesuai PDF) -->
+              <div class="lkpd-table-wrapper border border-slate-300 rounded-xl overflow-x-auto bg-white mb-4">
+                <table class="w-full text-left text-xs sm:text-sm min-w-[560px]">
+                  <thead class="bg-blue-600 text-white font-bold uppercase tracking-wider text-[11px] sm:text-xs">
+                    <tr>
+                      <th class="py-2.5 px-3 w-12 text-center">No</th>
+                      <th class="py-2.5 px-4">Deskripsi Fungsi</th>
+                      <th class="py-2.5 px-4 w-64">Nama Komponen</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-200 text-slate-800">
+                    <tr class="hover:bg-slate-50/70 lkpd-avoid-break">
+                      <td class="py-2.5 px-3 text-center font-bold">1</td>
+                      <td class="py-2.5 px-4">Menerima data dari pengguna melalui keyboard, mouse, atau sensor.</td>
+                      <td class="py-2 px-3">
+                        <textarea id="tp1-1" rows="1" oninput="autoResizeTextarea(this)" placeholder="Nama Komponen..." class="auto-expand w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none text-xs sm:text-sm font-semibold"></textarea>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/70 lkpd-avoid-break">
+                      <td class="py-2.5 px-3 text-center font-bold">2</td>
+                      <td class="py-2.5 px-4">Mengolah semua data dan instruksi — otak komputer.</td>
+                      <td class="py-2 px-3">
+                        <textarea id="tp1-2" rows="1" oninput="autoResizeTextarea(this)" placeholder="Nama Komponen..." class="auto-expand w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none text-xs sm:text-sm font-semibold"></textarea>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/70 lkpd-avoid-break">
+                      <td class="py-2.5 px-3 text-center font-bold">3</td>
+                      <td class="py-2.5 px-4">Menyimpan program dan data sementara (hilang saat mati).</td>
+                      <td class="py-2 px-3">
+                        <textarea id="tp1-3" rows="1" oninput="autoResizeTextarea(this)" placeholder="Nama Komponen..." class="auto-expand w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none text-xs sm:text-sm font-semibold"></textarea>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/70 lkpd-avoid-break">
+                      <td class="py-2.5 px-3 text-center font-bold">4</td>
+                      <td class="py-2.5 px-4">Menampilkan hasil pemrosesan ke pengguna melalui monitor atau speaker.</td>
+                      <td class="py-2 px-3">
+                        <textarea id="tp1-4" rows="1" oninput="autoResizeTextarea(this)" placeholder="Nama Komponen..." class="auto-expand w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none text-xs sm:text-sm font-semibold"></textarea>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/70 lkpd-avoid-break">
+                      <td class="py-2.5 px-3 text-center font-bold">5</td>
+                      <td class="py-2.5 px-4">Bagian CPU yang bertugas melakukan operasi matematika dan logika.</td>
+                      <td class="py-2 px-3">
+                        <textarea id="tp1-5" rows="1" oninput="autoResizeTextarea(this)" placeholder="Nama Komponen..." class="auto-expand w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none text-xs sm:text-sm font-semibold"></textarea>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/70 lkpd-avoid-break">
+                      <td class="py-2.5 px-3 text-center font-bold">6</td>
+                      <td class="py-2.5 px-4">Bagian CPU yang mengatur alur instruksi dan memberi sinyal kendali.</td>
+                      <td class="py-2 px-3">
+                        <textarea id="tp1-6" rows="1" oninput="autoResizeTextarea(this)" placeholder="Nama Komponen..." class="auto-expand w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none text-xs sm:text-sm font-semibold"></textarea>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Refleksi TP 1 -->
+              <div class="bg-slate-50 p-3.5 sm:p-4 rounded-xl border border-slate-200 lkpd-avoid-break">
+                <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-1.5">
+                  Refleksi: Mengapa keempat komponen ini harus bekerja sama?
+                </label>
+                <textarea id="refleksi-tp1" rows="2" oninput="autoResizeTextarea(this)" placeholder="(Tuliskan alasan/refleksimu...)" class="auto-expand w-full p-2.5 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
+              </div>
+            </div>
+
+            <!-- BAGIAN 2: SIMULASI DINAMIKA ALUR I-P-O (TP 2) -->
+            <div class="mb-4 lkpd-avoid-break">
+              <div class="flex items-center gap-2.5 mb-2">
+                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-indigo-600 text-white font-extrabold flex items-center justify-center text-xs sm:text-sm shadow-sm flex-shrink-0">
+                  2
+                </div>
+                <h4 class="font-extrabold text-base sm:text-lg text-slate-900">
+                  Simulasi Dinamika Alur I-P-O (TP 2)
+                </h4>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-600 mb-3 font-semibold">
+                Skenario: Pengguna mengetik "5 + 3" di kalkulator digital.
+              </p>
+
+              <!-- Tabel TP 2 (Header Hijau/Emerald Sesuai PDF) -->
+              <div class="lkpd-table-wrapper border border-slate-300 rounded-xl overflow-x-auto bg-white mb-2">
+                <table class="w-full text-left text-xs sm:text-sm min-w-[560px]">
+                  <thead class="bg-emerald-600 text-white font-bold uppercase tracking-wider text-[11px] sm:text-xs">
+                    <tr>
+                      <th class="py-2.5 px-3 w-16 text-center">Langkah</th>
+                      <th class="py-2.5 px-4 w-44">Komponen Aktif</th>
+                      <th class="py-2.5 px-4">Apa yang Terjadi?</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-200 text-slate-800">
+                    <tr class="hover:bg-slate-50/70 lkpd-avoid-break">
+                      <td class="py-2.5 px-3 text-center font-bold">1</td>
+                      <td class="py-2.5 px-4 font-bold text-amber-700">INPUT</td>
+                      <td class="py-2 px-3">
+                        <textarea id="tp2-1" rows="1" oninput="autoResizeTextarea(this)" placeholder="Tuliskan yang terjadi..." class="auto-expand w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none text-xs sm:text-sm font-medium"></textarea>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/70 lkpd-avoid-break">
+                      <td class="py-2.5 px-3 text-center font-bold">2</td>
+                      <td class="py-2.5 px-4 font-bold text-emerald-700">MEMORI</td>
+                      <td class="py-2 px-3">
+                        <textarea id="tp2-2" rows="1" oninput="autoResizeTextarea(this)" placeholder="Tuliskan yang terjadi..." class="auto-expand w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none text-xs sm:text-sm font-medium"></textarea>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/70 lkpd-avoid-break">
+                      <td class="py-2.5 px-3 text-center font-bold">3</td>
+                      <td class="py-2.5 px-4 font-bold text-sky-700">CPU — Fetch</td>
+                      <td class="py-2 px-3">
+                        <textarea id="tp2-3" rows="1" oninput="autoResizeTextarea(this)" placeholder="Tuliskan yang terjadi..." class="auto-expand w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none text-xs sm:text-sm font-medium"></textarea>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/70 lkpd-avoid-break">
+                      <td class="py-2.5 px-3 text-center font-bold">4</td>
+                      <td class="py-2.5 px-4 font-bold text-purple-700">CPU — Decode</td>
+                      <td class="py-2 px-3">
+                        <textarea id="tp2-4" rows="1" oninput="autoResizeTextarea(this)" placeholder="Tuliskan yang terjadi..." class="auto-expand w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none text-xs sm:text-sm font-medium"></textarea>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/70 lkpd-avoid-break">
+                      <td class="py-2.5 px-3 text-center font-bold">5</td>
+                      <td class="py-2.5 px-4 font-bold text-blue-700">CPU — ALU</td>
+                      <td class="py-2 px-3">
+                        <textarea id="tp2-5" rows="1" oninput="autoResizeTextarea(this)" placeholder="Tuliskan yang terjadi..." class="auto-expand w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none text-xs sm:text-sm font-medium"></textarea>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/70 lkpd-avoid-break">
+                      <td class="py-2.5 px-3 text-center font-bold">6</td>
+                      <td class="py-2.5 px-4 font-bold text-cyan-700">OUTPUT</td>
+                      <td class="py-2 px-3">
+                        <textarea id="tp2-6" rows="1" oninput="autoResizeTextarea(this)" placeholder="Tuliskan yang terjadi..." class="auto-expand w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none text-xs sm:text-sm font-medium"></textarea>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Footer Halaman 1 -->
+            <div class="pt-3 border-t border-slate-200 text-center text-xs text-slate-500 font-medium">
+              Bilik Komputasi • Arsitektur Von Neumann • SMA Fase E
+            </div>
+          </div>
+
+          <!-- PAGE BREAK PEMISAH HALAMAN 1 & 2 -->
+          <div class="page-break my-4"></div>
+
+          <!-- ==================== HALAMAN 2 ==================== -->
+          <div class="lkpd-sheet bg-white p-5 sm:p-8 lg:p-10 rounded-3xl border border-slate-200/90 shadow-sm relative">
+            
+            <!-- Top Header Strip Halaman 2 -->
+            <div class="bg-indigo-600 text-white px-4 sm:px-6 py-2.5 rounded-xl flex items-center justify-between mb-6 shadow-sm">
+              <div>
+                <div class="font-extrabold text-sm sm:text-base tracking-wide">Bilik Komputasi</div>
+                <div class="text-[10px] sm:text-xs text-indigo-100">LKPD — Arsitektur Von Neumann & I-P-O (Sub-Bab 5)</div>
+              </div>
+              <div class="text-[11px] sm:text-xs font-bold bg-white/20 px-3 py-1 rounded-full whitespace-nowrap">
+                Halaman 2
+              </div>
+            </div>
+
+            <!-- PERTANYAAN LANJUTAN DINAMIKA IPO -->
+            <div class="space-y-4 mb-8">
+              <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 lkpd-avoid-break">
+                <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-2">
+                  1. Pada langkah ke berapa CPU melakukan perhitungan matematika? Mengapa?
+                </label>
+                <textarea id="tp2-q1" rows="2" oninput="autoResizeTextarea(this)" placeholder="(Tuliskan analisismu...)" class="auto-expand w-full p-2.5 sm:p-3 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
+              </div>
+
+              <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 lkpd-avoid-break">
+                <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-2">
+                  2. Apa peran Memori dalam dinamika I-P-O di atas?
+                </label>
+                <textarea id="tp2-q2" rows="2" oninput="autoResizeTextarea(this)" placeholder="(Tuliskan analisismu...)" class="auto-expand w-full p-2.5 sm:p-3 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
+              </div>
+
+              <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 lkpd-avoid-break">
+                <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-2">
+                  3. Apa yang akan terjadi jika komponen OUTPUT rusak?
+                </label>
+                <textarea id="tp2-q3" rows="2" oninput="autoResizeTextarea(this)" placeholder="(Tuliskan analisismu...)" class="auto-expand w-full p-2.5 sm:p-3 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
+              </div>
+            </div>
+
+            <!-- BAGIAN 3: REFLEKSI -->
+            <div class="mb-8">
+              <div class="flex items-center gap-2.5 mb-4">
+                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-indigo-600 text-white font-extrabold flex items-center justify-center text-xs sm:text-sm shadow-sm flex-shrink-0">
+                  3
+                </div>
+                <h4 class="font-extrabold text-base sm:text-lg text-slate-900">
+                  Refleksi
+                </h4>
+              </div>
+
+              <div class="space-y-4">
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 lkpd-avoid-break">
+                  <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-2">
+                    1. Dengan kata-katamu sendiri, apa itu arsitektur Von Neumann?
+                  </label>
+                  <textarea id="refleksi-q1" rows="2" oninput="autoResizeTextarea(this)" placeholder="(Tuliskan jawaban...)" class="auto-expand w-full p-2.5 sm:p-3 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 lkpd-avoid-break">
+                  <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-2">
+                    2. Mengapa keempat komponen harus bekerja sama?
+                  </label>
+                  <textarea id="refleksi-q2" rows="2" oninput="autoResizeTextarea(this)" placeholder="(Tuliskan jawaban...)" class="auto-expand w-full p-2.5 sm:p-3 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 lkpd-avoid-break">
+                  <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-2">
+                    3. Tuliskan 1 hal baru yang kamu pelajari hari ini!
+                  </label>
+                  <textarea id="refleksi-q3" rows="2" oninput="autoResizeTextarea(this)" placeholder="(Tuliskan jawaban...)" class="auto-expand w-full p-2.5 sm:p-3 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
+                </div>
+
+                <!-- Pertanyaan 4: Perasaan Belajar Hari Ini -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 lkpd-avoid-break">
+                  <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-2">
+                    4. Bagaimana perasaan dan pemahamanmu setelah mempelajari materi hari ini?
+                  </label>
+                  <p class="text-xs text-slate-500 mb-3 font-medium">
+                    Pilih salah satu ikon yang paling menggambarkan kesan belajarmu:
+                  </p>
+                  
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-3" id="lkpd-feeling-options">
+                    <button type="button" onclick="selectFeeling('menyenangkan')" id="feeling-btn-menyenangkan" class="feeling-option-btn p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-emerald-400 hover:bg-emerald-50/40 text-center transition flex flex-col items-center justify-center gap-1 group cursor-pointer">
+                      <span class="text-2xl group-hover:scale-110 transition transform">😄</span>
+                      <span class="font-bold text-xs text-slate-800">Menyenangkan</span>
+                      <span class="text-[10px] text-slate-500 leading-tight">Paham & seru!</span>
+                    </button>
+                    <button type="button" onclick="selectFeeling('bingung')" id="feeling-btn-bingung" class="feeling-option-btn p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-amber-400 hover:bg-amber-50/40 text-center transition flex flex-col items-center justify-center gap-1 group cursor-pointer">
+                      <span class="text-2xl group-hover:scale-110 transition transform">🤔</span>
+                      <span class="font-bold text-xs text-slate-800">Masih Bingung</span>
+                      <span class="text-[10px] text-slate-500 leading-tight">Butuh bimbingan</span>
+                    </button>
+                    <button type="button" onclick="selectFeeling('biasa')" id="feeling-btn-biasa" class="feeling-option-btn p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-blue-400 hover:bg-blue-50/40 text-center transition flex flex-col items-center justify-center gap-1 group cursor-pointer">
+                      <span class="text-2xl group-hover:scale-110 transition transform">😐</span>
+                      <span class="font-bold text-xs text-slate-800">Biasa Aja</span>
+                      <span class="text-[10px] text-slate-500 leading-tight">Cukup mengerti</span>
+                    </button>
+                    <button type="button" onclick="selectFeeling('menantang')" id="feeling-btn-menantang" class="feeling-option-btn p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-purple-400 hover:bg-purple-50/40 text-center transition flex flex-col items-center justify-center gap-1 group cursor-pointer">
+                      <span class="text-2xl group-hover:scale-110 transition transform">🤯</span>
+                      <span class="font-bold text-xs text-slate-800">Menantang</span>
+                      <span class="text-[10px] text-slate-500 leading-tight">Mendalam & keren</span>
+                    </button>
+                  </div>
+
+                  <input type="hidden" id="lkpd-feeling" value="">
+
+                  <div class="mt-2.5">
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">
+                      Catatan atau alasan (hal yang paling disukai / yang masih membingungkan):
+                    </label>
+                    <textarea id="lkpd-feeling-note" rows="2" oninput="autoResizeTextarea(this)" placeholder="(Opsional) Tuliskan catatan atau alasanmu di sini..." class="auto-expand w-full p-2.5 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Footer Halaman 2 -->
+            <div class="pt-4 border-t border-slate-200 text-center text-xs text-slate-500 font-medium">
+              Bilik Komputasi • Arsitektur Von Neumann • SMA Fase E
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- VIEW 5: PRE-TEST & POST-TEST (EVALUASI INTERAKTIF)        -->
+    <!-- ========================================================= -->
+    <div id="view-pretest" class="view-panel hidden">
+      <div class="max-w-3xl mx-auto bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-slate-200/90">
+        <div class="text-center mb-8">
+          <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-orange-100 text-orange-700">
+            Pre-Test Diagnostik
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">Uji Kemampuan Awalmu</h2>
+          <p class="text-slate-500 text-sm mt-1">Jawab 5 pertanyaan cepat ini sebelum mendalami materi inti!</p>
+        </div>
+        <div id="pretest-quiz-container" class="space-y-6"></div>
+      </div>
+    </div>
+
+    <div id="view-posttest" class="view-panel hidden">
+      <div class="max-w-3xl mx-auto bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-slate-200/90">
+        <div class="text-center mb-8">
+          <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-indigo-100 text-indigo-700">
+            Post-Test Formatif
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">Evaluasi Akhir Pemahaman</h2>
+          <p class="text-slate-500 text-sm mt-1">Ukur seberapa jauh kamu menguasai Arsitektur von Neumann & Alur IPO!</p>
+        </div>
+        <div id="posttest-quiz-container" class="space-y-6"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ================================================== -->
+  <!-- 4. MODAL LEADERBOARD SISWA                         -->
+  <!-- ================================================== -->
+  <div id="leaderboard-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-scaleUp">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2 text-slate-900 font-extrabold text-lg">
+          <i class="fas fa-trophy text-amber-500"></i> Leaderboard Kelas X
+        </div>
+        <button onclick="closeLeaderboardModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="mt-4 space-y-2.5 max-h-80 overflow-y-auto">
+        <div class="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-full bg-amber-500 text-white font-bold text-xs flex items-center justify-center">1</span>
+            <div>
+              <div class="font-bold text-slate-900 text-sm">Ahmad Fauzan</div>
+              <div class="text-[11px] text-slate-500">Nilai Post-Test: 100 • Selesai 2m</div>
+            </div>
+          </div>
+          <span class="font-mono font-extrabold text-amber-600">100 Pts</span>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-full bg-slate-300 text-slate-700 font-bold text-xs flex items-center justify-center">2</span>
+            <div>
+              <div class="font-bold text-slate-900 text-sm">Siti Rahmawati</div>
+              <div class="text-[11px] text-slate-500">Nilai Post-Test: 95 • Selesai 3m</div>
+            </div>
+          </div>
+          <span class="font-mono font-extrabold text-slate-700">95 Pts</span>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-orange-50/50 border border-orange-200 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-full bg-orange-400 text-white font-bold text-xs flex items-center justify-center">3</span>
+            <div>
+              <div class="font-bold text-slate-900 text-sm">Budi Pratama</div>
+              <div class="text-[11px] text-slate-500">Nilai Post-Test: 90 • Selesai 4m</div>
+            </div>
+          </div>
+          <span class="font-mono font-extrabold text-orange-700">90 Pts</span>
+        </div>
+
+        <div class="p-3 rounded-xl bg-white border border-slate-100 flex items-center justify-between text-xs text-slate-600">
+          <div class="flex items-center gap-3">
+            <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-500 font-bold flex items-center justify-center">4</span>
+            <span>Dewi Lestari</span>
+          </div>
+          <span class="font-mono font-bold">85 Pts</span>
+        </div>
+      </div>
+
+      <div class="mt-6 pt-4 border-t border-slate-100 text-center">
+        <button onclick="closeLeaderboardModal()" class="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 font-semibold text-slate-700 text-sm transition">
+          Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================== -->
+  <!-- 5. FOOTER EDUKASI                                  -->
+  <!-- ================================================== -->
+  <footer class="bg-white border-t border-slate-200/80 py-8 text-center text-slate-500 text-sm no-print mt-12">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="font-extrabold text-slate-900">Bilik Komputasi</span>
+        <span class="text-slate-400">&bull;</span>
+        <span>Platform Pembelajaran Informatika Terpadu</span>
+      </div>
+      <p class="text-xs text-slate-400">
+        &copy; 2026 PPG Informatika • Elemen Sistem Komputer (Kurikulum Merdeka)
+      </p>
+    </div>
+  </footer>
+
+  <!-- ================================================== -->
+  <!-- 6. JAVASCRIPT LOGIC LENGKAP & INTEGRATIF           -->
+  <!-- ================================================== -->
+  <script>
+    /* ===================================================
+       1. TOP MODULE NAVIGATION (PRETEST, MATERI, DLL)
+       =================================================== */
+    function switchMainTab(tabId) {
+      // Hide all panels
+      document.querySelectorAll('.view-panel').forEach(p => p.classList.add('hidden'));
+      document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('block'));
+
+      // Show target panel
+      const target = document.getElementById('view-' + tabId);
+      if (target) {
+        target.classList.remove('hidden');
+        target.classList.add('block');
+      }
+
+      // Update Top Nav Button styles
+      document.querySelectorAll('.main-tab-btn').forEach(btn => {
+        btn.className = "main-tab-btn flex-1 min-w-[120px] py-2.5 px-3 rounded-xl text-center transition hover:text-orange-600 hover:bg-orange-50/70 text-slate-600 font-semibold";
+      });
+
+      const activeBtn = document.getElementById('main-tab-tab-' + tabId) || document.getElementById('main-tab-' + tabId);
+      if (activeBtn) {
+        activeBtn.className = "main-tab-btn flex-1 min-w-[120px] py-2.5 px-3 rounded-xl text-center transition bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold shadow-md shadow-orange-500/30";
+      }
+
+      if (tabId === 'lkpd') {
+        setTimeout(resizeAllLKPDTextareas, 60);
+      }
+
+      window.scrollTo({ top: 180, behavior: 'smooth' });
+    }
+
+    /* ===================================================
+       2. SUB-TOPIC NAVIGATION (A s/d G DI DALAM MATERI INTI)
+       =================================================== */
+    function switchSubTopic(subId) {
+      // Hide all subtopic contents
+      document.querySelectorAll('.subtopic-content').forEach(c => {
+        c.classList.add('hidden');
+        c.classList.remove('block');
+      });
+
+      // Show selected subtopic
+      const targetContent = document.getElementById('content-' + subId);
+      if (targetContent) {
+        targetContent.classList.remove('hidden');
+        targetContent.classList.add('block');
+      }
+
+      // Reset all sidebar buttons to inactive
+      document.querySelectorAll('.subtopic-nav-btn').forEach(btn => {
+        btn.className = "subtopic-nav-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50 transition border border-transparent hover:border-slate-200";
+        const icon = btn.querySelector('i');
+        if (icon) {
+          icon.className = icon.className.replace('text-white', 'text-slate-400');
+        }
+      });
+
+      // Set active button (Vibrant Indigo Style persis screenshot)
+      const activeBtn = document.getElementById('btn-' + subId);
+      if (activeBtn) {
+        activeBtn.className = "subtopic-nav-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl font-bold bg-indigo-600 text-white shadow-md shadow-indigo-600/30 transition";
+        const icon = activeBtn.querySelector('i');
+        if (icon) {
+          icon.className = icon.className.replace('text-slate-400', 'text-white');
+        }
+      }
+    }
+
+    /* ===================================================
+       3. SIMULATOR KALKULATOR 3 + 5 = 8 (5 TAHAP FISIK)
+       =================================================== */
+    let currentCalcStep = 0;
+    let autoPlayInterval = null;
+
+    const calcSteps = [
+      {
+        step: 0,
+        title: "Status Sistem: Siap Mulai",
+        desc: "Tekan tombol angka '3' atau klik 'Step Berikutnya' untuk memulai siklus komputasi.",
+        screen: "0",
+        ram100: "-", ram200: "-", ram101: "-", ram300: "-",
+        cu: { status: "Menunggu", desc: "Belum ada instruksi aktif." },
+        alu: { status: "Standby", desc: "Operasi: -" },
+        regA: "-", regB: "-", acc: "-",
+        activeNodes: []
+      },
+      {
+        step: 1,
+        title: "Tahap 1: Input Angka '3' Transit ke RAM",
+        desc: "Tombol '3' ditekan di keyboard. Sinyal dikirim via bus dan transit di RAM Alamat 100.",
+        screen: "3",
+        ram100: "3", ram200: "-", ram101: "-", ram300: "-",
+        cu: { status: "Standby", desc: "Menunggu instruksi operator." },
+        alu: { status: "Standby", desc: "Operasi: -" },
+        regA: "-", regB: "-", acc: "-",
+        activeNodes: [1, 2]
+      },
+      {
+        step: 2,
+        title: "Tahap 2: Input Operator '+' Disimpan di RAM",
+        desc: "Operator '+' ditekan. Kode instruksi ADD disimpan di RAM Alamat 200.",
+        screen: "3 +",
+        ram100: "3", ram200: "ADD", ram101: "-", ram300: "-",
+        cu: { status: "Standby", desc: "Instruksi ADD tersimpan di RAM." },
+        alu: { status: "Standby", desc: "Operasi: -" },
+        regA: "-", regB: "-", acc: "-",
+        activeNodes: [1, 2]
+      },
+      {
+        step: 3,
+        title: "Tahap 3: Input Angka '5' Transit ke RAM",
+        desc: "Tombol '5' ditekan. Data angka 5 disimpan di RAM Alamat 101. Kedua data kini siap di RAM.",
+        screen: "3 + 5",
+        ram100: "3", ram200: "ADD", ram101: "5", ram300: "-",
+        cu: { status: "Standby", desc: "Data siap di RAM." },
+        alu: { status: "Standby", desc: "Operasi: -" },
+        regA: "-", regB: "-", acc: "-",
+        activeNodes: [1, 2]
+      },
+      {
+        step: 4,
+        title: "Tahap 4: CPU Mengambil Data & MENUNGGU Perintah '='",
+        desc: "Data ditarik ke Register A (3) dan Register B (5). CPU TIDAK LANGSUNG MENJUMLAHKAN! CPU menunggu pemicu tombol '=' ditekan.",
+        screen: "3 + 5 ...",
+        ram100: "3", ram200: "ADD", ram101: "5", ram300: "-",
+        cu: { status: "MENUNGGU '='", desc: "HOLD: Menunggu perintah eksekusi dari pengguna!" },
+        alu: { status: "Waiting", desc: "Menunggu sinyal eksekusi CU" },
+        regA: "3", regB: "5", acc: "-",
+        activeNodes: [2, 3]
+      },
+      {
+        step: 5,
+        title: "Tahap 5: Tombol '=' Ditekan &rarr; ALU Mengeksekusi 3 + 5 = 8",
+        desc: "Tombol '=' ditekan! CU mengirim sinyal Execute ke ALU. ALU menjumlahkan 3 + 5 = 8 dan menyimpannya di Accumulator.",
+        screen: "3 + 5 = ...",
+        ram100: "3", ram200: "ADD", ram101: "5", ram300: "-",
+        cu: { status: "Executing", desc: "Mengirim sinyal hitung ke ALU" },
+        alu: { status: "Calculating", desc: "3 + 5 = 8 (Selesai)" },
+        regA: "3", regB: "5", acc: "8",
+        activeNodes: [3]
+      },
+      {
+        step: 6,
+        title: "Tahap 6: Writeback Hasil 8 ke RAM (Transit 2)",
+        desc: "CPU tidak bisa langsung mengirim 8 ke monitor! Angka 8 ditulis kembali ke RAM Alamat 300 via Data Bus.",
+        screen: "Memproses...",
+        ram100: "3", ram200: "ADD", ram101: "5", ram300: "8",
+        cu: { status: "Write-back", desc: "Menyimpan hasil ke RAM Alamat 300" },
+        alu: { status: "Done", desc: "Tugas selesai" },
+        regA: "3", regB: "5", acc: "8",
+        activeNodes: [3, 4]
+      },
+      {
+        step: 7,
+        title: "Tahap 7: Display Controller Membaca RAM & Output Selesai!",
+        desc: "Pengontrol layar membaca RAM Alamat 300 dan memancarkan angka 8 di layar monitor. Siklus sempurna selesai!",
+        screen: "8",
+        ram100: "3", ram200: "ADD", ram101: "5", ram300: "8",
+        cu: { status: "IDLE", desc: "Siklus selesai. Menunggu input berikutnya." },
+        alu: { status: "Standby", desc: "Standby" },
+        regA: "3", regB: "5", acc: "8",
+        activeNodes: [4, 5]
+      }
+    ];
+
+    function updateCalcUI() {
+      const data = calcSteps[currentCalcStep];
+      
+      // Update Step Badge & Narrative
+      document.getElementById('calc-step-badge').innerText = `Step ${data.step} / 7`;
+      document.getElementById('calc-narrative-title').innerHTML = data.title;
+      document.getElementById('calc-narrative-desc').innerHTML = data.desc;
+      
+      // Screen & RAM
+      document.getElementById('calc-screen-val').innerText = data.screen;
+      document.getElementById('ram-val-100').innerText = data.ram100;
+      document.getElementById('ram-val-200').innerText = data.ram200;
+      document.getElementById('ram-val-101').innerText = data.ram101;
+      document.getElementById('ram-val-300').innerText = data.ram300;
+
+      // RAM Active Highlight
+      ['100', '200', '101', '300'].forEach(addr => {
+        const cell = document.getElementById('ram-cell-' + addr);
+        if (cell) {
+          if (data['ram' + addr] !== '-') {
+            cell.className = "p-3 rounded-xl border border-emerald-400 bg-emerald-50/70 flex items-center justify-between transition shadow-sm";
+          } else {
+            cell.className = "p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between transition";
+          }
+        }
+      });
+
+      // CPU Internals
+      document.getElementById('cu-status-text').innerText = data.cu.status;
+      document.getElementById('cu-desc-text').innerText = data.cu.desc;
+      document.getElementById('alu-status-text').innerText = data.alu.status;
+      document.getElementById('alu-desc-text').innerText = data.alu.desc;
+      document.getElementById('reg-a-val').innerText = data.regA;
+      document.getElementById('reg-b-val').innerText = data.regB;
+      document.getElementById('reg-acc-val').innerText = data.acc;
+
+      // Pipeline Nodes Active Glow
+      for (let i = 1; i <= 5; i++) {
+        const node = document.getElementById('pipe-node-' + i);
+        if (node) {
+          if (data.activeNodes.includes(i)) {
+            node.className = "pipe-box border-2 border-indigo-600 rounded-2xl p-3 sm:p-4 bg-indigo-50/90 shadow-md transform scale-105 transition duration-300";
+            node.querySelector('i').className = node.querySelector('i').className.replace('text-slate-400', 'text-indigo-600');
+          } else {
+            node.className = "pipe-box border-2 border-slate-200 rounded-2xl p-3 sm:p-4 bg-slate-50 transition";
+            node.querySelector('i').className = node.querySelector('i').className.replace('text-indigo-600', 'text-slate-400');
+          }
+        }
+      }
+    }
+
+    function calcStepNext() {
+      if (currentCalcStep < calcSteps.length - 1) {
+        currentCalcStep++;
+        updateCalcUI();
+        if (currentCalcStep === calcSteps.length - 1) {
+          confetti({ particleCount: 40, spread: 60, origin: { y: 0.8 } });
+        }
+      } else {
+        currentCalcStep = 0;
+        updateCalcUI();
+      }
+    }
+
+    function calcStepAuto() {
+      const btn = document.getElementById('btn-calc-auto');
+      if (autoPlayInterval) {
+        clearInterval(autoPlayInterval);
+        autoPlayInterval = null;
+        btn.innerHTML = `<i class="fas fa-play"></i> Auto Play`;
+        btn.className = "px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 font-bold text-sm shadow-md transition flex items-center gap-2";
+      } else {
+        btn.innerHTML = `<i class="fas fa-pause"></i> Pause`;
+        btn.className = "px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 font-bold text-sm shadow-md transition flex items-center gap-2";
+        autoPlayInterval = setInterval(() => {
+          if (currentCalcStep < calcSteps.length - 1) {
+            calcStepNext();
+          } else {
+            clearInterval(autoPlayInterval);
+            autoPlayInterval = null;
+            btn.innerHTML = `<i class="fas fa-play"></i> Auto Play`;
+            btn.className = "px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 font-bold text-sm shadow-md transition flex items-center gap-2";
+          }
+        }, 1600);
+      }
+    }
+
+    function resetCalcSim() {
+      if (autoPlayInterval) {
+        clearInterval(autoPlayInterval);
+        autoPlayInterval = null;
+        document.getElementById('btn-calc-auto').innerHTML = `<i class="fas fa-play"></i> Auto Play`;
+      }
+      currentCalcStep = 0;
+      updateCalcUI();
+    }
+
+    function pressKey(key) {
+      if (key === '3' && currentCalcStep === 0) calcStepNext();
+      else if (key === '+' && currentCalcStep === 1) calcStepNext();
+      else if (key === '5' && currentCalcStep === 2) calcStepNext();
+      else if (key === '=' && currentCalcStep === 4) calcStepNext();
+      else if (key === 'C') resetCalcSim();
+      else calcStepNext();
+    }
+
+    /* ===================================================
+       4. PRAKTIK SUSUN KOMPONEN (DIAGNOSTIK SISTEM)
+       =================================================== */
+    function applyAssemblyPreset(preset) {
+      const kb = document.getElementById('comp-keyboard');
+      const ram = document.getElementById('comp-ram');
+      const cpu = document.getElementById('comp-cpu');
+      const mon = document.getElementById('comp-monitor');
+
+      if (preset === 'only-io') {
+        kb.checked = true; ram.checked = false; cpu.checked = false; mon.checked = true;
+      } else if (preset === 'no-ram') {
+        kb.checked = true; ram.checked = false; cpu.checked = true; mon.checked = true;
+      } else if (preset === 'no-cpu') {
+        kb.checked = true; ram.checked = true; cpu.checked = false; mon.checked = true;
+      } else if (preset === 'complete') {
+        kb.checked = true; ram.checked = true; cpu.checked = true; mon.checked = true;
+      }
+      runAssemblyCheck();
+    }
+
+    function runAssemblyCheck() {
+      const kb = document.getElementById('comp-keyboard').checked;
+      const ram = document.getElementById('comp-ram').checked;
+      const cpu = document.getElementById('comp-cpu').checked;
+      const mon = document.getElementById('comp-monitor').checked;
+
+      const box = document.getElementById('assembly-diagnose-box');
+      const icon = document.getElementById('assembly-status-icon');
+      const title = document.getElementById('assembly-status-title');
+      const desc = document.getElementById('assembly-status-desc');
+
+      if (kb && ram && cpu && mon) {
+        // LENGKAP
+        box.className = "p-6 rounded-2xl bg-emerald-50 border-2 border-emerald-300 transition";
+        icon.className = "w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center text-xl flex-shrink-0 shadow-sm";
+        icon.innerHTML = `<i class="fas fa-check-circle"></i>`;
+        title.className = "text-lg font-bold text-emerald-950 mb-1";
+        title.innerText = "STATUS: SISTEM BERJALAN SEMPURNA! ✅";
+        desc.innerText = "Alur 5 tahap fisik Input -> RAM -> CPU -> RAM -> Output berjalan mulus tanpa kendala! Perhitungan 3 + 5 = 8 berhasil diproses dan tampil di layar.";
+        confetti({ particleCount: 30, spread: 60, origin: { y: 0.7 } });
+      } else if (kb && mon && !ram && !cpu) {
+        // HANYA KEYBOARD + LAYAR
+        box.className = "p-6 rounded-2xl bg-rose-50 border-2 border-rose-300 transition";
+        icon.className = "w-12 h-12 rounded-2xl bg-rose-500 text-white flex items-center justify-center text-xl flex-shrink-0 shadow-sm";
+        icon.innerHTML = `<i class="fas fa-power-off"></i>`;
+        title.className = "text-lg font-bold text-rose-950 mb-1";
+        title.innerText = "STATUS: SISTEM MATI TOTAL (NO SIGNAL) ❌";
+        desc.innerText = "Hasilnya: Layar hitam pekat tanpa respon! Keyboard tidak memiliki memori penampung sinyal, dan tidak ada sirkuit controller untuk memancarkan sinyal ke layar.";
+      } else if (kb && cpu && mon && !ram) {
+        // TANPA RAM (CPU SOMBONG CRASH)
+        box.className = "p-6 rounded-2xl bg-amber-50 border-2 border-amber-300 transition";
+        icon.className = "w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center text-xl flex-shrink-0 shadow-sm";
+        icon.innerHTML = `<i class="fas fa-crown"></i>`;
+        title.className = "text-lg font-bold text-amber-950 mb-1";
+        title.innerText = "STATUS: KASUS 'CPU SOMBONG' & CRASH ⚠️";
+        desc.innerText = "Hasilnya: CPU menolak berkomunikasi! Register CPU bekerja pada kecepatan gigahertz dan tidak bisa langsung menampung ketukan lambat keyboard. Sistem langsung macet (Deadlock) karena tidak ada RAM sebagai jembatan transit.";
+      } else if (kb && ram && mon && !cpu) {
+        // TANPA CPU (FROZEN DATA)
+        box.className = "p-6 rounded-2xl bg-sky-50 border-2 border-sky-300 transition";
+        icon.className = "w-12 h-12 rounded-2xl bg-sky-500 text-white flex items-center justify-center text-xl flex-shrink-0 shadow-sm";
+        icon.innerHTML = `<i class="fas fa-snowflake"></i>`;
+        title.className = "text-lg font-bold text-sky-950 mb-1";
+        title.innerText = "STATUS: SISTEM MEMBEKU / DUMMY TERMINAL ❄️";
+        desc.innerText = "Hasilnya: Angka 3 dan 5 masuk dan tersimpan di RAM, tetapi TIDAK BISA DIHITUNG menjadi 8! Karena tidak ada ALU/CPU untuk mengeksekusi operasi matematika. Data pasif tanpa olahan.";
+      } else {
+        // KOMBINASI LAINNYA
+        box.className = "p-6 rounded-2xl bg-slate-100 border border-slate-300 transition";
+        icon.className = "w-12 h-12 rounded-2xl bg-slate-600 text-white flex items-center justify-center text-xl flex-shrink-0";
+        icon.innerHTML = `<i class="fas fa-exclamation"></i>`;
+        title.className = "text-lg font-bold text-slate-900 mb-1";
+        title.innerText = "STATUS: KOMPONEN TIDAK LENGKAP";
+        desc.innerText = "Sistem komputer memerlukan keempat komponen dasar Arsitektur von Neumann (Input, RAM, CPU, Output) agar siklus pemrosesan data dapat berlangsung utuh.";
+      }
+    }
+
+    /* ===================================================
+       5. GAME EDUKATIF: TANTANGAN JALUR DATA
+       =================================================== */
+    let pickedSequence = [];
+    const correctSequence = [
+      'Input Keyboard',
+      'RAM (Transit Masuk)',
+      'CPU Menghitung',
+      'RAM (Transit Keluar)',
+      'Layar Output'
+    ];
+
+    function pickGameCard(cardText) {
+      if (pickedSequence.length >= 5) return;
+      pickedSequence.push(cardText);
+
+      const slotIdx = pickedSequence.length;
+      const slot = document.getElementById('game-slot-' + slotIdx);
+      if (slot) {
+        slot.className = "h-24 rounded-xl border-2 border-indigo-400 bg-indigo-50/80 p-2 flex flex-col items-center justify-center text-center text-xs font-bold text-indigo-900 shadow-sm transition";
+        slot.innerHTML = `<span class="text-[10px] text-indigo-500 font-mono mb-1">Step ${slotIdx}</span>${cardText}`;
+      }
+    }
+
+    function checkGameSequence() {
+      const msg = document.getElementById('game-feedback-msg');
+      msg.classList.remove('hidden');
+
+      if (pickedSequence.length < 5) {
+        msg.className = "mt-4 text-sm font-bold text-amber-600";
+        msg.innerText = "⚠️ Harap isi kelima slot tahapan sebelum memeriksa!";
+        return;
+      }
+
+      let isCorrect = true;
+      for (let i = 0; i < 5; i++) {
+        if (pickedSequence[i] !== correctSequence[i]) {
+          isCorrect = false;
+          break;
+        }
+      }
+
+      if (isCorrect) {
+        msg.className = "mt-4 text-sm font-bold text-emerald-600";
+        msg.innerHTML = "🎉 HEBAT! Urutanmu 100% Benar: Input &rarr; RAM &rarr; CPU &rarr; RAM &rarr; Output!";
+        document.getElementById('game-score-badge').innerText = "Skor: 100 Pts";
+        confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
+      } else {
+        msg.className = "mt-4 text-sm font-bold text-rose-600";
+        msg.innerHTML = "❌ Urutan belum tepat! Ingat Aturan Emas: RAM harus dilewati 2 kali (sebelum dan sesudah CPU)!";
+      }
+    }
+
+    function resetGameSequence() {
+      pickedSequence = [];
+      for (let i = 1; i <= 5; i++) {
+        const slot = document.getElementById('game-slot-' + i);
+        slot.className = "h-24 rounded-xl border-2 border-dashed border-slate-300 bg-white p-2 flex flex-col items-center justify-center text-center text-xs text-slate-400 font-semibold";
+        slot.innerText = i === 1 ? "Slot 1 (Awal)" : (i === 5 ? "Slot 5 (Akhir)" : "Slot " + i);
+      }
+      const msg = document.getElementById('game-feedback-msg');
+      msg.classList.add('hidden');
+    }
+
+    /* ===================================================
+       6. PRE-TEST & POST-TEST DATA & GENERATOR
+       =================================================== */
+    const pretestQuestions = [
+      {
+        q: "1. Siapakah tokoh yang pertama kali merumuskan konsep 'Stored-Program' pada tahun 1945?",
+        options: ["Alan Turing", "John von Neumann", "Charles Babbage", "Bill Gates"],
+        correct: 1,
+        exp: "John von Neumann merancang arsitektur komputer modern di mana data dan instruksi disimpan bersama di memori."
+      },
+      {
+        q: "2. Dalam arsitektur fisik komputer yang nyata, ke manakah data dari keyboard dikirim pertama kali?",
+        options: ["Langsung ke CPU", "Langsung ke Monitor", "Ke RAM (Memori Utama)", "Ke Harddisk"],
+        correct: 2,
+        exp: "Data selalu transit di RAM terlebih dahulu karena CPU menolak berhubungan langsung dengan I/O."
+      },
+      {
+        q: "3. Komponen di dalam CPU yang bertugas melakukan perhitungan matematika adalah...",
+        options: ["Control Unit (CU)", "Register", "Arithmetic Logic Unit (ALU)", "Cache Memory"],
+        correct: 2,
+        exp: "ALU (Arithmetic Logic Unit) adalah unit pelaksana perhitungan aritmatika dan evaluasi logika."
+      }
+    ];
+
+    const posttestQuestions = [
+      {
+        q: "1. Mengapa CPU disebut 'Sombong' dalam Arsitektur von Neumann?",
+        options: [
+          "Karena CPU harganya sangat mahal",
+          "Karena register CPU hanya mau berkomunikasi langsung dengan RAM akibat perbedaan kecepatan yang drastis",
+          "Karena CPU tidak membutuhkan bantuan komponen lain",
+          "Karena CPU dibuat dari bahan emas"
+        ],
+        correct: 1,
+        exp: "Kecepatan CPU berada di skala nanodetik/gigahertz, sehingga CPU hanya berkomunikasi dengan RAM sebagai transit hub berkecepatan tinggi."
+      },
+      {
+        q: "2. Pada studi kasus kalkulator (3 + 5 = 8), mengapa CPU tidak langsung menghitung saat angka 3 dan 5 dimasukkan?",
+        options: [
+          "Karena CPU kehabisan memori",
+          "Karena CPU harus menunggu instruksi pemicu eksekusi yaitu tombol '=' ditekan",
+          "Karena keyboard rusak",
+          "Karena angka 3 dan 5 masih di harddisk"
+        ],
+        correct: 1,
+        exp: "Control Unit (CU) hanya akan memerintahkan ALU melakukan penjumlahan jika menerima sinyal eksekusi penutup (tombol '=')."
+      },
+      {
+        q: "3. Manakah urutan siklus mesin (Machine Cycle) yang benar?",
+        options: [
+          "Execute -> Decode -> Fetch -> Writeback",
+          "Fetch -> Decode -> Execute -> Writeback",
+          "Decode -> Fetch -> Writeback -> Execute",
+          "Writeback -> Execute -> Decode -> Fetch"
+        ],
+        correct: 1,
+        exp: "Siklus mesin CPU selalu diawali dengan Fetch (mengambil), Decode (menerjemahkan), Execute (menjalankan), dan Writeback (menulis balik)."
+      },
+      {
+        q: "4. Manakah analogi yang paling tepat untuk menggambarkan perbedaan RAM dan Harddisk/SSD?",
+        options: [
+          "RAM = Lemari Arsip Raksasa, SSD = Meja Kerja",
+          "RAM = Meja Kerja Dokumen Aktif, SSD/Harddisk = Lemari Arsip Raksasa",
+          "RAM = Jalan Tol, SSD = Lampu Merah",
+          "RAM = Monitor Layar, SSD = Keyboard"
+        ],
+        correct: 1,
+        exp: "Berdasarkan materi: RAM dianalogikan sebagai Meja Kerja yang hanya memuat dokumen aktif (~10ns), sedangkan SSD/Harddisk adalah Lemari Arsip Raksasa yang permanen tapi lambat diakses (~10ms)."
+      },
+      {
+        q: "5. Jalur bus di motherboard yang membawa sinyal instruksi komando READ dan WRITE dari CU disebut...",
+        options: ["Data Bus", "Address Bus", "Control Bus", "USB Bus"],
+        correct: 2,
+        exp: "Control Bus adalah jalur pembawa sinyal komando pengendalian seperti sinyal Read, Write, Clock, dan Interrupt."
+      }
+    ];
+
+    function renderQuizzes() {
+      // Render Pre-test
+      const preContainer = document.getElementById('pretest-quiz-container');
+      if (preContainer) {
+        preContainer.innerHTML = pretestQuestions.map((item, idx) => `
+          <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="font-bold text-slate-900 text-base mb-3">${item.q}</div>
+            <div class="space-y-2">
+              ${item.options.map((opt, optIdx) => `
+                <button onclick="answerQuiz('pre', ${idx}, ${optIdx})" id="pre-${idx}-${optIdx}" class="w-full text-left p-3.5 rounded-xl border border-slate-200 bg-white hover:bg-orange-50/70 text-slate-700 text-sm font-medium transition">
+                  <span class="font-bold mr-2">${String.fromCharCode(65 + optIdx)}.</span> ${opt}
+                </button>
+              `).join('')}
+            </div>
+            <div id="pre-feedback-${idx}" class="mt-3 text-xs font-bold hidden"></div>
+          </div>
+        `).join('');
+      }
+
+      // Render Post-test
+      const postContainer = document.getElementById('posttest-quiz-container');
+      if (postContainer) {
+        postContainer.innerHTML = posttestQuestions.map((item, idx) => `
+          <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="font-bold text-slate-900 text-base mb-3">${item.q}</div>
+            <div class="space-y-2">
+              ${item.options.map((opt, optIdx) => `
+                <button onclick="answerQuiz('post', ${idx}, ${optIdx})" id="post-${idx}-${optIdx}" class="w-full text-left p-3.5 rounded-xl border border-slate-200 bg-white hover:bg-indigo-50/70 text-slate-700 text-sm font-medium transition">
+                  <span class="font-bold mr-2">${String.fromCharCode(65 + optIdx)}.</span> ${opt}
+                </button>
+              `).join('')}
+            </div>
+            <div id="post-feedback-${idx}" class="mt-3 text-xs font-bold hidden"></div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function answerQuiz(type, qIdx, optIdx) {
+      const qList = type === 'pre' ? pretestQuestions : posttestQuestions;
+      const question = qList[qIdx];
+      const isCorrect = optIdx === question.correct;
+
+      // Disable buttons for this question
+      for (let i = 0; i < question.options.length; i++) {
+        const btn = document.getElementById(`${type}-${qIdx}-${i}`);
+        if (btn) {
+          btn.disabled = true;
+          if (i === question.correct) {
+            btn.className = "w-full text-left p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 text-sm font-bold";
+          } else if (i === optIdx && !isCorrect) {
+            btn.className = "w-full text-left p-3.5 rounded-xl border-2 border-rose-400 bg-rose-50 text-rose-900 text-sm font-medium";
+          } else {
+            btn.className = "w-full text-left p-3.5 rounded-xl border border-slate-200 bg-slate-100 text-slate-400 text-sm";
+          }
+        }
+      }
+
+      const fb = document.getElementById(`${type}-feedback-${qIdx}`);
+      if (fb) {
+        fb.classList.remove('hidden');
+        if (isCorrect) {
+          fb.className = "mt-3 p-3 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-medium border border-emerald-200";
+          fb.innerHTML = `✅ <b>Jawaban Benar!</b> ${question.exp}`;
+        } else {
+          fb.className = "mt-3 p-3 rounded-xl bg-rose-50 text-rose-800 text-xs font-medium border border-rose-200";
+          fb.innerHTML = `❌ <b>Jawaban Kurang Tepat.</b> ${question.exp}`;
+        }
+      }
+    }
+
+    /* ===================================================
+       8. LKPD DIGITAL: DYNAMIC AUTO-EXPAND, AUTO-SAVE & PDF
+       =================================================== */
+    const lkpdFields = [
+      'lkpd-name-1', 'lkpd-nis-1',
+      'lkpd-name-2', 'lkpd-nis-2',
+      'lkpd-class', 'lkpd-date',
+      'tp1-1', 'tp1-2', 'tp1-3', 'tp1-4', 'tp1-5', 'tp1-6', 'refleksi-tp1',
+      'tp2-1', 'tp2-2', 'tp2-3', 'tp2-4', 'tp2-5', 'tp2-6',
+      'tp2-q1', 'tp2-q2', 'tp2-q3',
+      'refleksi-q1', 'refleksi-q2', 'refleksi-q3',
+      'lkpd-feeling', 'lkpd-feeling-note'
+    ];
+
+    // Fungsi otomatis menyesuaikan tinggi textarea ke bawah sesuai isi teks
+    function autoResizeTextarea(el) {
+      if (!el) return;
+      el.style.height = 'auto';
+      el.style.height = (el.scrollHeight) + 'px';
+    }
+
+    function resizeAllLKPDTextareas() {
+      document.querySelectorAll('#print-lkpd-area textarea.auto-expand').forEach(ta => {
+        autoResizeTextarea(ta);
+      });
+    }
+
+    // Fungsi memilih kesan/perasaan pembelajaran
+    function selectFeeling(val) {
+      const hiddenInput = document.getElementById('lkpd-feeling');
+      if (hiddenInput) {
+        hiddenInput.value = val;
+        localStorage.setItem('bilik_lkpd_lkpd-feeling', val);
+      }
+
+      const feelings = ['menyenangkan', 'bingung', 'biasa', 'menantang'];
+      feelings.forEach(f => {
+        const btn = document.getElementById('feeling-btn-' + f);
+        if (!btn) return;
+        if (f === val) {
+          btn.className = "feeling-option-btn p-3 rounded-xl border-2 border-indigo-600 bg-indigo-50/90 ring-2 ring-indigo-500/40 text-center transition flex flex-col items-center justify-center gap-1 shadow-sm cursor-pointer";
+        } else {
+          btn.className = "feeling-option-btn p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/60 text-center transition flex flex-col items-center justify-center gap-1 group opacity-60 hover:opacity-100 cursor-pointer";
+        }
+      });
+
+      showAutoSaveIndicator();
+    }
+
+    function initLKPDAutoSave() {
+      // Set default date to today if empty
+      const dateInput = document.getElementById('lkpd-date');
+      if (dateInput && !dateInput.value) {
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.value = today;
+      }
+
+      // Restore saved values from localStorage
+      lkpdFields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          const saved = localStorage.getItem('bilik_lkpd_' + id);
+          if (saved !== null) {
+            el.value = saved;
+          }
+          // Listen to change/input to auto-save & auto-resize
+          el.addEventListener('input', () => {
+            localStorage.setItem('bilik_lkpd_' + id, el.value);
+            if (el.classList.contains('auto-expand')) {
+              autoResizeTextarea(el);
+            }
+            showAutoSaveIndicator();
+          });
+        }
+      });
+
+      // Restore saved feeling
+      const savedFeeling = localStorage.getItem('bilik_lkpd_lkpd-feeling');
+      if (savedFeeling) {
+        selectFeeling(savedFeeling);
+      }
+
+      // Initial auto resize of textareas after DOM ready
+      setTimeout(resizeAllLKPDTextareas, 100);
+    }
+
+    function showAutoSaveIndicator() {
+      const toast = document.getElementById('lkpd-autosave-toast');
+      if (!toast) return;
+      toast.innerHTML = `<i class="fas fa-check-circle text-emerald-600"></i> <span>Tersimpan otomatis (${new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' })})</span>`;
+    }
+
+    function resetLKPDForm() {
+      if (!confirm('Apakah kamu yakin ingin mengosongkan seluruh isian LKPD?')) return;
+      lkpdFields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          if (id === 'lkpd-date') {
+            el.value = new Date().toISOString().split('T')[0];
+          } else {
+            el.value = '';
+          }
+          localStorage.removeItem('bilik_lkpd_' + id);
+          if (el.classList.contains('auto-expand')) {
+            el.style.height = 'auto';
+          }
+        }
+      });
+
+      // Reset feeling buttons
+      const hiddenFeeling = document.getElementById('lkpd-feeling');
+      if (hiddenFeeling) hiddenFeeling.value = '';
+      localStorage.removeItem('bilik_lkpd_lkpd-feeling');
+      ['menyenangkan', 'bingung', 'biasa', 'menantang'].forEach(f => {
+        const btn = document.getElementById('feeling-btn-' + f);
+        if (btn) {
+          btn.className = "feeling-option-btn p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/60 text-center transition flex flex-col items-center justify-center gap-1 group cursor-pointer";
+        }
+      });
+
+      alert('Isian LKPD telah dibersihkan.');
+    }
+
+    function downloadLKPDAsPDF() {
+      const btn = document.getElementById('btn-download-pdf');
+      const originalHTML = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-1"></i> <span>Memproses PDF...</span>`;
+
+      // Student names for filename
+      const name1 = document.getElementById('lkpd-name-1')?.value?.trim() || '';
+      const name2 = document.getElementById('lkpd-name-2')?.value?.trim() || '';
+      let namePart = 'Kelompok';
+      if (name1 && name2) {
+        namePart = `${name1}_${name2}`;
+      } else if (name1) {
+        namePart = name1;
+      } else if (name2) {
+        namePart = name2;
+      }
+      const cleanName = namePart.replace(/[^a-zA-Z0-9_-]/g, '_');
+      const filename = `LKPD_Arsitektur_Von_Neumann_${cleanName}.pdf`;
+
+      // Original printable container
+      const source = document.getElementById('print-lkpd-area');
+      if (!source) {
+        alert('Area dokumen tidak ditemukan.');
+        btn.disabled = false;
+        btn.innerHTML = originalHTML;
+        return;
+      }
+
+      // Clone container to prevent mutating UI on screen
+      const clone = source.cloneNode(true);
+
+      // In clone: Format the chosen sentiment / feeling card cleanly for printout
+      const feelingVal = document.getElementById('lkpd-feeling')?.value?.trim() || '';
+      const cloneFeelingContainer = clone.querySelector('#lkpd-feeling-options');
+      if (cloneFeelingContainer) {
+        const feelingMap = {
+          'menyenangkan': { icon: '😄', title: 'Sangat Menyenangkan & Paham', desc: 'Materinya seru, jelas, dan simulasi interaktifnya sangat membantu!', color: 'bg-emerald-50 border-emerald-400 text-emerald-900' },
+          'bingung': { icon: '🤔', title: 'Masih Bingung / Butuh Bimbingan', desc: 'Masih ada beberapa konsep atau alur kerja komputer yang belum dipahami.', color: 'bg-amber-50 border-amber-400 text-amber-900' },
+          'biasa': { icon: '😐', title: 'Biasa Aja', desc: 'Bisa mengikuti dengan baik, tapi butuh lebih banyak latihan dan contoh.', color: 'bg-blue-50 border-blue-400 text-blue-900' },
+          'menantang': { icon: '🤯', title: 'Menantang & Keren', desc: 'Materinya mendalam dan rumit, tapi menantang untuk dipelajari!', color: 'bg-purple-50 border-purple-400 text-purple-900' }
+        };
+
+        const feelingInfo = feelingMap[feelingVal];
+        const sentimentCard = document.createElement('div');
+        sentimentCard.className = "w-full p-3 rounded-xl border-2 lkpd-avoid-break mb-2 flex items-center gap-3";
+        if (feelingInfo) {
+          sentimentCard.className += " " + feelingInfo.color;
+          sentimentCard.innerHTML = `<span class="text-3xl">${feelingInfo.icon}</span><div><div class="font-extrabold text-xs sm:text-sm tracking-wide">Pilihan Murid: ${feelingInfo.title}</div><div class="text-[11px] opacity-80 mt-0.5">${feelingInfo.desc}</div></div>`;
+        } else {
+          sentimentCard.className += " bg-slate-50 border-slate-300 text-slate-500 italic text-xs";
+          sentimentCard.innerHTML = `<span>(Murid belum memilih penilaian kesan/perasaan pembelajaran)</span>`;
+        }
+        cloneFeelingContainer.parentNode.replaceChild(sentimentCard, cloneFeelingContainer);
+      }
+
+      // Map values from inputs/textareas to clean text elements in clone
+      const originalInputs = source.querySelectorAll('input:not(#lkpd-feeling), textarea');
+      const cloneInputs = clone.querySelectorAll('input:not(#lkpd-feeling), textarea');
+
+      for (let i = 0; i < originalInputs.length; i++) {
+        const orig = originalInputs[i];
+        const cln = cloneInputs[i];
+        if (!cln) continue;
+        const val = orig.value.trim();
+
+        const replacement = document.createElement('div');
+        if (orig.tagName.toLowerCase() === 'textarea') {
+          replacement.className = "w-full p-2.5 rounded-lg border border-slate-300 bg-slate-50 text-xs text-slate-800 whitespace-pre-wrap font-medium lkpd-avoid-break";
+          replacement.style.wordBreak = "break-word";
+          replacement.style.height = "auto";
+          replacement.style.minHeight = "36px";
+          replacement.innerText = val ? val : '(belum diisi)';
+          if (!val) {
+            replacement.className = "w-full p-2.5 rounded-lg border border-slate-200 bg-slate-50/50 text-xs text-slate-400 italic font-medium lkpd-avoid-break";
+          }
+        } else {
+          replacement.className = "w-full py-1 px-1.5 text-xs font-bold text-slate-800";
+          replacement.innerText = val ? val : '-';
+          if (!val) {
+            replacement.className = "w-full py-1 px-1.5 text-xs font-semibold text-slate-400 italic";
+          }
+        }
+        cln.parentNode.replaceChild(replacement, cln);
+      }
+
+      // Ensure table wrappers do not clip or hide overflow
+      clone.querySelectorAll('.lkpd-table-wrapper').forEach(w => {
+        w.style.overflow = 'visible';
+        w.classList.remove('overflow-x-auto');
+      });
+
+      // Ensure all table rows avoid break
+      clone.querySelectorAll('tr').forEach(r => {
+        r.style.pageBreakInside = 'avoid';
+        r.style.breakInside = 'avoid';
+      });
+
+      // Fixed container styles for exact A4 conversion
+      clone.style.width = '794px'; // 210mm at 96 DPI
+      clone.style.margin = '0 auto';
+      clone.style.padding = '0';
+      clone.style.background = '#ffffff';
+
+      // Ensure page-break class has clean page break in PDF engine
+      const breaks = clone.querySelectorAll('.page-break');
+      breaks.forEach(b => {
+        b.style.pageBreakAfter = 'always';
+        b.style.breakAfter = 'page';
+        b.style.height = '0';
+        b.style.margin = '0';
+        b.style.padding = '0';
+      });
+
+      // Settings for html2pdf to prevent any cutting across page breaks
+      const opt = {
+        margin: [8, 8, 8, 8],
+        filename: filename,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          letterRendering: true,
+          scrollY: 0,
+          scrollX: 0
+        },
+        jsPDF: {
+          unit: 'mm',
+          format: 'a4',
+          orientation: 'portrait'
+        },
+        pagebreak: {
+          mode: ['avoid-all', 'css', 'legacy'],
+          avoid: ['.lkpd-avoid-break', 'tr']
+        }
+      };
+
+      // Generate PDF
+      if (typeof html2pdf !== 'undefined') {
+        html2pdf().set(opt).from(clone).save().then(() => {
+          btn.disabled = false;
+          btn.innerHTML = originalHTML;
+          confetti({ particleCount: 40, spread: 60, origin: { y: 0.6 } });
+        }).catch(err => {
+          console.error('html2pdf generation error:', err);
+          btn.disabled = false;
+          btn.innerHTML = originalHTML;
+          window.print();
+        });
+      } else {
+        btn.disabled = false;
+        btn.innerHTML = originalHTML;
+        window.print();
+      }
+    }
+
+    /* ===================================================
+       9. LEADERBOARD MODAL
+       =================================================== */
+    function openLeaderboardModal() {
+      const modal = document.getElementById('leaderboard-modal');
+      if (modal) modal.classList.remove('hidden');
+    }
+    function closeLeaderboardModal() {
+      const modal = document.getElementById('leaderboard-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    // Initialize on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      updateCalcUI();
+      renderQuizzes();
+      initLKPDAutoSave();
+    });
+  </script>
+
+</body>
+</html>

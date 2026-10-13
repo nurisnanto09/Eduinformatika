@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Lapisan Bawang Sistem Operasi & Software | Bilik Komputasi</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome 6 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        * { font-family: 'Poppins', sans-serif; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+
+        /* Onion Rings Styles */
+        .onion-ring {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .onion-ring:hover {
+            filter: brightness(1.15);
+            transform: scale(1.015);
+        }
+        .onion-ring.active-ring {
+            stroke-width: 4px;
+            stroke: #38bdf8;
+            filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.6));
+        }
+
+        /* Pulse wave animation through layers */
+        @keyframes ring-pulse {
+            0% { transform: scale(0.96); opacity: 0.4; }
+            50% { transform: scale(1.02); opacity: 1; }
+            100% { transform: scale(0.96); opacity: 0.4; }
+        }
+        .pulse-layer {
+            animation: ring-pulse 1s infinite ease-in-out;
+        }
+
+        .tab-btn.active {
+            background-color: #D97706;
+            color: #FFFFFF;
+            box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35);
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col selection:bg-amber-500 selection:text-white">
+
+    <!-- ==================== HEADER (BILIK KOMPUTASI BRAND) ==================== -->
+    <header class="bg-slate-950/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <a href="materi_siswa.html" class="flex items-center gap-2.5 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white text-lg shadow-md shadow-indigo-600/30 group-hover:scale-105 transition">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="flex items-baseline">
+                        <span class="text-lg font-extrabold text-white tracking-tight">Bilik&nbsp;</span>
+                        <span class="text-lg font-extrabold text-indigo-400 tracking-tight">Komputasi</span>
+                    </div>
+                </a>
+                <span class="text-slate-600 hidden sm:inline">|</span>
+                <div class="hidden sm:block">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400 block">Sistem Komputer • Kelas X</span>
+                    <h1 class="text-sm font-bold text-slate-200">Sistem Operasi, Lapisan Bawang & Software</h1>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-4">
+                <a href="index.html" class="text-slate-300 hover:text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition">
+                    <i class="fas fa-home text-slate-400"></i> <span class="hidden md:inline">Beranda</span>
+                </a>
+                <a href="materi_siswa.html" class="text-indigo-400 hover:text-indigo-300 text-xs sm:text-sm font-bold flex items-center gap-1.5 transition">
+                    <i class="fas fa-book-open"></i> <span>Materi</span>
+                </a>
+                <a href="kisi.html" class="px-3 py-1.5 rounded-full border border-indigo-400/50 text-indigo-300 hover:bg-indigo-950/50 text-xs font-semibold shadow-sm transition flex items-center gap-1.5">
+                    <i class="fas fa-id-card-alt"></i>
+                    <span>Portal Guru</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== TAB NAVIGATION ==================== -->
+    <nav class="bg-slate-950/50 border-b border-slate-800/80 px-4 sm:px-6 py-2.5">
+        <div class="max-w-7xl mx-auto flex items-center justify-between overflow-x-auto gap-2">
+            <div class="flex items-center gap-1.5 min-w-max">
+                <button onclick="switchTab('onion')" id="tab-btn-onion" class="tab-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2">
+                    <i class="fas fa-circle-nodes"></i>
+                    <span>Eksplorasi Lapisan Bawang</span>
+                </button>
+                <button onclick="switchTab('trace')" id="tab-btn-trace" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white hover:bg-slate-800/60 transition flex items-center gap-2">
+                    <i class="fas fa-route"></i>
+                    <span>Simulasi Alur Aksi (Tracer)</span>
+                </button>
+                <button onclick="switchTab('klasifikasi')" id="tab-btn-klasifikasi" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white hover:bg-slate-800/60 transition flex items-center gap-2">
+                    <i class="fas fa-cubes"></i>
+                    <span>Klasifikasi Software</span>
+                </button>
+                <button onclick="switchTab('game')" id="tab-btn-game" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white hover:bg-slate-800/60 transition flex items-center gap-2">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Tantangan Sortir Software</span>
+                </button>
+            </div>
+
+            <div class="hidden md:flex items-center gap-2 text-xs text-slate-400">
+                <span class="text-amber-400 font-bold"><i class="fas fa-shield-alt mr-1"></i>Ring 0 (Kernel)</span>
+                <span>vs</span>
+                <span class="text-blue-400 font-bold"><i class="fas fa-user-shield mr-1"></i>Ring 3 (User Space)</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="flex-1 max-w-7xl mx-auto w-full p-4 sm:p-6 lg:p-8">
+
+        <!-- ========================================================================= -->
+        <!-- TAB 1: EKSPLORASI LAPISAN BAWANG INTERAKTIF (ONION RING EXPLORER)        -->
+        <!-- ========================================================================= -->
+        <section id="tab-onion" class="tab-content block space-y-6">
+
+            <!-- Banner info -->
+            <div class="bg-gradient-to-r from-amber-950/40 via-slate-800 to-slate-900 border border-amber-500/30 rounded-3xl p-5 sm:p-6 shadow-xl">
+                <div class="max-w-3xl">
+                    <span class="text-xs font-bold uppercase tracking-widest text-amber-400 mb-1.5 block">Arsitektur Berlapis Sistem Operasi</span>
+                    <h2 class="text-xl sm:text-2xl font-black text-white mb-2">Model Lapisan Bawang (The Onion Ring Architecture)</h2>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        Mengapa disebut lapisan bawang? Karena seperti mengupas bawang, sistem komputer dirancang berlapis-lapis konsentris. Lapisan luar melindungi lapisan dalam, dan setiap lapisan hanya dapat berkomunikasi dengan lapisan tepat di atas atau di bawahnya melalui antarmuka yang terstandarisasi.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Onion Diagram & Detail Panel -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                
+                <!-- Left: SVG Concentric Onion Rings (Col 1-6) -->
+                <div class="lg:col-span-6 bg-slate-800/90 border border-slate-700 rounded-3xl p-6 shadow-xl flex flex-col items-center">
+                    <div class="w-full flex items-center justify-between pb-3 mb-2 border-b border-slate-700 text-xs">
+                        <span class="font-bold text-slate-300"><i class="fas fa-hand-pointer text-amber-400 mr-1.5"></i>Klik Lingkaran untuk Membedah Lapisan</span>
+                        <span class="font-mono text-slate-400 text-[11px]">Dari Luar ke Inti</span>
+                    </div>
+
+                    <!-- SVG Rings Diagram -->
+                    <div class="relative w-full max-w-[420px] aspect-square flex items-center justify-center py-4">
+                        <svg viewBox="0 0 500 500" class="w-full h-full drop-shadow-2xl select-none">
+                            <!-- Layer 5: User (Outermost) -->
+                            <circle cx="250" cy="250" r="235" fill="#3B82F6" fill-opacity="0.22" stroke="#60A5FA" stroke-width="2.5" class="onion-ring" id="ring-5" onclick="selectLayer(5)" />
+                            
+                            <!-- Layer 4: Application Software -->
+                            <circle cx="250" cy="250" r="195" fill="#8B5CF6" fill-opacity="0.28" stroke="#A78BFA" stroke-width="2.5" class="onion-ring" id="ring-4" onclick="selectLayer(4)" />
+                            
+                            <!-- Layer 3: System Software & Utilities / Shell -->
+                            <circle cx="250" cy="250" r="155" fill="#EC4899" fill-opacity="0.32" stroke="#F472B6" stroke-width="2.5" class="onion-ring" id="ring-3" onclick="selectLayer(3)" />
+                            
+                            <!-- Layer 2: System Calls & OS API -->
+                            <circle cx="250" cy="250" r="115" fill="#F59E0B" fill-opacity="0.40" stroke="#FBBF24" stroke-width="2.5" class="onion-ring" id="ring-2" onclick="selectLayer(2)" />
+                            
+                            <!-- Layer 1: OS Kernel (Heart) -->
+                            <circle cx="250" cy="250" r="75" fill="#10B981" fill-opacity="0.55" stroke="#34D399" stroke-width="3" class="onion-ring" id="ring-1" onclick="selectLayer(1)" />
+                            
+                            <!-- Layer 0: Hardware (Core Center) -->
+                            <circle cx="250" cy="250" r="38" fill="#EF4444" fill-opacity="0.85" stroke="#F87171" stroke-width="3" class="onion-ring" id="ring-0" onclick="selectLayer(0)" />
+
+                            <!-- Center Label -->
+                            <text x="250" y="246" text-anchor="middle" fill="#FFFFFF" font-size="11" font-weight="bold" pointer-events="none">HARDWARE</text>
+                            <text x="250" y="260" text-anchor="middle" fill="#FECACA" font-size="9" font-family="monospace" pointer-events="none">(L-0)</text>
+
+                            <!-- Outer Text Labels -->
+                            <text x="250" y="90" text-anchor="middle" fill="#93C5FD" font-size="11" font-weight="bold" pointer-events="none">USER / PENGGUNA (L-5)</text>
+                            <text x="250" y="130" text-anchor="middle" fill="#C4B5FD" font-size="10.5" font-weight="bold" pointer-events="none">APLIKASI (L-4)</text>
+                            <text x="250" y="165" text-anchor="middle" fill="#F9A8D4" font-size="10" font-weight="bold" pointer-events="none">UTILITAS & SHELL (L-3)</text>
+                            <text x="250" y="200" text-anchor="middle" fill="#FDE68A" font-size="9.5" font-weight="bold" pointer-events="none">SYSTEM CALL (L-2)</text>
+                            <text x="250" y="224" text-anchor="middle" fill="#A7F3D0" font-size="9.5" font-weight="bold" pointer-events="none">KERNEL (L-1)</text>
+                        </svg>
+                    </div>
+
+                    <!-- Quick Layer Switch Buttons -->
+                    <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5 w-full mt-2">
+                        <button onclick="selectLayer(0)" id="lbtn-0" class="layer-pill-btn p-2 rounded-xl text-[11px] font-bold bg-slate-900 border border-red-500/40 text-red-300 hover:bg-red-950/40 transition text-center">
+                            L-0 Core<br><span class="text-[9px] text-slate-400">Hardware</span>
+                        </button>
+                        <button onclick="selectLayer(1)" id="lbtn-1" class="layer-pill-btn p-2 rounded-xl text-[11px] font-bold bg-slate-900 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-950/40 transition text-center">
+                            L-1 Ring 0<br><span class="text-[9px] text-slate-400">Kernel OS</span>
+                        </button>
+                        <button onclick="selectLayer(2)" id="lbtn-2" class="layer-pill-btn p-2 rounded-xl text-[11px] font-bold bg-slate-900 border border-amber-500/40 text-amber-300 hover:bg-amber-950/40 transition text-center">
+                            L-2 Gate<br><span class="text-[9px] text-slate-400">System Call</span>
+                        </button>
+                        <button onclick="selectLayer(3)" id="lbtn-3" class="layer-pill-btn p-2 rounded-xl text-[11px] font-bold bg-slate-900 border border-pink-500/40 text-pink-300 hover:bg-pink-950/40 transition text-center">
+                            L-3 Shell<br><span class="text-[9px] text-slate-400">Utilitas</span>
+                        </button>
+                        <button onclick="selectLayer(4)" id="lbtn-4" class="layer-pill-btn p-2 rounded-xl text-[11px] font-bold bg-slate-900 border border-purple-500/40 text-purple-300 hover:bg-purple-950/40 transition text-center">
+                            L-4 Apps<br><span class="text-[9px] text-slate-400">Aplikasi</span>
+                        </button>
+                        <button onclick="selectLayer(5)" id="lbtn-5" class="layer-pill-btn p-2 rounded-xl text-[11px] font-bold bg-slate-900 border border-blue-500/40 text-blue-300 hover:bg-blue-950/40 transition text-center">
+                            L-5 Brain<br><span class="text-[9px] text-slate-400">User</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right: Detailed Info Card for Selected Layer (Col 7-12) -->
+                <div class="lg:col-span-6 bg-slate-800/90 border border-slate-700 rounded-3xl p-6 shadow-xl flex flex-col justify-between min-h-[460px]">
+                    <div id="layer-details-box">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-700 flex items-center justify-between text-xs text-slate-400">
+                        <span class="flex items-center gap-1.5">
+                            <i class="fas fa-lightbulb text-amber-400"></i>
+                            Prinsip Isolasi: Mencegah Kernel Panic & Crash Total
+                        </span>
+                        <span class="font-mono text-cyan-400">Layer <span id="current-layer-num">1</span> of 5</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- TAB 2: SIMULASI ALUR AKSI MENEMBUS LAPISAN (ACTION TRACER)               -->
+        <!-- ========================================================================= -->
+        <section id="tab-trace" class="tab-content hidden space-y-6">
+
+            <div class="bg-slate-800/90 border border-slate-700 rounded-3xl p-6 shadow-xl">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 mb-6 border-b border-slate-700">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-emerald-400">Visualizer Alur Instruksi</span>
+                        <h2 class="text-xl sm:text-2xl font-black text-white">Bagaimana Perintah Menembus Lapisan Bawang?</h2>
+                        <p class="text-xs sm:text-sm text-slate-400">Pilih skenario aksi nyata untuk melihat perjalanan instruksi dari luar ke dalam.</p>
+                    </div>
+
+                    <select id="trace-select" onchange="loadTraceScenario()" class="bg-slate-900 border border-slate-700 text-white rounded-xl px-3.5 py-2 text-sm font-semibold focus:outline-none focus:border-amber-500">
+                        <option value="save">Skenario 1: Menyimpan File Word (Ctrl+S)</option>
+                        <option value="youtube">Skenario 2: Memutar Video YouTube di Chrome</option>
+                        <option value="camera">Skenario 3: Mengaktifkan Kamera Webcam Laptop</option>
+                        <option value="virus">Skenario 4: Aplikasi Ilegal Dicegat System Call (Aman!)</option>
+                    </select>
+                </div>
+
+                <!-- Trace Visual Step-by-Step Cards -->
+                <div id="trace-cards-container" class="space-y-3.5">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- Control Button -->
+                <div class="mt-6 pt-4 border-t border-slate-700 flex items-center justify-between">
+                    <span id="trace-summary-text" class="text-xs text-slate-300 font-medium">Klik "Langkah Berikutnya" untuk menjalankan alur layer demi layer.</span>
+                    <button onclick="advanceTraceStep()" class="px-5 py-2.5 bg-amber-600 hover:bg-amber-500 text-white rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 shadow-lg shadow-amber-600/20">
+                        <i class="fas fa-arrow-down"></i>
+                        <span>Langkah Alur Berikutnya</span>
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- TAB 3: KLASIFIKASI LENGKAP SOFTWARE & LISENSI                            -->
+        <!-- ========================================================================= -->
+        <section id="tab-klasifikasi" class="tab-content hidden space-y-6">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Classification 1: By Function -->
+                <div class="bg-slate-800/90 border border-slate-700 rounded-3xl p-6 shadow-xl space-y-4">
+                    <div class="flex items-center gap-3 pb-3 border-b border-slate-700">
+                        <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-lg font-bold border border-blue-500/30">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-black text-white">Klasifikasi Berdasarkan Fungsi</h3>
+                            <p class="text-xs text-slate-400">Pembagian peran perangkat lunak dalam ekosistem</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="bg-slate-900 p-3.5 rounded-2xl border border-slate-800">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="font-bold text-sm text-blue-400">1. Sistem Operasi (Operating System)</span>
+                                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800">Fondasi</span>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed mb-2">Mengelola seluruh perangkat keras dan menjadi wadah bagi berjalannya aplikasi.</p>
+                            <span class="text-[11px] text-slate-400 font-mono">Contoh: Windows 11, Linux (Ubuntu), macOS Sonoma, Android, iOS.</span>
+                        </div>
+
+                        <div class="bg-slate-900 p-3.5 rounded-2xl border border-slate-800">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="font-bold text-sm text-pink-400">2. Software Utilitas (Utility Program)</span>
+                                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-pink-950 text-pink-300 border border-pink-800">Pemeliharaan</span>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed mb-2">Membantu merawat, menganalisis, mengoptimalkan, dan mengamankan komputer.</p>
+                            <span class="text-[11px] text-slate-400 font-mono">Contoh: Antivirus (Windows Defender, Avast), WinRAR, Disk Cleanup, Task Manager.</span>
+                        </div>
+
+                        <div class="bg-slate-900 p-3.5 rounded-2xl border border-slate-800">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="font-bold text-sm text-purple-400">3. Software Aplikasi (Application Software)</span>
+                                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800">Produktivitas</span>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed mb-2">Membantu manusia menyelesaikan pekerjaan spesifik, komunikasi, atau rekreasi.</p>
+                            <span class="text-[11px] text-slate-400 font-mono">Contoh: Chrome, MS Word, Excel, Photoshop, VLC Media Player, Canva.</span>
+                        </div>
+
+                        <div class="bg-slate-900 p-3.5 rounded-2xl border border-slate-800">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="font-bold text-sm text-emerald-400">4. Perangkat Lunak Pemrograman</span>
+                                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Pembangun</span>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed mb-2">Alat untuk menulis, mengompilasi, dan menguji kode program komputer.</p>
+                            <span class="text-[11px] text-slate-400 font-mono">Contoh: VS Code, Python Interpreter, GCC Compiler, Android Studio.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Classification 2: By License / Distribution -->
+                <div class="bg-slate-800/90 border border-slate-700 rounded-3xl p-6 shadow-xl space-y-4">
+                    <div class="flex items-center gap-3 pb-3 border-b border-slate-700">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg font-bold border border-amber-500/30">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-black text-white">Klasifikasi Berdasarkan Lisensi</h3>
+                            <p class="text-xs text-slate-400">Hak cipta dan legalitas penggunaan perangkat lunak</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="bg-slate-900 p-3.5 rounded-2xl border border-slate-800">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="font-bold text-sm text-emerald-400">1. Open Source (Sumber Terbuka)</span>
+                                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Bebas & Terbuka</span>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed mb-2">Kode sumber dibuka untuk umum, boleh dimodifikasi, dipelajari, dan disebarluaskan.</p>
+                            <span class="text-[11px] text-slate-400 font-mono">Contoh: Linux Ubuntu, Blender 3D, VS Code, Python, GIMP, VLC.</span>
+                        </div>
+
+                        <div class="bg-slate-900 p-3.5 rounded-2xl border border-slate-800">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="font-bold text-sm text-red-400">2. Proprietary / Komersial</span>
+                                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-red-950 text-red-300 border border-red-800">Berbayar Tertutup</span>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed mb-2">Kode sumber tertutup (rahasia pabrik) dan pengguna wajib membeli lisensi resmi.</p>
+                            <span class="text-[11px] text-slate-400 font-mono">Contoh: Microsoft Windows, Adobe Creative Cloud, AutoCAD, CorelDRAW.</span>
+                        </div>
+
+                        <div class="bg-slate-900 p-3.5 rounded-2xl border border-slate-800">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="font-bold text-sm text-cyan-400">3. Freeware</span>
+                                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">Gratis Tertutup</span>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed mb-2">Bebas diunduh dan digunakan tanpa bayar, namun kode sumber tetap dirahasiakan.</p>
+                            <span class="text-[11px] text-slate-400 font-mono">Contoh: Google Chrome, WhatsApp Desktop, Adobe Acrobat Reader.</span>
+                        </div>
+
+                        <div class="bg-slate-900 p-3.5 rounded-2xl border border-slate-800">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="font-bold text-sm text-amber-400">4. Shareware / Trial</span>
+                                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">Uji Coba Terbatas</span>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed mb-2">Diberikan secara gratis untuk masa percobaan (misal 30 hari), setelah itu harus membeli.</p>
+                            <span class="text-[11px] text-slate-400 font-mono">Contoh: WinRAR (evaluasi 40 hari), Antivirus Trial Edition.</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- TAB 4: MINI GAME TANTANGAN SORTIR SOFTWARE                               -->
+        <!-- ========================================================================= -->
+        <section id="tab-game" class="tab-content hidden space-y-6">
+
+            <div class="bg-slate-800/90 border border-slate-700 rounded-3xl p-6 sm:p-8 shadow-xl">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 mb-6 border-b border-slate-700">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-amber-400">Game Edukasi</span>
+                        <h2 class="text-xl sm:text-2xl font-black text-white">Misi Sortir: Di Mana Letak Software Ini?</h2>
+                        <p class="text-xs sm:text-sm text-slate-400">Tebak lapisan atau kategori yang tepat untuk setiap kartu software di bawah ini!</p>
+                    </div>
+
+                    <div class="flex items-center gap-3 bg-slate-900 border border-slate-700 px-4 py-2 rounded-2xl">
+                        <i class="fas fa-star text-amber-400 text-lg"></i>
+                        <div>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold">Skor Sortir:</span>
+                            <span id="game-score-badge" class="font-mono font-black text-white text-base">0 / 6</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Question Card -->
+                <div id="game-card-area" class="max-w-xl mx-auto bg-slate-900 border border-slate-700 rounded-3xl p-6 text-center space-y-5">
+                    <!-- Populated dynamically by JS -->
+                </div>
+
+                <div class="text-center mt-6">
+                    <button onclick="resetSortGame()" class="px-5 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-xl text-xs font-bold transition">
+                        <i class="fas fa-rotate-left mr-1.5"></i> Ulangi Tantangan
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="bg-slate-950 border-t border-slate-800 text-slate-500 text-xs py-6 px-6 text-center mt-12">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center gap-2 text-slate-400 font-bold">
+                <i class="fas fa-layer-group text-amber-400"></i>
+                <span>Bilik Komputasi — Modul Sistem Komputer: Sistem Operasi & Software</span>
+            </div>
+            <p>&copy; 2026 Laboratorium Interaktif Informatika SMA/SMK Kelas X</p>
+        </div>
+    </footer>
+
+    <!-- ========================================================================= -->
+    <!-- JAVASCRIPT LOGIC                                                         -->
+    <!-- ========================================================================= -->
+    <script>
+        // Layer Data Definitions
+        const layerData = [
+            {
+                level: 0,
+                name: "Perangkat Keras (Hardware)",
+                tag: "Inti Fisik Paling Dalam",
+                color: "text-red-400",
+                badgeBg: "bg-red-500/20 text-red-300 border-red-500/30",
+                icon: "fa-microchip",
+                desc: "Fondasi fisik tempat seluruh listrik dan logika biner bekerja. Terdiri dari mikroprosesor CPU, memori RAM, media penyimpanan magnetik/flash (SSD/HDD), kartu grafis GPU, dan port I/O.",
+                responsibility: [
+                    "Mengeksekusi instruksi biner mesin mentah pada level sirkuit",
+                    "Menyimpan bit 0 dan 1 dalam sel kapasitor/transistor",
+                    "Menerima tegangan input listrik dan menghasilkan sinyal fisik"
+                ],
+                analogy: "<b>Ibarat:</b> Mesin mobil, roda, piston, dan tangki bahan bakar fisik.",
+                security: "<b>Level Akses:</b> Hardware murni. Tidak boleh disentuh langsung oleh aplikasi tanpa pengawasan Kernel!"
+            },
+            {
+                level: 1,
+                name: "Kernel Sistem Operasi (Ring 0)",
+                tag: "Jantung Sistem Operasi",
+                color: "text-emerald-400",
+                badgeBg: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
+                icon: "fa-shield-halved",
+                desc: "Inti terpenting dari OS yang berjalan terus-menerus di memori sejak booting hingga komputer mati. Beroperasi dalam <i>Kernel Mode (Ring 0)</i> dengan hak akses penuh tanpa batas ke hardware.",
+                responsibility: [
+                    "<b>Process Management:</b> Mengatur jadwal giliran jutaan tugas di CPU (CPU Scheduling)",
+                    "<b>Memory Management:</b> Mengalokasikan blok RAM secara adil dan mencegah aplikasi saling menimpa",
+                    "<b>Device Drivers:</b> Berkomunikasi langsung dengan controller hardware fisik",
+                    "<b>Interrupt Handler:</b> Merespons sinyal mendadak seperti klik mouse atau tombol ditekan"
+                ],
+                analogy: "<b>Ibarat:</b> Sopir profesional yang memegang setir dan pedal gas; penumpang (aplikasi) dilarang merebut setir!",
+                security: "<b>Contoh Nyata:</b> Linux Kernel, Windows NT Kernel (ntoskrnl.exe), XNU Kernel (macOS/iOS)."
+            },
+            {
+                level: 2,
+                name: "Antarmuka System Call & API",
+                tag: "Pintu Gerbang Keamanan Terproteksi",
+                color: "text-amber-400",
+                badgeBg: "bg-amber-500/20 text-amber-300 border-amber-500/30",
+                icon: "fa-door-open",
+                desc: "Satu-satunya jembatan resmi tempat program aplikasi di luar meminta layanan ke Kernel. Mencegah aplikasi nakal membobol sistem atau merusak hardware.",
+                responsibility: [
+                    "Memvalidasi izin: Apakah aplikasi ini berhak membaca file atau mengakses internet?",
+                    "Melakukan peralihan aman dari <i>User Mode</i> ke <i>Kernel Mode</i> (Context Switch)",
+                    "Menyediakan fungsi standar seperti: open(), read(), write(), close(), fork(), malloc()"
+                ],
+                analogy: "<b>Ibarat:</b> Loket teller bank. Nasabah tidak boleh masuk ke brankas uang, hanya boleh meminta teller lewat loket kaca antipeluru.",
+                security: "<b>Mengapa Sangat Penting:</b> Jika aplikasi mencoba menulis RAM tanpa System Call, CPU akan melempar sinyal <i>Segmentation Fault</i> dan menutup aplikasi tersebut tanpa mematikan komputer."
+            },
+            {
+                level: 3,
+                name: "Software Sistem, Shell & Utilitas",
+                tag: "Lingkungan Antarmuka Sistem",
+                color: "text-pink-400",
+                badgeBg: "bg-pink-500/20 text-pink-300 border-pink-500/30",
+                icon: "fa-terminal",
+                desc: "Perangkat lunak pendukung yang menerjemahkan keinginan pengguna atau pengembang ke dalam instruksi yang dipahami sistem. Mencakup antarmuka baris perintah (CLI Shell), lingkungan desktop (GUI), dan utilitas perawatan.",
+                responsibility: [
+                    "<b>Shell CLI & GUI:</b> Terminal Bash, PowerShell, Windows Explorer, GNOME Shell",
+                    "<b>Program Utilitas:</b> Antivirus (Windows Defender), Disk Defragmenter, Task Manager, Kompresi File",
+                    "<b>Device Driver:</b> Menerjemahkan bahasa umum OS ke bahasa khusus printer/GPU tertentu"
+                ],
+                analogy: "<b>Ibarat:</b> Dasbor mobil dengan spedometer, tuas lampu sen, dan radio kontrol.",
+                security: "<b>Mode Operasi:</b> User Mode terproteksi."
+            },
+            {
+                level: 4,
+                name: "Perangkat Lunak Aplikasi (User Space)",
+                tag: "Program Kebutuhan Manusia",
+                color: "text-purple-400",
+                badgeBg: "bg-purple-500/20 text-purple-300 border-purple-500/30",
+                icon: "fa-window-restore",
+                desc: "Perangkat lunak yang dipasang untuk menyelesaikan tugas produktivitas, kreasi, atau hiburan spesifik pengguna. Berjalan dalam <i>User Mode (Ring 3)</i> dengan hak akses terbatas.",
+                responsibility: [
+                    "Menyediakan antarmuka interaktif yang nyaman untuk pekerjaan pengguna",
+                    "Mengolah data dokumen, video, audio, atau browsing internet",
+                    "Tidak memiliki wewenang mengontrol hardware secara langsung (wajib memanggil System Call)"
+                ],
+                analogy: "<b>Ibarat:</b> Penumpang di dalam mobil yang memesan tujuan perjalanan ke sang sopir.",
+                security: "<b>Contoh:</b> Google Chrome, Microsoft Word, Spotify, Roblox, Adobe Photoshop, VS Code."
+            },
+            {
+                level: 5,
+                name: "Pengguna (User / Brainware)",
+                tag: "Lapisan Terluar (Manusia)",
+                color: "text-blue-400",
+                badgeBg: "bg-blue-500/20 text-blue-300 border-blue-500/30",
+                icon: "fa-user-astronaut",
+                desc: "Manusia yang mengoperasikan komputer melalui keyboard, mouse, layar sentuh, atau suara untuk mencapai tujuan tertentu.",
+                responsibility: [
+                    "Memberikan instruksi dan input data melalui panca indera & perangkat input",
+                    "Menerima dan menafsirkan informasi hasil komputasi pada layar atau speaker",
+                    "Mengambil keputusan akhir berdasarkan informasi yang disajikan sistem"
+                ],
+                analogy: "<b>Ibarat:</b> Pemilik mobil yang menentukan arah destinasi liburan.",
+                security: "<b>Kategori Brainware:</b> End-user (siswa/guru), Programmer (pembuat kode), Administrator Sistem."
+            }
+        ];
+
+        // Trace Scenarios
+        const traceScenarios = {
+            save: {
+                title: "Menyimpan File Dokumen di Microsoft Word (Ctrl + S)",
+                steps: [
+                    { layer: 5, title: "L-5: Pengguna", desc: "User menekan tombol kombinasi <b>Ctrl + S</b> pada keyboard setelah selesai mengetik tugas.", status: "Input Masuk" },
+                    { layer: 4, title: "L-4: Aplikasi (MS Word)", desc: "MS Word menyusun data teks biner dokumen lalu meminta OS untuk menyimpannya dengan memanggil fungsi API simpan berkas.", status: "Request File Save" },
+                    { layer: 2, title: "L-2: System Call", desc: "Perpindahan ke System Call <code>sys_write(file_descriptor, buffer, size)</code>. Cek hak akses direktori.", status: "Validasi Izin" },
+                    { layer: 1, title: "L-1: Kernel OS", desc: "Kernel OS mengalokasikan blok cluster pada sistem berkas (NTFS) dan memerintahkan driver penyimpanan NVMe/SATA.", status: "Alokasi Disk" },
+                    { layer: 0, title: "L-0: Hardware (SSD/HDD)", desc: "Chip flash NAND pada SSD menuliskan bit data secara permanen ke memori non-volatile. Berkas aman tersimpan!", status: "Penulisan Selesai" }
+                ]
+            },
+            youtube: {
+                title: "Memutar Video YouTube di Google Chrome",
+                steps: [
+                    { layer: 5, title: "L-5: Pengguna", desc: "User mengklik tombol 'Play' pada thumbnail video edukasi di YouTube.", status: "Klik Play" },
+                    { layer: 4, title: "L-4: Aplikasi (Chrome)", desc: "Browser Chrome mendekode stream video HTML5 lalu meminta akses kartu jaringan dan audio.", status: "Decode Stream" },
+                    { layer: 2, title: "L-2: System Call", desc: "Chrome memanggil System Call <code>socket_recv()</code> untuk paket Wi-Fi dan <code>audio_write()</code> untuk speaker.", status: "System Call Gateway" },
+                    { layer: 1, title: "L-1: Kernel OS", desc: "Kernel mengalirkan paket data jaringan dari buffer RAM ke sound card driver dan GPU driver.", status: "Routing Kernel" },
+                    { layer: 0, title: "L-0: Hardware (Speaker & Layar)", desc: "Speaker bergetar mengeluarkan suara guru dan layar monitor menampilkan jutaan warna frame video!", status: "Output Media" }
+                ]
+            },
+            camera: {
+                title: "Mengaktifkan Kamera Webcam di Aplikasi Google Meet",
+                steps: [
+                    { layer: 5, title: "L-5: Pengguna", desc: "Siswa menekan tombol ikon kamera untuk menyalakan video pembelajaran.", status: "Nyalakan Kamera" },
+                    { layer: 4, title: "L-4: Aplikasi (Google Meet)", desc: "Aplikasi browser meminta akses izin perangkat kamera kepada sistem operasi.", status: "Request Kamera" },
+                    { layer: 2, title: "L-2: System Call", desc: "System Call <code>ioctl(VIDIOC_STREAMON)</code> memverifikasi izin privasi webcam pengguna.", status: "Verifikasi Privasi" },
+                    { layer: 1, title: "L-1: Kernel OS", desc: "Kernel mengirim sinyal USB power ke controller sensor webcam dan menyiapkan buffer DMA di RAM.", status: "Inisialisasi Sensor" },
+                    { layer: 0, title: "L-0: Hardware (Sensor Kamera)", desc: "Lensa CMOS menangkap cahaya optik ruangan dan mengubahnya menjadi stream biner piksel 1080p.", status: "Kamera Aktif" }
+                ]
+            },
+            virus: {
+                title: "Percobaan Akses Ilegal oleh Program Jahat (Dihadang System Call!)",
+                steps: [
+                    { layer: 4, title: "L-4: Aplikasi Nakal", desc: "Sebuah program mencurigakan mencoba mengakses langsung alamat RAM milik aplikasi perbankan tanpa izin.", status: "Percobaan Ilegal" },
+                    { layer: 2, title: "L-2: System Call & MMU", desc: "System Call & Memory Management Unit (MMU) mendeteksi bahwa alamat RAM tersebut berada di luar batas izin!", status: "Dihadang Gerbang!" },
+                    { layer: 1, title: "L-1: Kernel OS", desc: "Kernel melempar sinyal interupsi <code>SIGSEGV (Segmentation Fault)</code> dan mematikan paksa aplikasi nakal seketika.", status: "Aplikasi Dibunuh" },
+                    { layer: 5, title: "L-5: Pengguna", desc: "Layar memunculkan peringatan 'Aplikasi Ditutup karena Pelanggaran Keamanan'. Komputer dan data Anda tetap 100% aman!", status: "Sistem Terlindungi" }
+                ]
+            }
+        };
+
+        let currentTraceKey = 'save';
+        let currentTraceIndex = 0;
+
+        // Sort Game Questions
+        const sortGameItems = [
+            { name: "Linux Ubuntu", cat: "Kernel & OS", hint: "Sistem operasi sumber terbuka populer berbasis kernel Linux." },
+            { name: "Microsoft Excel", cat: "Software Aplikasi", hint: "Program pengolah angka dan tabel yang dipakai pengguna untuk tugas." },
+            { name: "Avast Antivirus", cat: "Software Utilitas", hint: "Program pembantu yang bertugas menjaga dan merawat keamanan sistem." },
+            { name: "Intel Core i7", cat: "Perangkat Keras", hint: "Keping mikroprosesor fisik otak komputasi di motherboard." },
+            { name: "Google Chrome", cat: "Software Aplikasi", hint: "Browser web untuk berselancar di internet sehari-hari." },
+            { name: "Device Driver Printer", cat: "Software Utilitas", hint: "Penerjemah komunikasi antara sistem operasi dan hardware printer fisik." }
+        ];
+
+        let gameIndex = 0;
+        let gameScore = 0;
+
+        // Init on DOM Ready
+        document.addEventListener('DOMContentLoaded', () => {
+            selectLayer(1); // Default select Kernel (Layer 1)
+            loadTraceScenario();
+            renderSortCard();
+        });
+
+        // Tab switcher
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active', 'bg-amber-600', 'text-white'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+
+            const activeBtn = document.getElementById('tab-btn-' + tabId);
+            const activeTab = document.getElementById('tab-' + tabId);
+            if (activeBtn) activeBtn.classList.add('active');
+            if (activeTab) activeTab.classList.remove('hidden');
+        }
+
+        // Layer Selection Logic
+        function selectLayer(lvl) {
+            const data = layerData[lvl];
+            document.getElementById('current-layer-num').innerText = lvl;
+
+            // Highlight ring SVG
+            for (let i = 0; i <= 5; i++) {
+                const ring = document.getElementById(`ring-${i}`);
+                const lbtn = document.getElementById(`lbtn-${i}`);
+                if (ring) ring.classList.remove('active-ring', 'pulse-layer');
+                if (lbtn) lbtn.classList.remove('bg-amber-600', 'text-white', 'border-amber-400');
+            }
+
+            const targetRing = document.getElementById(`ring-${lvl}`);
+            const targetBtn = document.getElementById(`lbtn-${lvl}`);
+            if (targetRing) targetRing.classList.add('active-ring', 'pulse-layer');
+            if (targetBtn) targetBtn.classList.add('bg-amber-600', 'text-white', 'border-amber-400');
+
+            // Render details
+            const box = document.getElementById('layer-details-box');
+            let respList = '';
+            data.responsibility.forEach(r => {
+                respList += `<li class="text-xs text-slate-300">${r}</li>`;
+            });
+
+            box.innerHTML = `
+                <div class="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-700">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-2xl ${data.color} border border-slate-700 shadow-md">
+                            <i class="fas ${data.icon}"></i>
+                        </div>
+                        <div>
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${data.badgeBg}">
+                                Lapisan ${data.level}: ${data.tag}
+                            </span>
+                            <h3 class="text-lg sm:text-xl font-black text-white mt-1">${data.name}</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-xs sm:text-sm text-slate-200 leading-relaxed mb-4">
+                    ${data.desc}
+                </p>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 mb-4">
+                    <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <i class="fas fa-list-check"></i> Tugas & Tanggung Jawab Utama:
+                    </h4>
+                    <ul class="list-disc list-inside space-y-1.5 pl-1">
+                        ${respList}
+                    </ul>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-slate-300">
+                        <i class="fas fa-lightbulb text-amber-400 mr-1.5"></i>
+                        ${data.analogy}
+                    </div>
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-slate-300">
+                        <i class="fas fa-shield-alt text-cyan-400 mr-1.5"></i>
+                        ${data.security}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Trace Scenario Logic
+        function loadTraceScenario() {
+            currentTraceKey = document.getElementById('trace-select').value;
+            currentTraceIndex = 0;
+            renderTraceCards();
+        }
+
+        function renderTraceCards() {
+            const sc = traceScenarios[currentTraceKey];
+            const container = document.getElementById('trace-cards-container');
+            container.innerHTML = '';
+
+            sc.steps.forEach((step, idx) => {
+                const isPassed = idx <= currentTraceIndex;
+                const isCurrent = idx === currentTraceIndex;
+
+                const card = document.createElement('div');
+                card.className = `p-4 rounded-2xl border transition-all duration-300 flex items-start gap-4 ${
+                    isCurrent
+                        ? 'bg-amber-950/40 border-amber-500 shadow-lg shadow-amber-500/10 scale-[1.01]'
+                        : isPassed
+                        ? 'bg-slate-900/90 border-slate-700 opacity-90'
+                        : 'bg-slate-950/40 border-slate-800/60 opacity-40'
+                }`;
+
+                card.innerHTML = `
+                    <div class="w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 ${
+                        isCurrent
+                            ? 'bg-amber-500 text-slate-950 shadow-md animate-pulse'
+                            : isPassed
+                            ? 'bg-emerald-600 text-white'
+                            : 'bg-slate-800 text-slate-500'
+                    }">
+                        ${isPassed && !isCurrent ? '<i class="fas fa-check"></i>' : idx + 1}
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-1">
+                            <h4 class="font-bold text-sm ${isCurrent ? 'text-amber-300' : 'text-white'}">${step.title}</h4>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded ${
+                                isCurrent ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'bg-slate-800 text-slate-400'
+                            }">${step.status}</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">${step.desc}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            const summary = document.getElementById('trace-summary-text');
+            if (currentTraceIndex >= sc.steps.length - 1) {
+                summary.innerHTML = `<span class="text-emerald-400 font-bold"><i class="fas fa-check-circle mr-1"></i>Alur Selesai!</span> Perintah berhasil dieksekusi menembus seluruh lapisan.`;
+            } else {
+                summary.innerText = `Langkah ${currentTraceIndex + 1} dari ${sc.steps.length}: Klik 'Langkah Alur Berikutnya' untuk memajukan pulsa data.`;
+            }
+        }
+
+        function advanceTraceStep() {
+            const sc = traceScenarios[currentTraceKey];
+            if (currentTraceIndex < sc.steps.length - 1) {
+                currentTraceIndex++;
+            } else {
+                currentTraceIndex = 0; // Loop back
+            }
+            renderTraceCards();
+        }
+
+        // Sort Game Logic
+        function renderSortCard() {
+            const area = document.getElementById('game-card-area');
+            if (gameIndex >= sortGameItems.length) {
+                area.innerHTML = `
+                    <div class="py-6">
+                        <div class="w-16 h-16 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-3xl mx-auto mb-4 border border-amber-500/30">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h3 class="text-2xl font-black text-white mb-2">Hebat! Misi Selesai!</h3>
+                        <p class="text-sm text-slate-300 mb-6">Skor Akhir Anda: <b class="text-amber-400 text-lg">${gameScore} / ${sortGameItems.length}</b></p>
+                        <button onclick="resetSortGame()" class="px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white rounded-xl font-bold text-sm shadow-lg transition">
+                            Mainkan Lagi
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            const item = sortGameItems[gameIndex];
+            area.innerHTML = `
+                <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400">Tantangan ${gameIndex + 1} dari ${sortGameItems.length}</span>
+                <div class="my-4">
+                    <h3 class="text-2xl font-black text-white mb-1">${item.name}</h3>
+                    <p class="text-xs text-slate-400 italic">${item.hint}</p>
+                </div>
+
+                <p class="text-xs text-slate-300 font-semibold mb-3">Pilih Kategori / Lapisan yang Benar:</p>
+
+                <div class="grid grid-cols-2 gap-2.5" id="game-options-container">
+                    <button onclick="checkSortAnswer('Perangkat Keras')" class="game-opt-btn p-3 rounded-xl border border-slate-700 bg-slate-950 hover:bg-slate-800 text-xs font-bold text-slate-200 transition">
+                        Perangkat Keras
+                    </button>
+                    <button onclick="checkSortAnswer('Kernel & OS')" class="game-opt-btn p-3 rounded-xl border border-slate-700 bg-slate-950 hover:bg-slate-800 text-xs font-bold text-slate-200 transition">
+                        Kernel & OS
+                    </button>
+                    <button onclick="checkSortAnswer('Software Utilitas')" class="game-opt-btn p-3 rounded-xl border border-slate-700 bg-slate-950 hover:bg-slate-800 text-xs font-bold text-slate-200 transition">
+                        Software Utilitas
+                    </button>
+                    <button onclick="checkSortAnswer('Software Aplikasi')" class="game-opt-btn p-3 rounded-xl border border-slate-700 bg-slate-950 hover:bg-slate-800 text-xs font-bold text-slate-200 transition">
+                        Software Aplikasi
+                    </button>
+                </div>
+
+                <div id="game-feedback-box" class="hidden p-3 rounded-xl text-xs mt-4"></div>
+            `;
+        }
+
+        function checkSortAnswer(selectedCat) {
+            const item = sortGameItems[gameIndex];
+            const fb = document.getElementById('game-feedback-box');
+            fb.classList.remove('hidden');
+
+            document.querySelectorAll('.game-opt-btn').forEach(b => b.disabled = true);
+
+            if (selectedCat === item.cat) {
+                gameScore++;
+                fb.className = 'p-3 rounded-xl text-xs mt-4 bg-emerald-950/60 border border-emerald-500/40 text-emerald-300';
+                fb.innerHTML = `<i class="fas fa-check-circle mr-1"></i><b>Tepat Sekali!</b> ${item.name} adalah ${item.cat}.`;
+            } else {
+                fb.className = 'p-3 rounded-xl text-xs mt-4 bg-rose-950/60 border border-rose-500/40 text-rose-300';
+                fb.innerHTML = `<i class="fas fa-times-circle mr-1"></i><b>Kurang Tepat.</b> ${item.name} tergolong ke dalam ${item.cat}.`;
+            }
+
+            document.getElementById('game-score-badge').innerText = `${gameScore} / ${sortGameItems.length}`;
+
+            setTimeout(() => {
+                gameIndex++;
+                renderSortCard();
+            }, 1200);
+        }
+
+        function resetSortGame() {
+            gameIndex = 0;
+            gameScore = 0;
+            document.getElementById('game-score-badge').innerText = `0 / ${sortGameItems.length}`;
+            renderSortCard();
+        }
+    </script>
+
+</body>
+</html>

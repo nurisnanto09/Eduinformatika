@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LMS Informatika</title>
+    <title>Bilik Komputasi - LMS Informatika</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -28,7 +28,7 @@
         <div>
             <div class="p-6 border-b border-gray-100 flex items-center gap-3">
                 <div class="bg-blue-600 text-white p-2.5 rounded-xl shadow-md"><i class="fas fa-laptop-code text-xl"></i></div>
-                <h1 class="text-xl font-black text-gray-800 tracking-tight">EduInformatika</h1>
+                <h1 class="text-xl font-black text-gray-800 tracking-tight">Bilik Komputasi</h1>
             </div>
             <nav class="mt-6 flex flex-col gap-2 px-4">
                 <button onclick="switchMenu('dashboard')" id="nav-dashboard" class="menu-item menu-active text-left w-full px-4 py-3 rounded-xl flex items-center gap-3 transition-colors">
@@ -52,6 +52,9 @@
                 <button onclick="window.open('simulator_stack_queue.html', '_blank')" id="nav-simulator" class="menu-item menu-inactive text-left w-full px-4 py-3 rounded-xl flex items-center gap-3 transition-colors">
                     <i class="fas fa-cogs w-5 text-center"></i> Simulator Stack & Queue
                 </button>
+                <button onclick="window.open('page_von_neumann.html', '_blank')" id="nav-von-neumann" class="menu-item menu-inactive text-left w-full px-4 py-3 rounded-xl flex items-center gap-3 transition-colors">
+                    <i class="fas fa-microchip w-5 text-center"></i> Sim. Von Neumann & IPO
+                </button>
             </nav>
         </div>
         <div class="p-6 border-t border-gray-50 bg-gray-50/50">
@@ -72,7 +75,7 @@
         
         <!-- DASHBOARD -->
         <div id="view-dashboard" class="view-section block animate-fade-in">
-            <h2 class="text-3xl font-black text-gray-800 mb-2">Selamat Datang di LMS! ðŸ‘‹</h2>
+            <h2 class="text-3xl font-black text-gray-800 mb-2">Selamat Datang di LMS! 👋</h2>
             <p class="text-gray-500 mb-8 font-medium">Pantau aktivitas kelas dan kelola materi pembelajaran interaktif.</p>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -82,7 +85,7 @@
                 </div>
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-5 hover:shadow-md transition-shadow">
                     <div class="w-14 h-14 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-2xl"><i class="fas fa-book"></i></div>
-                    <div><p class="text-gray-500 text-sm font-medium">Total Materi</p><p class="text-2xl font-black text-gray-800">10</p></div>
+                    <div><p class="text-gray-500 text-sm font-medium">Total Materi</p><p class="text-2xl font-black text-gray-800">12</p></div>
                 </div>
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-5 hover:shadow-md transition-shadow">
                     <div class="w-14 h-14 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center text-2xl"><i class="fas fa-chart-line"></i></div>
@@ -448,7 +451,95 @@
             { id: 'pengenalan-coding', topic: 'Pengenalan Bahasa Pemrograman', title: 'Bahasa Pemrograman', icon: 'fa-laptop-code', color: 'bg-gray-800', desc: 'Konsep dasar pemrograman.', content: '<p><b>Bahasa Pemrograman</b> adalah kosa kata dan tata bahasa (sintaks) untuk menginstruksikan komputer agar melakukan tugas tertentu.</p><p>Komputer hanya mengerti biner, dan bahasa pemrograman menerjemahkan logika manusia menjadi bahasa mesin.</p>', simulations: [{ name: 'Simulasi Pemrograman', url: 'simulasi_pemrograman.html' }] },
 
             // TOPIC: FLOWCHART
-            { id: 'flowchart', topic: 'Flowchart', title: 'Diagram Alir (Flowchart)', icon: 'fa-sitemap', color: 'bg-orange-600', desc: 'Algoritma bangun datar.', content: '<p><b>Flowchart</b> menggunakan simbol-simbol bangun ruang khusus untuk menggambarkan langkah-langkah logika pemecahan masalah.</p>', simulations: [{ name: 'Buka Portal Flowchart ðŸš€', url: 'page_flowchart.html' }] }
+            { id: 'flowchart', topic: 'Flowchart', title: 'Diagram Alir (Flowchart)', icon: 'fa-sitemap', color: 'bg-orange-600', desc: 'Algoritma bangun datar.', content: '<p><b>Flowchart</b> menggunakan simbol-simbol bangun ruang khusus untuk menggambarkan langkah-langkah logika pemecahan masalah.</p>', simulations: [{ name: 'Buka Portal Flowchart 🚀', url: 'page_flowchart.html' }] },
+
+            // TOPIC: SISTEM KOMPUTER
+            {
+                id: 'von-neumann',
+                topic: 'Sistem Komputer',
+                title: 'Arsitektur von Neumann & Dinamika IPO',
+                icon: 'fa-microchip',
+                color: 'bg-emerald-600',
+                desc: 'Prinsip kerja komputer: Input, Process, Output, dan siklus CPU Fetch-Decode-Execute.',
+                openNewTab: true,
+                content: `<p><b>Arsitektur von Neumann</b> (1945) adalah arsitektur komputer modern yang dicetuskan oleh John von Neumann. Ciri utamanya adalah <b>Stored-Program Concept</b>, di mana instruksi program dan data biner disimpan bersama dalam memori utama (RAM) yang sama.</p>
+                <div class="mt-6 mb-6 bg-emerald-50 p-6 rounded-2xl border border-emerald-200">
+                    <h4 class="font-bold text-emerald-900 text-lg mb-3 flex items-center gap-2"><i class="fas fa-microchip"></i> 4 Komponen Utama Arsitektur von Neumann:</h4>
+                    <ul class="list-disc pl-6 space-y-2 text-gray-700">
+                        <li><b>Central Processing Unit (CPU):</b> Otak pemroses yang terdiri dari <i>Control Unit (CU)</i> yang mengatur instruksi, <i>Arithmetic Logic Unit (ALU)</i> yang melakukan komputasi matematika & logika, serta <i>Registers</i> (PC, IR, ACC, MAR) untuk penyimpanan cepat di dalam CPU.</li>
+                        <li><b>Memori Utama (RAM):</b> Menyimpan data dan instruksi program dalam sel-sel beralamat.</li>
+                        <li><b>Sistem Bus:</b> Terdiri dari <i>Address Bus</i> (satu arah ke memori), <i>Data Bus</i> (dua arah antar komponen), dan <i>Control Bus</i> (sinyal kendali).</li>
+                        <li><b>Input & Output (I/O):</b> Pintu masuk data mentah dan penyajian informasi hasil proses.</li>
+                    </ul>
+                </div>
+                <div class="mt-6 mb-6 bg-slate-900 text-slate-100 p-6 rounded-2xl border border-slate-800">
+                    <h4 class="text-amber-400 font-bold text-lg mb-3 flex items-center gap-2"><i class="fas fa-arrows-spin"></i> Siklus FDE (Fetch - Decode - Execute):</h4>
+                    <ol class="list-decimal pl-6 space-y-1.5 text-slate-300 text-sm">
+                        <li><b>Fetch:</b> CPU mengambil instruksi dari alamat memori yang ditunjuk Program Counter (PC).</li>
+                        <li><b>Decode:</b> Control Unit menerjemahkan kode instruksi biner.</li>
+                        <li><b>Execute:</b> ALU mengeksekusi operasi matematika atau logika.</li>
+                        <li><b>Store:</b> Hasil komputasi disimpan di Accumulator (ACC) atau ditulis ke RAM.</li>
+                    </ol>
+                </div>
+                <div class="mt-6 bg-blue-50 p-6 rounded-2xl border border-blue-200">
+                    <h4 class="font-bold text-blue-900 text-lg mb-2 flex items-center gap-2"><i class="fas fa-sync-alt"></i> Aliran Siklus Fisik Sebenarnya: INPUT &rarr; RAM &rarr; CPU &rarr; RAM &rarr; OUTPUT</h4>
+                    <p class="text-gray-700 text-sm mb-3">Sering kali orang menyederhanakannya menjadi "IPO (Input - Process - Output)". Namun secara arsitektur fisik von Neumann, <b>RAM adalah stasiun transit wajib dua kali</b>:</p>
+                    <ul class="list-disc pl-5 space-y-1.5 text-xs text-gray-600">
+                        <li><b>1. Input &rarr; RAM:</b> Data dari keyboard/mouse/sensor di-buffer terlebih dahulu ke RAM karena kecepatan CPU (GHz) jauh lebih tinggi daripada input manusia.</li>
+                        <li><b>2. RAM &rarr; CPU:</b> CPU mengambil (Fetch) instruksi dan data dari alamat RAM ke register internal.</li>
+                        <li><b>3. CPU (Proses):</b> ALU dan Control Unit mengolah/menghitung data.</li>
+                        <li><b>4. CPU &rarr; RAM:</b> Hasil komputasi dari Accumulator ditulis (Store) kembali ke RAM agar tersimpan aman.</li>
+                        <li><b>5. RAM &rarr; Output:</b> Controller display membaca data hasil dari RAM dan menyajikannya ke layar Output.</li>
+                    </ul>
+                </div>`,
+                simulations: [{ name: 'Buka Simulator Von Neumann & IPO 🚀 (Tab Baru)', url: 'page_von_neumann.html' }]
+            },
+            {
+                id: 'sistem-operasi',
+                topic: 'Sistem Komputer',
+                title: 'Sistem Operasi, Lapisan Bawang & Software',
+                icon: 'fa-layer-group',
+                color: 'bg-amber-600',
+                desc: 'Peran OS, model arsitektur lapisan bawang (hardware ke user), dan klasifikasi software & lisensi.',
+                openNewTab: false,
+                content: `<p><b>Sistem Operasi (Operating System / OS)</b> adalah perangkat lunak sistem yang bertugas mengelola perangkat keras komputer, mengalokasikan sumber daya (CPU, RAM, Hard Disk, I/O), dan menyediakan lingkungan bagi aplikasi untuk berjalan.</p>
+                <div class="mt-6 mb-6 bg-amber-50 p-6 rounded-2xl border border-amber-200">
+                    <h4 class="font-bold text-amber-900 text-lg mb-3 flex items-center gap-2"><i class="fas fa-layer-group"></i> Model Arsitektur Lapisan Bawang (The Onion Ring Model):</h4>
+                    <p class="text-gray-700 text-sm mb-4">Sistem komputer dibangun berlapis konsentris seperti mengupas bawang. Lapisan luar melindungi lapisan dalam, dan aplikasi dilarang menyentuh hardware secara langsung demi keamanan dan stabilitas:</p>
+                    <div class="space-y-2.5 text-sm">
+                        <div class="bg-white p-3 rounded-xl border border-gray-200"><b class="text-red-600">Lapisan 0 (Inti):</b> <b>Perangkat Keras (Hardware)</b> — CPU, RAM, SSD/HDD, GPU, Motherboard, Keyboard.</div>
+                        <div class="bg-white p-3 rounded-xl border border-gray-200"><b class="text-emerald-600">Lapisan 1:</b> <b>Kernel Sistem Operasi (Ring 0)</b> — Jantung OS yang mengontrol CPU Scheduling, alokasi memori fisik, dan Device Driver.</div>
+                        <div class="bg-white p-3 rounded-xl border border-gray-200"><b class="text-amber-600">Lapisan 2:</b> <b>System Call Interface & API</b> — Pintu gerbang keamanan resmi perantara User Mode dan Kernel Mode (misal: open(), write(), malloc()).</div>
+                        <div class="bg-white p-3 rounded-xl border border-gray-200"><b class="text-pink-600">Lapisan 3:</b> <b>Software Sistem, Shell & Utilitas</b> — Antarmuka CLI (Bash/PowerShell), GUI Desktop, Task Manager, Antivirus.</div>
+                        <div class="bg-white p-3 rounded-xl border border-gray-200"><b class="text-purple-600">Lapisan 4:</b> <b>Perangkat Lunak Aplikasi (User Mode)</b> — Program produktivitas pengguna: Web Browser (Chrome), MS Word, Game, Photoshop.</div>
+                        <div class="bg-white p-3 rounded-xl border border-gray-200"><b class="text-blue-600">Lapisan 5 (Terluar):</b> <b>Pengguna (User / Brainware)</b> — Manusia yang berinteraksi dengan sistem komputer.</div>
+                    </div>
+                </div>
+                <div class="mt-6 bg-slate-50 p-6 rounded-2xl border border-gray-200">
+                    <h4 class="font-bold text-gray-800 text-lg mb-3 flex items-center gap-2"><i class="fas fa-cubes text-blue-600"></i> Klasifikasi Perangkat Lunak (Software):</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+                        <div class="bg-white p-4 rounded-xl border border-gray-200">
+                            <h5 class="font-bold text-blue-700 mb-2">Berdasarkan Fungsi:</h5>
+                            <ul class="list-disc pl-5 space-y-1 text-xs">
+                                <li><b>Sistem Operasi:</b> Windows, Linux, macOS, Android.</li>
+                                <li><b>Software Utilitas:</b> Antivirus, WinRAR, Disk Cleanup.</li>
+                                <li><b>Software Aplikasi:</b> Browser, Office, Game.</li>
+                                <li><b>Bahasa Pemrograman:</b> Python, VS Code, GCC.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-gray-200">
+                            <h5 class="font-bold text-amber-700 mb-2">Berdasarkan Lisensi:</h5>
+                            <ul class="list-disc pl-5 space-y-1 text-xs">
+                                <li><b>Open Source:</b> Bebas kode sumber terbuka (Linux, Blender).</li>
+                                <li><b>Proprietary/Komersial:</b> Berbayar & tertutup (Windows, Photoshop).</li>
+                                <li><b>Freeware:</b> Gratis digunakan (Chrome, WhatsApp).</li>
+                                <li><b>Shareware/Trial:</b> Uji coba terbatas (WinRAR).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>`,
+                simulations: [{ name: 'Buka Simulasi Lapisan Bawang & Software 🧅', url: 'simulasi_lapisan_bawang.html' }]
+            }
         ];
 
         // Group data by topic (preserve insertion order of topics via tracking array)
@@ -482,7 +573,13 @@
                 grouped[topic].forEach(materi => {
                     const card = document.createElement('div');
                     card.className = 'group bg-white p-5 rounded-2xl border-2 border-gray-100 hover:border-blue-400 hover:shadow-lg transition-all flex flex-col justify-between cursor-pointer';
-                    card.onclick = () => openMateriDetail(materi.id);
+                    card.onclick = () => {
+                        if (materi.openNewTab) {
+                            window.open(materi.simulations[0].url, '_blank');
+                        } else {
+                            openMateriDetail(materi.id);
+                        }
+                    };
                     
                     card.innerHTML = `
                         <div class="flex items-start gap-4 mb-4">
@@ -492,7 +589,9 @@
                                 <p class="text-sm text-gray-500">${materi.desc}</p>
                             </div>
                         </div>
-                        ${materi.simulations.length > 0 ? '<div class="mt-2 inline-block bg-blue-50 text-blue-600 text-[10px] font-bold px-3 py-1 rounded-full w-max"><i class="fas fa-play-circle mr-1"></i> Ada Simulasi</div>' : ''}
+                        <div class="flex items-center gap-2">
+                            ${materi.openNewTab ? '<div class="mt-2 inline-block bg-emerald-50 text-emerald-700 text-[10px] font-bold px-3 py-1 rounded-full w-max border border-emerald-200"><i class="fas fa-external-link-alt mr-1"></i> Buka di Tab Baru</div>' : (materi.simulations.length > 0 ? '<div class="mt-2 inline-block bg-blue-50 text-blue-600 text-[10px] font-bold px-3 py-1 rounded-full w-max"><i class="fas fa-play-circle mr-1"></i> Ada Simulasi</div>' : '')}
+                        </div>
                     `;
                     grid.appendChild(card);
                 });
@@ -536,7 +635,7 @@
                     btn.innerHTML = `<i class="fas fa-play-circle mr-2"></i>` + sim.name;
                     
                     btn.onclick = (e) => {
-                        if (sim.url === 'page_flowchart.html' || sim.url === 'simulator_stack_queue.html' || sim.url === 'page_koki_algoritma.html') {
+                        if (sim.url === 'page_flowchart.html' || sim.url === 'simulator_stack_queue.html' || sim.url === 'page_koki_algoritma.html' || sim.url === 'page_von_neumann.html') {
                             window.open(sim.url, '_blank');
                             return;
                         }

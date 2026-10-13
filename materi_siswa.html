@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Materi Siswa - EduInformatika</title>
+    <title>Portal Materi Siswa - Bilik Komputasi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -84,7 +84,7 @@
                 <div class="w-10 h-10 bg-gray-900 rounded-full flex items-center justify-center text-white">
                     <i class="fas fa-laptop-code"></i>
                 </div>
-                <span class="text-lg font-bold text-white tracking-wide">EduInformatika</span>
+                <span class="text-lg font-bold text-white tracking-wide">Bilik Komputasi</span>
             </div>
             <div class="flex items-center gap-6">
                 <a href="#materi-section" class="text-white/80 hover:text-white font-semibold text-sm transition hidden md:block">Materi</a>
@@ -155,8 +155,8 @@
                 <p class="text-gray-500 font-medium max-w-xl mx-auto">Pelajari materi Informatika kelas X secara interaktif. Pilih salah satu kategori di bawah ini untuk memulai.</p>
             </div>
 
-            <!-- 3 Main Category Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <!-- 4 Main Category Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
 
                 <!-- Card 1: Berpikir Komputasi -->
                 <div class="materi-card bg-white rounded-3xl shadow-lg overflow-hidden cursor-pointer fade-up" onclick="toggleCategory('komputasi')">
@@ -206,6 +206,22 @@
                     </div>
                 </div>
 
+                <!-- Card 4: Sistem Komputer -->
+                <div class="materi-card bg-white rounded-3xl shadow-lg overflow-hidden cursor-pointer fade-up" onclick="toggleCategory('sk')" style="transition-delay: 0.3s;">
+                    <div class="h-3 bg-gradient-to-r from-emerald-500 to-amber-500"></div>
+                    <div class="p-8">
+                        <div class="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 text-3xl mb-5">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Sistem Komputer</h3>
+                        <p class="text-gray-500 text-sm mb-5">Arsitektur von Neumann, dinamika IPO, sistem operasi, lapisan bawang dan software.</p>
+                        <div class="flex items-center text-emerald-600 font-bold text-sm">
+                            <span>2 Sub-Materi</span>
+                            <i class="fas fa-chevron-down ml-2 transition-transform" id="icon-sk"></i>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <!-- ===== Expanded Sub-Materi Panels ===== -->
@@ -214,7 +230,7 @@
             <div id="panel-komputasi" class="hidden mb-10 fade-up">
                 <div class="bg-purple-50/60 border border-purple-200 rounded-3xl p-8">
                     <h3 class="text-xl font-bold text-purple-800 mb-6 flex items-center gap-3">
-                        <i class="fas fa-brain"></i> Berpikir Komputasi â€” Sub-Materi
+                        <i class="fas fa-brain"></i> Berpikir Komputasi — Sub-Materi
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="sub-komputasi"></div>
                 </div>
@@ -224,7 +240,7 @@
             <div id="panel-algoritma" class="hidden mb-10 fade-up">
                 <div class="bg-blue-50/60 border border-blue-200 rounded-3xl p-8">
                     <h3 class="text-xl font-bold text-blue-800 mb-6 flex items-center gap-3">
-                        <i class="fas fa-project-diagram"></i> Dasar Algoritma & Struktur Data â€” Sub-Materi
+                        <i class="fas fa-project-diagram"></i> Dasar Algoritma & Struktur Data — Sub-Materi
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="sub-algoritma"></div>
                 </div>
@@ -234,9 +250,19 @@
             <div id="panel-notasi" class="hidden mb-10 fade-up">
                 <div class="bg-teal-50/60 border border-orange-200 rounded-3xl p-8">
                     <h3 class="text-xl font-bold text-teal-800 mb-6 flex items-center gap-3">
-                        <i class="fas fa-code"></i> Notasi Algoritma â€” Sub-Materi
+                        <i class="fas fa-code"></i> Notasi Algoritma — Sub-Materi
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="sub-notasi"></div>
+                </div>
+            </div>
+
+            <!-- Panel: Sistem Komputer -->
+            <div id="panel-sk" class="hidden mb-10 fade-up">
+                <div class="bg-emerald-50/60 border border-emerald-200 rounded-3xl p-8">
+                    <h3 class="text-xl font-bold text-emerald-800 mb-6 flex items-center gap-3">
+                        <i class="fas fa-microchip"></i> Sistem Komputer — Sub-Materi
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="sub-sk"></div>
                 </div>
             </div>
 
@@ -249,7 +275,7 @@
             <div class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center text-white/80 text-sm">
                 <i class="fas fa-laptop-code"></i>
             </div>
-            <span class="font-bold text-white/80">EduInformatika</span>
+            <span class="font-bold text-white/80">Bilik Komputasi</span>
         </div>
         <p class="text-sm">Portal Materi Siswa &mdash; Informatika Kelas X</p>
     </footer>
@@ -312,7 +338,36 @@
                 items: [
                     { id: 'pseudocode', title: 'Pseudocode', icon: 'fa-file-code', color: 'bg-teal-600', desc: 'Menulis algoritma secara deskriptif.', topic: 'Notasi Algoritma', content: '<p><b>Pseudocode</b> berasal dari kata "Pseudo" (palsu/semu) dan "Code" (kode). Ini adalah cara menuliskan algoritma menggunakan bahasa deskriptif yang mudah dipahami manusia.</p><div class="bg-gray-800 text-gray-100 p-4 rounded-lg font-mono text-sm mt-3">INPUT nilai<br>IF nilai &gt; 75 THEN<br>&nbsp;&nbsp;PRINT "Lulus"<br>ELSE<br>&nbsp;&nbsp;PRINT "Remedial"<br>END IF</div>', sims: [{ name: 'Simulasi Pseudocode', url: 'simulasi_pseudocode.html' }] },
                     { id: 'pengenalan-coding', title: 'Bahasa Pemrograman', icon: 'fa-laptop-code', color: 'bg-gray-800', desc: 'Konsep dasar pemrograman komputer.', topic: 'Notasi Algoritma', content: '<p><b>Bahasa Pemrograman</b> adalah kosa kata dan tata bahasa (sintaks) untuk menginstruksikan komputer agar melakukan tugas tertentu.</p><p>Komputer hanya mengerti biner (0 dan 1), dan bahasa pemrograman menerjemahkan logika manusia menjadi bahasa mesin.</p>', sims: [{ name: 'Simulasi Pemrograman', url: 'simulasi_pemrograman.html' }] },
-                    { id: 'flowchart', title: 'Diagram Alir (Flowchart)', icon: 'fa-sitemap', color: 'bg-orange-600', desc: 'Visualisasi algoritma dengan simbol.', topic: 'Notasi Algoritma', content: '<p><b>Flowchart</b> menggunakan simbol-simbol bangun datar khusus untuk menggambarkan langkah-langkah logika pemecahan masalah secara visual.</p>', sims: [{ name: 'Buka Portal Flowchart ðŸš€', url: 'page_flowchart.html' }] },
+                    { id: 'flowchart', title: 'Diagram Alir (Flowchart)', icon: 'fa-sitemap', color: 'bg-orange-600', desc: 'Visualisasi algoritma dengan simbol.', topic: 'Notasi Algoritma', content: '<p><b>Flowchart</b> menggunakan simbol-simbol bangun datar khusus untuk menggambarkan langkah-langkah logika pemecahan masalah secara visual.</p>', sims: [{ name: 'Buka Portal Flowchart 🚀', url: 'page_flowchart.html' }] },
+                ]
+            },
+            sk: {
+                color: 'bg-emerald-600',
+                items: [
+                    {
+                        id: 'von-neumann',
+                        title: 'Arsitektur von Neumann & Dinamika IPO',
+                        icon: 'fa-microchip',
+                        color: 'bg-emerald-600',
+                        desc: 'Prinsip kerja komputer, siklus Fetch-Decode-Execute, dan siklus Input-Process-Output.',
+                        topic: 'Sistem Komputer',
+                        openNewTab: true,
+                        url: 'page_von_neumann.html',
+                        content: '<p><b>Arsitektur von Neumann</b> (1945) adalah fondasi arsitektur komputer modern yang dicetuskan oleh John von Neumann. Konsep kuncinya adalah <i>Stored-Program Concept</i>, di mana instruksi program dan data biner disimpan bersama dalam memori utama (RAM) yang sama.</p><div class=\"my-3 p-3.5 bg-emerald-50 rounded-xl border border-emerald-200 text-xs\"><p class=\"font-bold text-emerald-900 mb-1\"><i class=\"fas fa-arrows-alt-h mr-1\"></i> Aliran Siklus Fisik Sebenarnya:</p><p class=\"font-mono font-bold text-gray-800\">INPUT &rarr; RAM &rarr; CPU &rarr; RAM &rarr; OUTPUT</p><p class=\"text-gray-600 mt-1 leading-relaxed\">Data dari perangkat input tidak pernah langsung dilempar ke CPU, melainkan di-buffer di <b>RAM</b>. CPU mengambil data dari RAM, mengolahnya di ALU, menyimpan hasilnya kembali ke <b>RAM</b>, lalu dari RAM dikirim ke unit <b>Output</b>.</p></div><h4 class=\"font-bold mt-4 mb-2 text-gray-800\">Komponen Utama:</h4><ul class=\"list-disc ml-5 space-y-1 text-gray-600 text-xs\"><li><b>CPU:</b> Control Unit (CU), Arithmetic Logic Unit (ALU), Registers (PC, IR, ACC, MAR).</li><li><b>Memori Utama (RAM):</b> Menyimpan data dan instruksi beralamat.</li><li><b>Sistem Bus:</b> Address Bus, Data Bus, dan Control Bus.</li><li><b>Input & Output (I/O):</b> Jembatan komunikasi manusia dengan komputer.</li></ul>',
+                        sims: [{ name: 'Buka Simulator Von Neumann & IPO 🚀 (Tab Baru)', url: 'page_von_neumann.html' }]
+                    },
+                    {
+                        id: 'sistem-operasi',
+                        title: 'Sistem Operasi, Lapisan Bawang & Software',
+                        icon: 'fa-layer-group',
+                        color: 'bg-amber-600',
+                        desc: 'Peran OS, arsitektur lapisan bawang (hardware ke user), dan klasifikasi ragam software.',
+                        topic: 'Sistem Komputer',
+                        openNewTab: false,
+                        url: 'simulasi_lapisan_bawang.html',
+                        content: '<p><b>Sistem Operasi (OS)</b> adalah perangkat lunak sistem yang mengelola seluruh perangkat keras dan menyediakan lingkungan aman bagi perangkat lunak aplikasi.</p><h4 class="font-bold mt-4 mb-2 text-gray-800">Model Lapisan Bawang (Onion Ring Model):</h4><div class="space-y-1.5 text-sm bg-gray-50 p-4 rounded-xl border border-gray-200"><p><b class="text-red-600">L-0 (Inti):</b> <b>Hardware</b> — CPU, RAM, SSD/HDD, GPU, port I/O.</p><p><b class="text-emerald-600">L-1:</b> <b>Kernel OS</b> (Ring 0) — Jantung pengendali hardware & manajemen proses.</p><p><b class="text-amber-600">L-2:</b> <b>System Call Interface</b> — Pintu gerbang keamanan perantara User Mode dan Kernel Mode.</p><p><b class="text-pink-600">L-3:</b> <b>Utilitas & Shell</b> — Terminal CLI, Desktop GUI, Antivirus, Driver.</p><p><b class="text-purple-600">L-4:</b> <b>Software Aplikasi</b> — Browser, Word, Game, Media Player.</p><p><b class="text-blue-600">L-5 (Terluar):</b> <b>User / Brainware</b> — Manusia pengguna komputer.</p></div><h4 class="font-bold mt-4 mb-2 text-gray-800">Klasifikasi Software:</h4><ul class="list-disc ml-5 space-y-1 text-gray-600 text-sm"><li><b>Berdasarkan Fungsi:</b> Sistem Operasi, Utilitas, Aplikasi, Bahasa Pemrograman.</li><li><b>Berdasarkan Lisensi:</b> Open Source, Komersial/Proprietary, Freeware, Shareware/Trial.</li></ul>',
+                        sims: [{ name: 'Buka Simulasi Lapisan Bawang & Software 🧅', url: 'simulasi_lapisan_bawang.html' }]
+                    }
                 ]
             }
         };
@@ -322,22 +377,34 @@
             Object.keys(categories).forEach(catKey => {
                 const cat = categories[catKey];
                 const container = document.getElementById('sub-' + catKey);
+                if (!container) return;
+                container.innerHTML = '';
                 
                 cat.items.forEach(item => {
                     const card = document.createElement('div');
-                    card.className = 'sub-card rounded-2xl p-5 cursor-pointer border border-gray-100';
-                    card.onclick = () => openModal(catKey, item.id);
+                    card.className = 'sub-card rounded-2xl p-5 cursor-pointer border border-gray-100 flex flex-col justify-between';
+                    
+                    if (item.openNewTab) {
+                        card.onclick = () => window.open(item.url, '_blank');
+                    } else {
+                        card.onclick = () => openModal(catKey, item.id);
+                    }
                     
                     card.innerHTML = `
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="w-10 h-10 rounded-xl ${item.color} text-white flex items-center justify-center text-lg shadow-sm">
-                                <i class="fas ${item.icon}"></i>
+                        <div>
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-10 h-10 rounded-xl ${item.color} text-white flex items-center justify-center text-lg shadow-sm">
+                                    <i class="fas ${item.icon}"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800 flex-1 leading-tight">${item.title}</h4>
+                                <i class="fas ${item.openNewTab ? 'fa-external-link-alt text-emerald-500' : 'fa-arrow-right text-gray-300'} text-sm"></i>
                             </div>
-                            <h4 class="font-bold text-gray-800 flex-1">${item.title}</h4>
-                            <i class="fas fa-arrow-right text-gray-300 text-sm"></i>
+                            <p class="text-sm text-gray-500 mb-3">${item.desc}</p>
                         </div>
-                        <p class="text-sm text-gray-500">${item.desc}</p>
-                        ${item.sims.length > 0 ? '<div class="mt-3"><span class="text-[10px] font-bold uppercase tracking-wider bg-blue-50 px-2.5 py-1 rounded-full text-blue-600 border border-blue-100"><i class="fas fa-play mr-1"></i>Simulasi</span></div>' : ''}
+                        <div class="pt-2 border-t border-gray-100 flex items-center gap-2">
+                            ${item.openNewTab ? '<span class="text-[10px] font-bold uppercase tracking-wider bg-emerald-50 px-2.5 py-1 rounded-full text-emerald-700 border border-emerald-200"><i class="fas fa-external-link-alt mr-1"></i>Buka di Tab Baru (Simulasi)</span>' : ''}
+                            ${item.sims && item.sims.length > 0 && !item.openNewTab ? '<span class="text-[10px] font-bold uppercase tracking-wider bg-blue-50 px-2.5 py-1 rounded-full text-blue-600 border border-blue-100"><i class="fas fa-play mr-1"></i>Simulasi</span>' : ''}
+                        </div>
                     `;
                     container.appendChild(card);
                 });
@@ -348,18 +415,21 @@
         function toggleCategory(catKey) {
             const panel = document.getElementById('panel-' + catKey);
             const icon = document.getElementById('icon-' + catKey);
+            if (!panel) return;
             const isHidden = panel.classList.contains('hidden');
 
             // Close all panels
-            ['komputasi', 'algoritma', 'notasi'].forEach(k => {
-                document.getElementById('panel-' + k).classList.add('hidden');
-                document.getElementById('icon-' + k).style.transform = 'rotate(0deg)';
+            ['komputasi', 'algoritma', 'notasi', 'sk'].forEach(k => {
+                const p = document.getElementById('panel-' + k);
+                const ic = document.getElementById('icon-' + k);
+                if (p) p.classList.add('hidden');
+                if (ic) ic.style.transform = 'rotate(0deg)';
             });
 
             // Open if was hidden
             if (isHidden) {
                 panel.classList.remove('hidden');
-                icon.style.transform = 'rotate(180deg)';
+                if (icon) icon.style.transform = 'rotate(180deg)';
                 
                 // Scroll to panel
                 setTimeout(() => {
