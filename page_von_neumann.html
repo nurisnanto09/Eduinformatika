@@ -801,54 +801,48 @@
             <!-- ============================================== -->
             <div id="content-sub-f" class="subtopic-content hidden animate-fadeIn">
               <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-4">
-                F. DINAMIKA I-P-O: STUDI KASUS KALKULATOR
+                F. DINAMIKA I-P-O: STUDI KASUS KALKULATOR (5 + 3 = 8)
               </h2>
               <p class="text-slate-600 text-base sm:text-lg leading-relaxed mb-6">
-                Mari kita bedah perjalanan nyata data saat pengguna menghitung <code>3 + 5 = 8</code> pada sistem kalkulator komputer!
+                Mari kita bedah perjalanan nyata data saat pengguna mengetik dan menghitung <code>5 + 3 = 8</code> pada sistem kalkulator digital sesuai siklus Von Neumann!
               </p>
 
-              <!-- TIMELINE FISIK SESUAI SLIDE 6, 7, 10 -->
+              <!-- TIMELINE FISIK 6 TAHAP SESUAI TP 2 LKPD -->
               <div class="relative pl-6 border-l-2 border-indigo-200 space-y-6 mb-8">
                 <div class="relative">
                   <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-amber-500 border-4 border-white shadow"></div>
-                  <h4 class="font-bold text-slate-900 text-base">Langkah 1: Mengetik Angka 3</h4>
-                  <p class="text-slate-600 text-sm mt-1">Sinyal tombol '3' dari keyboard dititipkan dulu di <strong>RAM Alamat 100</strong>.</p>
-                </div>
-
-                <div class="relative">
-                  <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-blue-500 border-4 border-white shadow"></div>
-                  <h4 class="font-bold text-slate-900 text-base">Langkah 2: Mengetik Operator '+'</h4>
-                  <p class="text-slate-600 text-sm mt-1">Kode operasi penambahan (ADD) disimpan di <strong>RAM Alamat 200</strong>.</p>
-                </div>
-
-                <div class="relative">
-                  <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-amber-500 border-4 border-white shadow"></div>
-                  <h4 class="font-bold text-slate-900 text-base">Langkah 3: Mengetik Angka 5</h4>
-                  <p class="text-slate-600 text-sm mt-1">Sinyal tombol '5' disimpan di <strong>RAM Alamat 101</strong>.</p>
-                </div>
-
-                <div class="relative">
-                  <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-purple-600 border-4 border-white shadow"></div>
-                  <h4 class="font-bold text-slate-900 text-base">Langkah 4: CPU Menarik Data & MENUNGGU Perintah '='</h4>
-                  <p class="text-slate-600 text-sm mt-1">Data ditarik ke Register A dan B. <strong>CPU TIDAK LANGSUNG MENJUMLAHKAN!</strong> Mandor CU menahan eksekusi menunggu pemicu tombol '=' ditekan.</p>
+                  <h4 class="font-bold text-slate-900 text-base">Langkah 1: INPUT (Pengetikan "5 + 3")</h4>
+                  <p class="text-slate-600 text-sm mt-1">Pengguna menekan tombol '5', '+', dan '3' pada keypad kalkulator. Sinyal tombol dikonversi menjadi kode digital biner dan dikirim melalui Bus Masukan (Input Bus).</p>
                 </div>
 
                 <div class="relative">
                   <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-emerald-500 border-4 border-white shadow"></div>
-                  <h4 class="font-bold text-slate-900 text-base">Langkah 5: Tombol '=' Ditekan &rarr; ALU Mengeksekusi</h4>
-                  <p class="text-slate-600 text-sm mt-1">CU mengirim perintah hitung ke ALU &rarr; ALU menjumlahkan $3 + 5 = 8$ di Register Accumulator.</p>
+                  <h4 class="font-bold text-slate-900 text-base">Langkah 2: MEMORI (Transit di RAM)</h4>
+                  <p class="text-slate-600 text-sm mt-1">Data dan kode operasi ditampung sementara di memori utama: angka 5 di <strong>RAM Alamat [100]</strong>, instruksi ADD di <strong>RAM Alamat [200]</strong>, dan angka 3 di <strong>RAM Alamat [101]</strong> sebagai ruang transit utama.</p>
                 </div>
 
                 <div class="relative">
-                  <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-rose-500 border-4 border-white shadow"></div>
-                  <h4 class="font-bold text-slate-900 text-base">Langkah 6: Setor Balik ke RAM Alamat 300</h4>
-                  <p class="text-slate-600 text-sm mt-1">Hasil angka 8 ditulis balik ke <strong>RAM Alamat 300</strong> via Data Bus. CPU tidak pernah mengirim langsung ke monitor!</p>
+                  <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-sky-600 border-4 border-white shadow"></div>
+                  <h4 class="font-bold text-slate-900 text-base">Langkah 3: CPU — Fetch (Penjemputan ke Register)</h4>
+                  <p class="text-slate-600 text-sm mt-1">Control Unit (CU) menjemput kode instruksi dan data dari RAM melalui Bus Data. Angka 5 disalin ke <strong>Register A</strong> dan angka 3 disalin ke <strong>Register B</strong> internal CPU.</p>
                 </div>
 
                 <div class="relative">
-                  <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-cyan-500 border-4 border-white shadow"></div>
-                  <h4 class="font-bold text-slate-900 text-base">Langkah 7: Layar Monitor Melakukan Polling RAM</h4>
-                  <p class="text-slate-600 text-sm mt-1">Display controller membaca RAM Alamat 300 (polling 60x/detik) &rarr; matriks LED/LCD menyala membentuk angka '8' dalam tempo kurang dari 1 milidetik!</p>
+                  <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-purple-600 border-4 border-white shadow"></div>
+                  <h4 class="font-bold text-slate-900 text-base">Langkah 4: CPU — Decode (Penerjemahan & Status HOLD)</h4>
+                  <p class="text-slate-600 text-sm mt-1">CU menerjemahkan kode instruksi ADD dari RAM Alamat 200 bahwa operasi yang diminta adalah penjumlahan. <strong>CPU TIDAK LANGSUNG MENGHITUNG!</strong> CU berada dalam status HOLD (menahan eksekusi) menunggu pemicu tombol '=' ditekan.</p>
+                </div>
+
+                <div class="relative">
+                  <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-blue-600 border-4 border-white shadow"></div>
+                  <h4 class="font-bold text-slate-900 text-base">Langkah 5: CPU — ALU (Eksekusi 5 + 3 = 8 & Write-back ke RAM)</h4>
+                  <p class="text-slate-600 text-sm mt-1">Tombol '=' ditekan! CU mengirim sinyal Execute ke ALU. ALU menjumlahkan <strong>5 + 3 = 8</strong> di Register Accumulator (ACC), lalu CU segera melakukan <em>Write-back</em> menyimpan angka 8 ke <strong>RAM Alamat [300]</strong>.</p>
+                </div>
+
+                <div class="relative">
+                  <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-teal-600 border-4 border-white shadow"></div>
+                  <h4 class="font-bold text-slate-900 text-base">Langkah 6: OUTPUT (Penayangan Hasil di Layar)</h4>
+                  <p class="text-slate-600 text-sm mt-1">Display Controller membaca angka 8 dari <strong>RAM Alamat [300]</strong> dan memancarkan sinyal visual sehingga angka <strong>8</strong> muncul di layar kalkulator. Siklus I-P-O lengkap selesai!</p>
                 </div>
               </div>
             </div>
@@ -915,9 +909,9 @@
             <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-indigo-500/30 text-indigo-300 border border-indigo-400/30">
               Interactive Lab • Laboratorium Virtual
             </span>
-            <h2 class="text-2xl sm:text-3xl font-extrabold mt-2">Simulator Kalkulator $3 + 5 = 8$</h2>
+            <h2 class="text-2xl sm:text-3xl font-extrabold mt-2">Simulator Dinamika Alur I-P-O ($5 + 3 = 8$)</h2>
             <p class="text-slate-300 text-sm mt-1 max-w-xl">
-              Perhatikan bagaimana data transit 2 kali di RAM dan CPU menunggu instruksi tombol '=' sebelum menghitung!
+              Skenario LKPD TP 2: Pengguna mengetik <code>5 + 3</code> di kalkulator digital. Pelajari 6 langkah nyata: <strong>INPUT &rarr; MEMORI &rarr; CPU - Fetch &rarr; CPU - Decode &rarr; CPU - ALU &rarr; OUTPUT</strong>!
             </p>
           </div>
           <div class="flex items-center gap-3">
@@ -930,47 +924,57 @@
           </div>
         </div>
 
-        <!-- PIPELINE 5 TAHAP VISUAL -->
+        <!-- PIPELINE 6 TAHAP VISUAL (SESUAI TP 2 DINAMIKA I-P-O) -->
         <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/90">
           <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center justify-between">
-            <span>Visual Pipeline Alur Data Fisik</span>
-            <span id="calc-step-badge" class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-mono text-xs">Step 0 / 7</span>
+            <span class="flex items-center gap-2">
+              <i class="fas fa-project-diagram text-indigo-600"></i>
+              Visual Pipeline Alur Data Dinamika I-P-O
+            </span>
+            <span id="calc-step-badge" class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-mono text-xs font-bold">Step 0 / 6</span>
           </div>
 
-          <div class="grid grid-cols-5 gap-2 sm:gap-4 text-center">
-            <!-- Node 1: Input -->
-            <div id="pipe-node-1" class="pipe-box border-2 border-slate-200 rounded-2xl p-3 sm:p-4 bg-slate-50 transition">
-              <i class="fas fa-keyboard text-2xl text-slate-400 mb-2"></i>
-              <div class="font-bold text-xs sm:text-sm text-slate-800">1. Input</div>
-              <div id="pipe-val-1" class="text-xs text-slate-500 font-mono mt-1">-</div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 text-center">
+            <!-- Node 1: INPUT -->
+            <div id="pipe-node-1" class="pipe-box border-2 border-slate-200 rounded-2xl p-3 bg-slate-50 transition">
+              <i class="fas fa-keyboard text-2xl text-slate-400 mb-1.5"></i>
+              <div class="font-bold text-xs text-slate-800">1. INPUT</div>
+              <div id="pipe-val-1" class="text-[11px] text-slate-500 font-mono mt-1">Standby</div>
             </div>
 
-            <!-- Node 2: RAM In -->
-            <div id="pipe-node-2" class="pipe-box border-2 border-slate-200 rounded-2xl p-3 sm:p-4 bg-slate-50 transition">
-              <i class="fas fa-memory text-2xl text-slate-400 mb-2"></i>
-              <div class="font-bold text-xs sm:text-sm text-slate-800">2. RAM (Transit 1)</div>
-              <div id="pipe-val-2" class="text-xs text-slate-500 font-mono mt-1">-</div>
+            <!-- Node 2: MEMORI -->
+            <div id="pipe-node-2" class="pipe-box border-2 border-slate-200 rounded-2xl p-3 bg-slate-50 transition">
+              <i class="fas fa-memory text-2xl text-slate-400 mb-1.5"></i>
+              <div class="font-bold text-xs text-slate-800">2. MEMORI</div>
+              <div id="pipe-val-2" class="text-[11px] text-slate-500 font-mono mt-1">-</div>
             </div>
 
-            <!-- Node 3: CPU -->
-            <div id="pipe-node-3" class="pipe-box border-2 border-slate-200 rounded-2xl p-3 sm:p-4 bg-slate-50 transition">
-              <i class="fas fa-microchip text-2xl text-slate-400 mb-2"></i>
-              <div class="font-bold text-xs sm:text-sm text-slate-800">3. CPU Core</div>
-              <div id="pipe-val-3" class="text-xs text-slate-500 font-mono mt-1">IDLE</div>
+            <!-- Node 3: CPU - Fetch -->
+            <div id="pipe-node-3" class="pipe-box border-2 border-slate-200 rounded-2xl p-3 bg-slate-50 transition">
+              <i class="fas fa-arrow-circle-down text-2xl text-slate-400 mb-1.5"></i>
+              <div class="font-bold text-xs text-slate-800">3. CPU - Fetch</div>
+              <div id="pipe-val-3" class="text-[11px] text-slate-500 font-mono mt-1">-</div>
             </div>
 
-            <!-- Node 4: RAM Out -->
-            <div id="pipe-node-4" class="pipe-box border-2 border-slate-200 rounded-2xl p-3 sm:p-4 bg-slate-50 transition">
-              <i class="fas fa-memory text-2xl text-slate-400 mb-2"></i>
-              <div class="font-bold text-xs sm:text-sm text-slate-800">4. RAM (Transit 2)</div>
-              <div id="pipe-val-4" class="text-xs text-slate-500 font-mono mt-1">-</div>
+            <!-- Node 4: CPU - Decode -->
+            <div id="pipe-node-4" class="pipe-box border-2 border-slate-200 rounded-2xl p-3 bg-slate-50 transition">
+              <i class="fas fa-cogs text-2xl text-slate-400 mb-1.5"></i>
+              <div class="font-bold text-xs text-slate-800">4. CPU - Decode</div>
+              <div id="pipe-val-4" class="text-[11px] text-slate-500 font-mono mt-1">-</div>
             </div>
 
-            <!-- Node 5: Output -->
-            <div id="pipe-node-5" class="pipe-box border-2 border-slate-200 rounded-2xl p-3 sm:p-4 bg-slate-50 transition">
-              <i class="fas fa-tv text-2xl text-slate-400 mb-2"></i>
-              <div class="font-bold text-xs sm:text-sm text-slate-800">5. Layar Output</div>
-              <div id="pipe-val-5" class="text-xs text-slate-500 font-mono mt-1">-</div>
+            <!-- Node 5: CPU - ALU -->
+            <div id="pipe-node-5" class="pipe-box border-2 border-slate-200 rounded-2xl p-3 bg-slate-50 transition">
+              <i class="fas fa-calculator text-2xl text-slate-400 mb-1.5"></i>
+              <div class="font-bold text-xs text-slate-800">5. CPU - ALU</div>
+              <div id="pipe-val-5" class="text-[11px] text-slate-500 font-mono mt-1">-</div>
+            </div>
+
+            <!-- Node 6: OUTPUT -->
+            <div id="pipe-node-6" class="pipe-box border-2 border-slate-200 rounded-2xl p-3 bg-slate-50 transition">
+              <i class="fas fa-tv text-2xl text-slate-400 mb-1.5"></i>
+              <div class="font-bold text-xs text-slate-800">6. OUTPUT</div>
+              <div id="pipe-val-6" class="text-[11px] text-slate-500 font-mono mt-1">-</div>
             </div>
           </div>
 
@@ -980,9 +984,9 @@
               <i class="fas fa-info-circle"></i>
             </div>
             <div>
-              <div id="calc-narrative-title" class="font-bold text-indigo-950 text-base">Status Sistem: Siap Mulai</div>
+              <div id="calc-narrative-title" class="font-bold text-indigo-950 text-base">Status Sistem: Siap Mulai (Skenario 5 + 3)</div>
               <p id="calc-narrative-desc" class="text-slate-600 text-sm mt-0.5">
-                Klik tombol angka '3' di Keypad di bawah atau klik tombol "Step Berikutnya" untuk menjalankan siklus simulasi.
+                Ketik "5 + 3" di keypad di bawah atau klik "Step Berikutnya" untuk menjalankan siklus simulasi 6 tahap Dinamika I-P-O.
               </p>
             </div>
           </div>
@@ -1484,78 +1488,83 @@
               </div>
 
               <!-- Refleksi TP 1 -->
-              <div class="bg-slate-50 p-3.5 sm:p-4 rounded-xl border border-slate-200 lkpd-avoid-break">
-                <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-1.5">
+              <div class="mb-3 lkpd-avoid-break">
+                <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-1">
                   Refleksi: Mengapa keempat komponen ini harus bekerja sama?
                 </label>
-                <textarea id="refleksi-tp1" rows="2" oninput="autoResizeTextarea(this)" placeholder="(Tuliskan alasan/refleksimu...)" class="auto-expand w-full p-2.5 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
+                <textarea id="refleksi-tp1" rows="1" oninput="autoResizeTextarea(this)" placeholder="(Tuliskan alasan/refleksimu...)" class="auto-expand w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
               </div>
             </div>
 
             <!-- BAGIAN 2: SIMULASI DINAMIKA ALUR I-P-O (TP 2) -->
-            <div class="mb-4 lkpd-avoid-break">
-              <div class="flex items-center gap-2.5 mb-2">
-                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-indigo-600 text-white font-extrabold flex items-center justify-center text-xs sm:text-sm shadow-sm flex-shrink-0">
+            <div class="mb-3 lkpd-avoid-break">
+              <div class="flex items-center gap-2 mb-1.5">
+                <div class="w-6 h-6 rounded-full bg-indigo-600 text-white font-extrabold flex items-center justify-center text-xs shadow-sm flex-shrink-0">
                   2
                 </div>
-                <h4 class="font-extrabold text-base sm:text-lg text-slate-900">
+                <h4 class="font-extrabold text-sm sm:text-base text-slate-900">
                   Simulasi Dinamika Alur I-P-O (TP 2)
                 </h4>
               </div>
-              <p class="text-xs sm:text-sm text-slate-600 mb-3 font-semibold">
-                Skenario: Pengguna mengetik "5 + 3" di kalkulator digital.
-              </p>
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                <p class="text-xs text-slate-600 font-semibold">
+                  Skenario: Pengguna mengetik "5 + 3" di kalkulator digital.
+                </p>
+                <button onclick="fillTP2SampleAnswers()" type="button" class="no-print text-[11px] font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2.5 py-1 rounded-lg transition inline-flex items-center gap-1.5 self-start sm:self-auto shadow-xs">
+                  <i class="fas fa-magic"></i> Salin Kunci Dinamika I-P-O
+                </button>
+              </div>
 
               <!-- Tabel TP 2 (Header Hijau/Emerald Sesuai PDF) -->
               <div class="lkpd-table-wrapper border border-slate-300 rounded-xl overflow-x-auto bg-white mb-2">
                 <table class="w-full text-left text-xs sm:text-sm min-w-[560px]">
                   <thead class="bg-emerald-600 text-white font-bold uppercase tracking-wider text-[11px] sm:text-xs">
                     <tr>
-                      <th class="py-2.5 px-3 w-16 text-center">Langkah</th>
-                      <th class="py-2.5 px-4 w-44">Komponen Aktif</th>
-                      <th class="py-2.5 px-4">Apa yang Terjadi?</th>
+                      <th class="py-2 px-3 w-16 text-center">Langkah</th>
+                      <th class="py-2 px-4 w-44">Komponen Aktif</th>
+                      <th class="py-2 px-4">Apa yang Terjadi?</th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-slate-200 text-slate-800">
                     <tr class="hover:bg-slate-50/70 lkpd-avoid-break">
-                      <td class="py-2.5 px-3 text-center font-bold">1</td>
-                      <td class="py-2.5 px-4 font-bold text-amber-700">INPUT</td>
-                      <td class="py-2 px-3">
+                      <td class="py-2 px-3 text-center font-bold">1</td>
+                      <td class="py-2 px-4 font-bold text-amber-700">INPUT</td>
+                      <td class="py-1.5 px-3">
                         <textarea id="tp2-1" rows="1" oninput="autoResizeTextarea(this)" placeholder="Tuliskan yang terjadi..." class="auto-expand w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none text-xs sm:text-sm font-medium"></textarea>
                       </td>
                     </tr>
                     <tr class="hover:bg-slate-50/70 lkpd-avoid-break">
-                      <td class="py-2.5 px-3 text-center font-bold">2</td>
-                      <td class="py-2.5 px-4 font-bold text-emerald-700">MEMORI</td>
-                      <td class="py-2 px-3">
+                      <td class="py-2 px-3 text-center font-bold">2</td>
+                      <td class="py-2 px-4 font-bold text-emerald-700">MEMORI</td>
+                      <td class="py-1.5 px-3">
                         <textarea id="tp2-2" rows="1" oninput="autoResizeTextarea(this)" placeholder="Tuliskan yang terjadi..." class="auto-expand w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none text-xs sm:text-sm font-medium"></textarea>
                       </td>
                     </tr>
                     <tr class="hover:bg-slate-50/70 lkpd-avoid-break">
-                      <td class="py-2.5 px-3 text-center font-bold">3</td>
-                      <td class="py-2.5 px-4 font-bold text-sky-700">CPU — Fetch</td>
-                      <td class="py-2 px-3">
+                      <td class="py-2 px-3 text-center font-bold">3</td>
+                      <td class="py-2 px-4 font-bold text-sky-700">CPU — Fetch</td>
+                      <td class="py-1.5 px-3">
                         <textarea id="tp2-3" rows="1" oninput="autoResizeTextarea(this)" placeholder="Tuliskan yang terjadi..." class="auto-expand w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none text-xs sm:text-sm font-medium"></textarea>
                       </td>
                     </tr>
                     <tr class="hover:bg-slate-50/70 lkpd-avoid-break">
-                      <td class="py-2.5 px-3 text-center font-bold">4</td>
-                      <td class="py-2.5 px-4 font-bold text-purple-700">CPU — Decode</td>
-                      <td class="py-2 px-3">
+                      <td class="py-2 px-3 text-center font-bold">4</td>
+                      <td class="py-2 px-4 font-bold text-purple-700">CPU — Decode</td>
+                      <td class="py-1.5 px-3">
                         <textarea id="tp2-4" rows="1" oninput="autoResizeTextarea(this)" placeholder="Tuliskan yang terjadi..." class="auto-expand w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none text-xs sm:text-sm font-medium"></textarea>
                       </td>
                     </tr>
                     <tr class="hover:bg-slate-50/70 lkpd-avoid-break">
-                      <td class="py-2.5 px-3 text-center font-bold">5</td>
-                      <td class="py-2.5 px-4 font-bold text-blue-700">CPU — ALU</td>
-                      <td class="py-2 px-3">
+                      <td class="py-2 px-3 text-center font-bold">5</td>
+                      <td class="py-2 px-4 font-bold text-blue-700">CPU — ALU</td>
+                      <td class="py-1.5 px-3">
                         <textarea id="tp2-5" rows="1" oninput="autoResizeTextarea(this)" placeholder="Tuliskan yang terjadi..." class="auto-expand w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none text-xs sm:text-sm font-medium"></textarea>
                       </td>
                     </tr>
                     <tr class="hover:bg-slate-50/70 lkpd-avoid-break">
-                      <td class="py-2.5 px-3 text-center font-bold">6</td>
-                      <td class="py-2.5 px-4 font-bold text-cyan-700">OUTPUT</td>
-                      <td class="py-2 px-3">
+                      <td class="py-2 px-3 text-center font-bold">6</td>
+                      <td class="py-2 px-4 font-bold text-cyan-700">OUTPUT</td>
+                      <td class="py-1.5 px-3">
                         <textarea id="tp2-6" rows="1" oninput="autoResizeTextarea(this)" placeholder="Tuliskan yang terjadi..." class="auto-expand w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none text-xs sm:text-sm font-medium"></textarea>
                       </td>
                     </tr>
@@ -1565,19 +1574,19 @@
             </div>
 
             <!-- Footer Halaman 1 -->
-            <div class="pt-3 border-t border-slate-200 text-center text-xs text-slate-500 font-medium">
+            <div class="pt-2 border-t border-slate-200 text-center text-[11px] text-slate-500 font-medium">
               Bilik Komputasi • Arsitektur Von Neumann • SMA Fase E
             </div>
           </div>
 
           <!-- PAGE BREAK PEMISAH HALAMAN 1 & 2 -->
-          <div class="page-break my-4"></div>
+          <div class="page-break my-3"></div>
 
           <!-- ==================== HALAMAN 2 ==================== -->
-          <div class="lkpd-sheet bg-white p-5 sm:p-8 lg:p-10 rounded-3xl border border-slate-200/90 shadow-sm relative">
+          <div id="lkpd-sheet-2" class="lkpd-sheet bg-white p-5 sm:p-7 rounded-3xl border border-slate-200/90 shadow-sm relative">
             
             <!-- Top Header Strip Halaman 2 -->
-            <div class="bg-indigo-600 text-white px-4 sm:px-6 py-2.5 rounded-xl flex items-center justify-between mb-6 shadow-sm">
+            <div class="bg-indigo-600 text-white px-4 sm:px-6 py-2 rounded-xl flex items-center justify-between mb-3 shadow-sm">
               <div>
                 <div class="font-extrabold text-sm sm:text-base tracking-wide">Bilik Komputasi</div>
                 <div class="text-[10px] sm:text-xs text-indigo-100">LKPD — Arsitektur Von Neumann & I-P-O (Sub-Bab 5)</div>
@@ -1588,108 +1597,102 @@
             </div>
 
             <!-- PERTANYAAN LANJUTAN DINAMIKA IPO -->
-            <div class="space-y-4 mb-8">
-              <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 lkpd-avoid-break">
-                <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-2">
+            <div class="space-y-2 mb-3">
+              <div class="lkpd-avoid-break">
+                <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-1">
                   1. Pada langkah ke berapa CPU melakukan perhitungan matematika? Mengapa?
                 </label>
-                <textarea id="tp2-q1" rows="2" oninput="autoResizeTextarea(this)" placeholder="(Tuliskan analisismu...)" class="auto-expand w-full p-2.5 sm:p-3 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
+                <textarea id="tp2-q1" rows="1" oninput="autoResizeTextarea(this)" placeholder="(Tuliskan analisismu...)" class="auto-expand w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
               </div>
 
-              <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 lkpd-avoid-break">
-                <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-2">
+              <div class="lkpd-avoid-break">
+                <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-1">
                   2. Apa peran Memori dalam dinamika I-P-O di atas?
                 </label>
-                <textarea id="tp2-q2" rows="2" oninput="autoResizeTextarea(this)" placeholder="(Tuliskan analisismu...)" class="auto-expand w-full p-2.5 sm:p-3 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
+                <textarea id="tp2-q2" rows="1" oninput="autoResizeTextarea(this)" placeholder="(Tuliskan analisismu...)" class="auto-expand w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
               </div>
 
-              <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 lkpd-avoid-break">
-                <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-2">
+              <div class="lkpd-avoid-break">
+                <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-1">
                   3. Apa yang akan terjadi jika komponen OUTPUT rusak?
                 </label>
-                <textarea id="tp2-q3" rows="2" oninput="autoResizeTextarea(this)" placeholder="(Tuliskan analisismu...)" class="auto-expand w-full p-2.5 sm:p-3 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
+                <textarea id="tp2-q3" rows="1" oninput="autoResizeTextarea(this)" placeholder="(Tuliskan analisismu...)" class="auto-expand w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
               </div>
             </div>
 
             <!-- BAGIAN 3: REFLEKSI -->
-            <div class="mb-8">
-              <div class="flex items-center gap-2.5 mb-4">
-                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-indigo-600 text-white font-extrabold flex items-center justify-center text-xs sm:text-sm shadow-sm flex-shrink-0">
+            <div class="mb-3">
+              <div class="flex items-center gap-2 mb-2">
+                <div class="w-6 h-6 rounded-full bg-indigo-600 text-white font-extrabold flex items-center justify-center text-xs shadow-sm flex-shrink-0">
                   3
                 </div>
-                <h4 class="font-extrabold text-base sm:text-lg text-slate-900">
+                <h4 class="font-extrabold text-sm sm:text-base text-slate-900">
                   Refleksi
                 </h4>
               </div>
 
-              <div class="space-y-4">
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 lkpd-avoid-break">
-                  <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-2">
+              <div class="space-y-2">
+                <div class="lkpd-avoid-break">
+                  <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-1">
                     1. Dengan kata-katamu sendiri, apa itu arsitektur Von Neumann?
                   </label>
-                  <textarea id="refleksi-q1" rows="2" oninput="autoResizeTextarea(this)" placeholder="(Tuliskan jawaban...)" class="auto-expand w-full p-2.5 sm:p-3 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
+                  <textarea id="refleksi-q1" rows="1" oninput="autoResizeTextarea(this)" placeholder="(Tuliskan jawaban...)" class="auto-expand w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
                 </div>
 
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 lkpd-avoid-break">
-                  <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-2">
+                <div class="lkpd-avoid-break">
+                  <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-1">
                     2. Mengapa keempat komponen harus bekerja sama?
                   </label>
-                  <textarea id="refleksi-q2" rows="2" oninput="autoResizeTextarea(this)" placeholder="(Tuliskan jawaban...)" class="auto-expand w-full p-2.5 sm:p-3 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
+                  <textarea id="refleksi-q2" rows="1" oninput="autoResizeTextarea(this)" placeholder="(Tuliskan jawaban...)" class="auto-expand w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
                 </div>
 
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 lkpd-avoid-break">
-                  <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-2">
+                <div class="lkpd-avoid-break">
+                  <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-1">
                     3. Tuliskan 1 hal baru yang kamu pelajari hari ini!
                   </label>
-                  <textarea id="refleksi-q3" rows="2" oninput="autoResizeTextarea(this)" placeholder="(Tuliskan jawaban...)" class="auto-expand w-full p-2.5 sm:p-3 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
+                  <textarea id="refleksi-q3" rows="1" oninput="autoResizeTextarea(this)" placeholder="(Tuliskan jawaban...)" class="auto-expand w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
                 </div>
 
                 <!-- Pertanyaan 4: Perasaan Belajar Hari Ini -->
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 lkpd-avoid-break">
-                  <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-2">
+                <div class="lkpd-avoid-break pt-1">
+                  <label class="block font-bold text-xs sm:text-sm text-slate-900 mb-1">
                     4. Bagaimana perasaan dan pemahamanmu setelah mempelajari materi hari ini?
                   </label>
-                  <p class="text-xs text-slate-500 mb-3 font-medium">
-                    Pilih salah satu ikon yang paling menggambarkan kesan belajarmu:
-                  </p>
                   
-                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-3" id="lkpd-feeling-options">
-                    <button type="button" onclick="selectFeeling('menyenangkan')" id="feeling-btn-menyenangkan" class="feeling-option-btn p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-emerald-400 hover:bg-emerald-50/40 text-center transition flex flex-col items-center justify-center gap-1 group cursor-pointer">
-                      <span class="text-2xl group-hover:scale-110 transition transform">😄</span>
-                      <span class="font-bold text-xs text-slate-800">Menyenangkan</span>
-                      <span class="text-[10px] text-slate-500 leading-tight">Paham & seru!</span>
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-2" id="lkpd-feeling-options">
+                    <button type="button" onclick="selectFeeling('menyenangkan')" id="feeling-btn-menyenangkan" class="feeling-option-btn p-2 rounded-xl border-2 border-slate-200 bg-white hover:border-emerald-400 hover:bg-emerald-50/40 text-center transition flex flex-col items-center justify-center gap-0.5 group cursor-pointer">
+                      <span class="text-xl group-hover:scale-110 transition transform">😄</span>
+                      <span class="font-bold text-[11px] text-slate-800">Menyenangkan</span>
+                      <span class="text-[9px] text-slate-500 leading-tight">Paham & seru!</span>
                     </button>
-                    <button type="button" onclick="selectFeeling('bingung')" id="feeling-btn-bingung" class="feeling-option-btn p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-amber-400 hover:bg-amber-50/40 text-center transition flex flex-col items-center justify-center gap-1 group cursor-pointer">
-                      <span class="text-2xl group-hover:scale-110 transition transform">🤔</span>
-                      <span class="font-bold text-xs text-slate-800">Masih Bingung</span>
-                      <span class="text-[10px] text-slate-500 leading-tight">Butuh bimbingan</span>
+                    <button type="button" onclick="selectFeeling('bingung')" id="feeling-btn-bingung" class="feeling-option-btn p-2 rounded-xl border-2 border-slate-200 bg-white hover:border-amber-400 hover:bg-amber-50/40 text-center transition flex flex-col items-center justify-center gap-0.5 group cursor-pointer">
+                      <span class="text-xl group-hover:scale-110 transition transform">🤔</span>
+                      <span class="font-bold text-[11px] text-slate-800">Masih Bingung</span>
+                      <span class="text-[9px] text-slate-500 leading-tight">Butuh bimbingan</span>
                     </button>
-                    <button type="button" onclick="selectFeeling('biasa')" id="feeling-btn-biasa" class="feeling-option-btn p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-blue-400 hover:bg-blue-50/40 text-center transition flex flex-col items-center justify-center gap-1 group cursor-pointer">
-                      <span class="text-2xl group-hover:scale-110 transition transform">😐</span>
-                      <span class="font-bold text-xs text-slate-800">Biasa Aja</span>
-                      <span class="text-[10px] text-slate-500 leading-tight">Cukup mengerti</span>
+                    <button type="button" onclick="selectFeeling('biasa')" id="feeling-btn-biasa" class="feeling-option-btn p-2 rounded-xl border-2 border-slate-200 bg-white hover:border-blue-400 hover:bg-blue-50/40 text-center transition flex flex-col items-center justify-center gap-0.5 group cursor-pointer">
+                      <span class="text-xl group-hover:scale-110 transition transform">😐</span>
+                      <span class="font-bold text-[11px] text-slate-800">Biasa Aja</span>
+                      <span class="text-[9px] text-slate-500 leading-tight">Cukup mengerti</span>
                     </button>
-                    <button type="button" onclick="selectFeeling('menantang')" id="feeling-btn-menantang" class="feeling-option-btn p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-purple-400 hover:bg-purple-50/40 text-center transition flex flex-col items-center justify-center gap-1 group cursor-pointer">
-                      <span class="text-2xl group-hover:scale-110 transition transform">🤯</span>
-                      <span class="font-bold text-xs text-slate-800">Menantang</span>
-                      <span class="text-[10px] text-slate-500 leading-tight">Mendalam & keren</span>
+                    <button type="button" onclick="selectFeeling('menantang')" id="feeling-btn-menantang" class="feeling-option-btn p-2 rounded-xl border-2 border-slate-200 bg-white hover:border-purple-400 hover:bg-purple-50/40 text-center transition flex flex-col items-center justify-center gap-0.5 group cursor-pointer">
+                      <span class="text-xl group-hover:scale-110 transition transform">🤯</span>
+                      <span class="font-bold text-[11px] text-slate-800">Menantang</span>
+                      <span class="text-[9px] text-slate-500 leading-tight">Mendalam & keren</span>
                     </button>
                   </div>
 
                   <input type="hidden" id="lkpd-feeling" value="">
 
-                  <div class="mt-2.5">
-                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">
-                      Catatan atau alasan (hal yang paling disukai / yang masih membingungkan):
-                    </label>
-                    <textarea id="lkpd-feeling-note" rows="2" oninput="autoResizeTextarea(this)" placeholder="(Opsional) Tuliskan catatan atau alasanmu di sini..." class="auto-expand w-full p-2.5 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
+                  <div>
+                    <textarea id="lkpd-feeling-note" rows="1" oninput="autoResizeTextarea(this)" placeholder="(Opsional) Catatan atau alasan mengenai kesan belajarmu hari ini..." class="auto-expand w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-medium"></textarea>
                   </div>
                 </div>
               </div>
             </div>
 
             <!-- Footer Halaman 2 -->
-            <div class="pt-4 border-t border-slate-200 text-center text-xs text-slate-500 font-medium">
+            <div class="pt-2.5 border-t border-slate-200 text-center text-[11px] text-slate-500 font-medium">
               Bilik Komputasi • Arsitektur Von Neumann • SMA Fase E
             </div>
           </div>
@@ -1885,7 +1888,7 @@
     }
 
     /* ===================================================
-       3. SIMULATOR KALKULATOR 3 + 5 = 8 (5 TAHAP FISIK)
+       3. SIMULATOR KALKULATOR 5 + 3 = 8 (6 TAHAP DINAMIKA I-P-O TP 2)
        =================================================== */
     let currentCalcStep = 0;
     let autoPlayInterval = null;
@@ -1893,91 +1896,87 @@
     const calcSteps = [
       {
         step: 0,
-        title: "Status Sistem: Siap Mulai",
-        desc: "Tekan tombol angka '3' atau klik 'Step Berikutnya' untuk memulai siklus komputasi.",
+        title: "Status Sistem: Siap Mulai (Skenario 5 + 3)",
+        desc: "Ketik '5 + 3' pada keypad di bawah atau klik tombol 'Step Berikutnya' untuk memulai siklus komputasi 6 tahap sesuai TP 2.",
         screen: "0",
         ram100: "-", ram200: "-", ram101: "-", ram300: "-",
-        cu: { status: "Menunggu", desc: "Belum ada instruksi aktif." },
+        cu: { status: "Menunggu", desc: "Sistem idle. Belum ada sinyal instruksi aktif." },
         alu: { status: "Standby", desc: "Operasi: -" },
         regA: "-", regB: "-", acc: "-",
-        activeNodes: []
+        activeNodes: [],
+        nodeVals: { 1: "Standby", 2: "-", 3: "-", 4: "-", 5: "-", 6: "-" }
       },
       {
         step: 1,
-        title: "Tahap 1: Input Angka '3' Transit ke RAM",
-        desc: "Tombol '3' ditekan di keyboard. Sinyal dikirim via bus dan transit di RAM Alamat 100.",
-        screen: "3",
-        ram100: "3", ram200: "-", ram101: "-", ram300: "-",
-        cu: { status: "Standby", desc: "Menunggu instruksi operator." },
+        title: "Langkah 1: INPUT — Pengguna Mengetik '5 + 3'",
+        desc: "<strong>Komponen Aktif: INPUT (Keypad Kalkulator)</strong><br>Pengguna menekan tombol angka '5', tombol '+', dan tombol '3'. Pengontrol keyboard mengubah penekanan tombol mekanik menjadi kode sinyal digital biner dan mengirimkannya melalui Bus Masukan (Input Bus) menuju sistem.",
+        screen: "5 + 3",
+        ram100: "-", ram200: "-", ram101: "-", ram300: "-",
+        cu: { status: "Menerima Input", desc: "Mendeteksi aliran data masukan '5 + 3' dari Input Bus." },
         alu: { status: "Standby", desc: "Operasi: -" },
         regA: "-", regB: "-", acc: "-",
-        activeNodes: [1, 2]
+        activeNodes: [1],
+        nodeVals: { 1: "Ketik '5 + 3'", 2: "Bus Transfer", 3: "-", 4: "-", 5: "-", 6: "-" }
       },
       {
         step: 2,
-        title: "Tahap 2: Input Operator '+' Disimpan di RAM",
-        desc: "Operator '+' ditekan. Kode instruksi ADD disimpan di RAM Alamat 200.",
-        screen: "3 +",
-        ram100: "3", ram200: "ADD", ram101: "-", ram300: "-",
-        cu: { status: "Standby", desc: "Instruksi ADD tersimpan di RAM." },
+        title: "Langkah 2: MEMORI — Transit Data & Opcode di RAM",
+        desc: "<strong>Komponen Aktif: MEMORI (RAM / Main Memory)</strong><br>Data masukan tidak langsung diolah CPU. RAM mengalokasikan ruang dan menyimpan sementara: angka '5' di <strong>Alamat [100]</strong>, instruksi ADD ('+') di <strong>Alamat [200]</strong>, dan angka '3' di <strong>Alamat [101]</strong> sebagai ruang transit utama.",
+        screen: "5 + 3",
+        ram100: "5", ram200: "ADD", ram101: "3", ram300: "-",
+        cu: { status: "Standby", desc: "Data dan kode operasi tersimpan di RAM, siap dijemput." },
         alu: { status: "Standby", desc: "Operasi: -" },
         regA: "-", regB: "-", acc: "-",
-        activeNodes: [1, 2]
+        activeNodes: [2],
+        nodeVals: { 1: "Selesai", 2: "Transit [100,200,101]", 3: "-", 4: "-", 5: "-", 6: "-" }
       },
       {
         step: 3,
-        title: "Tahap 3: Input Angka '5' Transit ke RAM",
-        desc: "Tombol '5' ditekan. Data angka 5 disimpan di RAM Alamat 101. Kedua data kini siap di RAM.",
-        screen: "3 + 5",
-        ram100: "3", ram200: "ADD", ram101: "5", ram300: "-",
-        cu: { status: "Standby", desc: "Data siap di RAM." },
-        alu: { status: "Standby", desc: "Operasi: -" },
-        regA: "-", regB: "-", acc: "-",
-        activeNodes: [1, 2]
+        title: "Langkah 3: CPU — Fetch (Penjemputan Data & Instruksi)",
+        desc: "<strong>Komponen Aktif: CPU — Fetch (Control Unit & Register)</strong><br>Control Unit (CU) melakukan proses penjemputan (<em>Fetch</em>) kode instruksi dan data dari RAM melalui Bus Data. Angka 5 disalin ke <strong>Register A</strong> dan angka 3 disalin ke <strong>Register B</strong> internal CPU.",
+        screen: "5 + 3 ...",
+        ram100: "5", ram200: "ADD", ram101: "3", ram300: "-",
+        cu: { status: "FETCH DATA", desc: "CU menjemput data dari RAM ke Register A (5) dan Register B (3)." },
+        alu: { status: "Standby", desc: "Menunggu instruksi eksekusi" },
+        regA: "5", regB: "3", acc: "-",
+        activeNodes: [2, 3],
+        nodeVals: { 1: "-", 2: "Read RAM", 3: "Fetch Reg A & B", 4: "-", 5: "-", 6: "-" }
       },
       {
         step: 4,
-        title: "Tahap 4: CPU Mengambil Data & MENUNGGU Perintah '='",
-        desc: "Data ditarik ke Register A (3) dan Register B (5). CPU TIDAK LANGSUNG MENJUMLAHKAN! CPU menunggu pemicu tombol '=' ditekan.",
-        screen: "3 + 5 ...",
-        ram100: "3", ram200: "ADD", ram101: "5", ram300: "-",
-        cu: { status: "MENUNGGU '='", desc: "HOLD: Menunggu perintah eksekusi dari pengguna!" },
-        alu: { status: "Waiting", desc: "Menunggu sinyal eksekusi CU" },
-        regA: "3", regB: "5", acc: "-",
-        activeNodes: [2, 3]
+        title: "Langkah 4: CPU — Decode (Penerjemahan & Status HOLD)",
+        desc: "<strong>Komponen Aktif: CPU — Decode (Control Unit)</strong><br>Control Unit (CU) menerjemahkan (<em>Decode</em>) kode instruksi ADD dari Alamat [200]. CU membaca bahwa operasi yang diminta adalah penjumlahan. <strong>CPU TIDAK LANGSUNG MENJUMLAHKAN!</strong> CU berada dalam status <strong>HOLD (Menunggu)</strong> hingga pengguna menekan tombol sama dengan ('=').",
+        screen: "5 + 3 (Menunggu '=')",
+        ram100: "5", ram200: "ADD", ram101: "3", ram300: "-",
+        cu: { status: "DECODE & HOLD", desc: "Instruksi ADD diterjemahkan. CPU HOLD menunggu penekanan tombol '='!" },
+        alu: { status: "Configured (ADD)", desc: "Sirkuit penjumlahan siap, menunggu pemicu eksekusi CU." },
+        regA: "5", regB: "3", acc: "-",
+        activeNodes: [4],
+        nodeVals: { 1: "-", 2: "-", 3: "Data di Register", 4: "Decode ADD & HOLD", 5: "Sirkuit Siap", 6: "-" }
       },
       {
         step: 5,
-        title: "Tahap 5: Tombol '=' Ditekan &rarr; ALU Mengeksekusi 3 + 5 = 8",
-        desc: "Tombol '=' ditekan! CU mengirim sinyal Execute ke ALU. ALU menjumlahkan 3 + 5 = 8 dan menyimpannya di Accumulator.",
-        screen: "3 + 5 = ...",
-        ram100: "3", ram200: "ADD", ram101: "5", ram300: "-",
-        cu: { status: "Executing", desc: "Mengirim sinyal hitung ke ALU" },
-        alu: { status: "Calculating", desc: "3 + 5 = 8 (Selesai)" },
-        regA: "3", regB: "5", acc: "8",
-        activeNodes: [3]
+        title: "Langkah 5: CPU — ALU (Eksekusi 5 + 3 = 8 & Write-back)",
+        desc: "<strong>Komponen Aktif: CPU — ALU & Accumulator</strong><br>Tombol '=' ditekan! CU mengirim sinyal pemicu <em>Execute</em> ke ALU. ALU melakukan operasi penjumlahan matematika: <strong>5 + 3 = 8</strong>. Hasil 8 disimpan di Accumulator (ACC) dan langsung disetor balik (<em>Write-back</em>) ke <strong>RAM Alamat [300]</strong> via Bus Data.",
+        screen: "5 + 3 = 8",
+        ram100: "5", ram200: "ADD", ram101: "3", ram300: "8",
+        cu: { status: "EXECUTE & WRITE", desc: "Pemicu eksekusi aktif. Hasil 8 ditulis balik ke RAM Alamat [300]." },
+        alu: { status: "CALCULATED", desc: "5 + 3 = 8 (Operasi selesai)" },
+        regA: "5", regB: "3", acc: "8",
+        activeNodes: [5, 2],
+        nodeVals: { 1: "-", 2: "Write [300]=8", 3: "-", 4: "Eksekusi Selesai", 5: "5 + 3 = 8", 6: "-" }
       },
       {
         step: 6,
-        title: "Tahap 6: Writeback Hasil 8 ke RAM (Transit 2)",
-        desc: "CPU tidak bisa langsung mengirim 8 ke monitor! Angka 8 ditulis kembali ke RAM Alamat 300 via Data Bus.",
-        screen: "Memproses...",
-        ram100: "3", ram200: "ADD", ram101: "5", ram300: "8",
-        cu: { status: "Write-back", desc: "Menyimpan hasil ke RAM Alamat 300" },
-        alu: { status: "Done", desc: "Tugas selesai" },
-        regA: "3", regB: "5", acc: "8",
-        activeNodes: [3, 4]
-      },
-      {
-        step: 7,
-        title: "Tahap 7: Display Controller Membaca RAM & Output Selesai!",
-        desc: "Pengontrol layar membaca RAM Alamat 300 dan memancarkan angka 8 di layar monitor. Siklus sempurna selesai!",
+        title: "Langkah 6: OUTPUT — Penayangan Hasil di Layar",
+        desc: "<strong>Komponen Aktif: OUTPUT (Display Controller & Layar)</strong><br>Display Controller membaca angka 8 dari <strong>RAM Alamat [300]</strong>, mengonversinya menjadi sinyal tampilan piksel, dan memunculkan angka <strong>8</strong> di layar display kalkulator pengguna. Siklus Dinamika I-P-O lengkap selesai!",
         screen: "8",
-        ram100: "3", ram200: "ADD", ram101: "5", ram300: "8",
-        cu: { status: "IDLE", desc: "Siklus selesai. Menunggu input berikutnya." },
+        ram100: "5", ram200: "ADD", ram101: "3", ram300: "8",
+        cu: { status: "IDLE", desc: "Siklus selesai sempurna. Sistem siap untuk operasi berikutnya." },
         alu: { status: "Standby", desc: "Standby" },
-        regA: "3", regB: "5", acc: "8",
-        activeNodes: [4, 5]
+        regA: "5", regB: "3", acc: "8",
+        activeNodes: [6],
+        nodeVals: { 1: "-", 2: "Read [300]", 3: "-", 4: "-", 5: "Hasil 8", 6: "Tampil '8'" }
       }
     ];
 
@@ -1985,7 +1984,7 @@
       const data = calcSteps[currentCalcStep];
       
       // Update Step Badge & Narrative
-      document.getElementById('calc-step-badge').innerText = `Step ${data.step} / 7`;
+      document.getElementById('calc-step-badge').innerText = `Step ${data.step} / 6`;
       document.getElementById('calc-narrative-title').innerHTML = data.title;
       document.getElementById('calc-narrative-desc').innerHTML = data.desc;
       
@@ -2017,16 +2016,27 @@
       document.getElementById('reg-b-val').innerText = data.regB;
       document.getElementById('reg-acc-val').innerText = data.acc;
 
-      // Pipeline Nodes Active Glow
-      for (let i = 1; i <= 5; i++) {
+      // Pipeline Nodes Active Glow (1 to 6)
+      for (let i = 1; i <= 6; i++) {
         const node = document.getElementById('pipe-node-' + i);
+        const valEl = document.getElementById('pipe-val-' + i);
+        if (valEl && data.nodeVals && data.nodeVals[i]) {
+          valEl.innerText = data.nodeVals[i];
+        }
         if (node) {
+          const icon = node.querySelector('i');
           if (data.activeNodes.includes(i)) {
-            node.className = "pipe-box border-2 border-indigo-600 rounded-2xl p-3 sm:p-4 bg-indigo-50/90 shadow-md transform scale-105 transition duration-300";
-            node.querySelector('i').className = node.querySelector('i').className.replace('text-slate-400', 'text-indigo-600');
+            node.className = "pipe-box border-2 border-indigo-600 rounded-2xl p-3 bg-indigo-50/90 shadow-md transform scale-105 transition duration-300";
+            if (icon) {
+              icon.classList.remove('text-slate-400');
+              icon.classList.add('text-indigo-600');
+            }
           } else {
-            node.className = "pipe-box border-2 border-slate-200 rounded-2xl p-3 sm:p-4 bg-slate-50 transition";
-            node.querySelector('i').className = node.querySelector('i').className.replace('text-indigo-600', 'text-slate-400');
+            node.className = "pipe-box border-2 border-slate-200 rounded-2xl p-3 bg-slate-50 transition";
+            if (icon) {
+              icon.classList.remove('text-indigo-600');
+              icon.classList.add('text-slate-400');
+            }
           }
         }
       }
@@ -2064,7 +2074,7 @@
             btn.innerHTML = `<i class="fas fa-play"></i> Auto Play`;
             btn.className = "px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 font-bold text-sm shadow-md transition flex items-center gap-2";
           }
-        }, 1600);
+        }, 1800);
       }
     }
 
@@ -2072,17 +2082,24 @@
       if (autoPlayInterval) {
         clearInterval(autoPlayInterval);
         autoPlayInterval = null;
-        document.getElementById('btn-calc-auto').innerHTML = `<i class="fas fa-play"></i> Auto Play`;
+        const btn = document.getElementById('btn-calc-auto');
+        if (btn) {
+          btn.innerHTML = `<i class="fas fa-play"></i> Auto Play`;
+          btn.className = "px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 font-bold text-sm shadow-md transition flex items-center gap-2";
+        }
       }
       currentCalcStep = 0;
       updateCalcUI();
     }
 
     function pressKey(key) {
-      if (key === '3' && currentCalcStep === 0) calcStepNext();
+      if (key === '5' && currentCalcStep === 0) calcStepNext();
       else if (key === '+' && currentCalcStep === 1) calcStepNext();
-      else if (key === '5' && currentCalcStep === 2) calcStepNext();
-      else if (key === '=' && currentCalcStep === 4) calcStepNext();
+      else if (key === '3' && currentCalcStep === 2) calcStepNext();
+      else if (key === '=' && (currentCalcStep === 3 || currentCalcStep === 4)) {
+        currentCalcStep = 4;
+        calcStepNext();
+      }
       else if (key === 'C') resetCalcSim();
       else calcStepNext();
     }
@@ -2126,7 +2143,7 @@
         icon.innerHTML = `<i class="fas fa-check-circle"></i>`;
         title.className = "text-lg font-bold text-emerald-950 mb-1";
         title.innerText = "STATUS: SISTEM BERJALAN SEMPURNA! ✅";
-        desc.innerText = "Alur 5 tahap fisik Input -> RAM -> CPU -> RAM -> Output berjalan mulus tanpa kendala! Perhitungan 3 + 5 = 8 berhasil diproses dan tampil di layar.";
+        desc.innerText = "Alur Dinamika I-P-O (Input -> RAM -> CPU -> RAM -> Output) berjalan mulus tanpa kendala! Perhitungan 5 + 3 = 8 berhasil diproses dan tampil di layar.";
         confetti({ particleCount: 30, spread: 60, origin: { y: 0.7 } });
       } else if (kb && mon && !ram && !cpu) {
         // HANYA KEYBOARD + LAYAR
@@ -2264,12 +2281,12 @@
         exp: "Kecepatan CPU berada di skala nanodetik/gigahertz, sehingga CPU hanya berkomunikasi dengan RAM sebagai transit hub berkecepatan tinggi."
       },
       {
-        q: "2. Pada studi kasus kalkulator (3 + 5 = 8), mengapa CPU tidak langsung menghitung saat angka 3 dan 5 dimasukkan?",
+        q: "2. Pada studi kasus kalkulator (5 + 3 = 8), mengapa CPU tidak langsung menghitung saat angka 5 dan 3 dimasukkan?",
         options: [
           "Karena CPU kehabisan memori",
           "Karena CPU harus menunggu instruksi pemicu eksekusi yaitu tombol '=' ditekan",
           "Karena keyboard rusak",
-          "Karena angka 3 dan 5 masih di harddisk"
+          "Karena angka 5 dan 3 masih di harddisk"
         ],
         correct: 1,
         exp: "Control Unit (CU) hanya akan memerintahkan ALU melakukan penjumlahan jika menerima sinyal eksekusi penutup (tombol '=')."
@@ -2498,6 +2515,26 @@
       alert('Isian LKPD telah dibersihkan.');
     }
 
+    function fillTP2SampleAnswers() {
+      const answers = {
+        'tp2-1': "Pengguna menekan tombol angka '5', tombol '+', dan tombol '3' pada keypad kalkulator. Sinyal mekanis tombol diubah menjadi sinyal digital biner dan dikirim melalui Bus Masukan (Input Bus).",
+        'tp2-2': "Data angka 5 (Alamat [100]), instruksi ADD (Alamat [200]), dan angka 3 (Alamat [101]) ditampung sementara di memori utama (RAM) sebagai ruang transit sebelum CPU memprosesnya.",
+        'tp2-3': "Control Unit (CU) menjemput (fetch) instruksi dan data dari RAM. Angka 5 dan 3 disalin ke penyimpanan internal CPU, yaitu Register A (5) dan Register B (3).",
+        'tp2-4': "Control Unit (CU) menerjemahkan (decode) kode instruksi ADD dari RAM Alamat 200 dan menyiapkan jalur sirkuit ALU. CPU berada dalam status HOLD (menunggu) sampai pengguna menekan tombol sama dengan ('=').",
+        'tp2-5': "Saat tombol '=' ditekan, CU memicu ALU mengeksekusi perhitungan matematika: 5 + 3 = 8. Hasil 8 disimpan di Accumulator (ACC) dan langsung disetor balik (Write-back) ke RAM Alamat [300].",
+        'tp2-6': "Display Controller membaca nilai hasil angka 8 dari RAM Alamat [300], mengonversinya menjadi sinyal tampilan visual, dan menampilkan angka 8 di layar monitor."
+      };
+      for (const [id, val] of Object.entries(answers)) {
+        const el = document.getElementById(id);
+        if (el) {
+          el.value = val;
+          localStorage.setItem('bilik_lkpd_' + id, val);
+          autoResizeTextarea(el);
+        }
+      }
+      showAutoSaveIndicator();
+    }
+
     function downloadLKPDAsPDF() {
       const btn = document.getElementById('btn-download-pdf');
       const originalHTML = btn.innerHTML;
@@ -2535,20 +2572,19 @@
       const cloneFeelingContainer = clone.querySelector('#lkpd-feeling-options');
       if (cloneFeelingContainer) {
         const feelingMap = {
-          'menyenangkan': { icon: '😄', title: 'Sangat Menyenangkan & Paham', desc: 'Materinya seru, jelas, dan simulasi interaktifnya sangat membantu!', color: 'bg-emerald-50 border-emerald-400 text-emerald-900' },
-          'bingung': { icon: '🤔', title: 'Masih Bingung / Butuh Bimbingan', desc: 'Masih ada beberapa konsep atau alur kerja komputer yang belum dipahami.', color: 'bg-amber-50 border-amber-400 text-amber-900' },
-          'biasa': { icon: '😐', title: 'Biasa Aja', desc: 'Bisa mengikuti dengan baik, tapi butuh lebih banyak latihan dan contoh.', color: 'bg-blue-50 border-blue-400 text-blue-900' },
-          'menantang': { icon: '🤯', title: 'Menantang & Keren', desc: 'Materinya mendalam dan rumit, tapi menantang untuk dipelajari!', color: 'bg-purple-50 border-purple-400 text-purple-900' }
+          'menyenangkan': { icon: '😄', title: 'Sangat Menyenangkan & Paham', color: 'border-emerald-400 bg-emerald-50 text-emerald-900' },
+          'bingung': { icon: '🤔', title: 'Masih Bingung / Butuh Bimbingan', color: 'border-amber-400 bg-amber-50 text-amber-900' },
+          'biasa': { icon: '😐', title: 'Biasa Aja', color: 'border-blue-400 bg-blue-50 text-blue-900' },
+          'menantang': { icon: '🤯', title: 'Menantang & Keren', color: 'border-purple-400 bg-purple-50 text-purple-900' }
         };
 
         const feelingInfo = feelingMap[feelingVal];
         const sentimentCard = document.createElement('div');
-        sentimentCard.className = "w-full p-3 rounded-xl border-2 lkpd-avoid-break mb-2 flex items-center gap-3";
         if (feelingInfo) {
-          sentimentCard.className += " " + feelingInfo.color;
-          sentimentCard.innerHTML = `<span class="text-3xl">${feelingInfo.icon}</span><div><div class="font-extrabold text-xs sm:text-sm tracking-wide">Pilihan Murid: ${feelingInfo.title}</div><div class="text-[11px] opacity-80 mt-0.5">${feelingInfo.desc}</div></div>`;
+          sentimentCard.className = `w-full px-3 py-1.5 rounded-lg border ${feelingInfo.color} mb-1.5 flex items-center gap-2 text-xs font-bold`;
+          sentimentCard.innerHTML = `<span class="text-lg">${feelingInfo.icon}</span> <span>Pilihan Murid: ${feelingInfo.title}</span>`;
         } else {
-          sentimentCard.className += " bg-slate-50 border-slate-300 text-slate-500 italic text-xs";
+          sentimentCard.className = "w-full px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 text-slate-400 italic text-[11px] mb-1.5";
           sentimentCard.innerHTML = `<span>(Murid belum memilih penilaian kesan/perasaan pembelajaran)</span>`;
         }
         cloneFeelingContainer.parentNode.replaceChild(sentimentCard, cloneFeelingContainer);
@@ -2566,13 +2602,13 @@
 
         const replacement = document.createElement('div');
         if (orig.tagName.toLowerCase() === 'textarea') {
-          replacement.className = "w-full p-2.5 rounded-lg border border-slate-300 bg-slate-50 text-xs text-slate-800 whitespace-pre-wrap font-medium lkpd-avoid-break";
+          replacement.className = "w-full px-2.5 py-1 rounded-lg border border-slate-300 bg-slate-50 text-xs text-slate-800 whitespace-pre-wrap font-medium";
           replacement.style.wordBreak = "break-word";
-          replacement.style.height = "auto";
-          replacement.style.minHeight = "36px";
+          replacement.style.minHeight = "26px";
+          replacement.style.lineHeight = "1.4";
           replacement.innerText = val ? val : '(belum diisi)';
           if (!val) {
-            replacement.className = "w-full p-2.5 rounded-lg border border-slate-200 bg-slate-50/50 text-xs text-slate-400 italic font-medium lkpd-avoid-break";
+            replacement.className = "w-full px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 text-xs text-slate-400 italic font-medium";
           }
         } else {
           replacement.className = "w-full py-1 px-1.5 text-xs font-bold text-slate-800";
@@ -2583,6 +2619,17 @@
         }
         cln.parentNode.replaceChild(replacement, cln);
       }
+
+      // Ensure sheets have clean printable page styling (no heavy card borders or double paddings)
+      const sheets = clone.querySelectorAll('.lkpd-sheet');
+      sheets.forEach(sheet => {
+        sheet.style.border = 'none';
+        sheet.style.boxShadow = 'none';
+        sheet.style.borderRadius = '0';
+        sheet.style.padding = '0';
+        sheet.style.margin = '0';
+        sheet.style.background = '#ffffff';
+      });
 
       // Ensure table wrappers do not clip or hide overflow
       clone.querySelectorAll('.lkpd-table-wrapper').forEach(w => {
@@ -2597,24 +2644,25 @@
       });
 
       // Fixed container styles for exact A4 conversion
-      clone.style.width = '794px'; // 210mm at 96 DPI
+      clone.style.width = '750px';
       clone.style.margin = '0 auto';
       clone.style.padding = '0';
       clone.style.background = '#ffffff';
 
-      // Ensure page-break class has clean page break in PDF engine
-      const breaks = clone.querySelectorAll('.page-break');
-      breaks.forEach(b => {
-        b.style.pageBreakAfter = 'always';
-        b.style.breakAfter = 'page';
-        b.style.height = '0';
-        b.style.margin = '0';
-        b.style.padding = '0';
-      });
+      // Ensure page-break class triggers clean split between Halaman 1 & 2
+      const pageBreak = clone.querySelector('.page-break');
+      if (pageBreak) {
+        pageBreak.className = 'html2pdf__page-break';
+        pageBreak.style.pageBreakBefore = 'always';
+        pageBreak.style.breakBefore = 'page';
+        pageBreak.style.height = '0';
+        pageBreak.style.margin = '0';
+        pageBreak.style.padding = '0';
+      }
 
-      // Settings for html2pdf to prevent any cutting across page breaks
+      // Settings for html2pdf with clean CSS page breaks
       const opt = {
-        margin: [8, 8, 8, 8],
+        margin: [6, 10, 6, 10],
         filename: filename,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: {
@@ -2630,8 +2678,7 @@
           orientation: 'portrait'
         },
         pagebreak: {
-          mode: ['avoid-all', 'css', 'legacy'],
-          avoid: ['.lkpd-avoid-break', 'tr']
+          mode: ['css', 'legacy']
         }
       };
 

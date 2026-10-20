@@ -65,6 +65,11 @@
                 width: 100%;
                 min-height: 80px;
             }
+            select.role-select {
+                border: 1px solid #000 !important;
+                background-color: transparent !important;
+                font-size: 11px !important;
+            }
         }
         .print-mirror {
             display: none;
@@ -74,43 +79,252 @@
 <body class="p-4 md:p-8 text-gray-800">
 
     <!-- Floating Action Button for Download PDF -->
-    <button onclick="window.print()" class="no-print fixed bottom-6 right-6 bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-full shadow-2xl flex items-center justify-center gap-2 hover:scale-105 transition-transform z-50 group">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-        </svg>
-        <span class="font-bold hidden group-hover:block pr-2">Simpan PDF / Cetak</span>
-    </button>
+    <div class="no-print fixed bottom-6 right-6 flex flex-col gap-2 z-50">
+        <a href="LKPD_Pseudocode.pdf" download="LKPD_Pseudocode.pdf" class="bg-emerald-600 hover:bg-emerald-700 text-white p-3.5 px-5 rounded-full shadow-2xl flex items-center justify-center gap-2 hover:scale-105 transition-transform group text-sm font-bold">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            <span>Download PDF Langsung</span>
+        </a>
+    </div>
 
     <div class="max-w-5xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border-4 border-purple-200">
         
-        <!-- Header Section -->
-        <div class="bg-gradient-to-r from-purple-100 to-pink-100 p-6 border-b-4 border-purple-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <!-- Header Section (Cover Warna) -->
+        <div class="bg-gradient-to-r from-purple-100 to-pink-100 p-6 md:p-8 border-b-4 border-purple-200">
+            <!-- Judul LKPD (Atas) -->
             <div>
-                <div class="inline-block bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-bold mb-2 shadow-sm">LKPD INFORMATIKA</div>
-                <h1 class="text-3xl font-extrabold text-purple-900">Bab: Berpikir Komputasional</h1>
-                <h2 class="text-xl font-bold text-pink-600 mt-1">& Pseudocode</h2>
-            </div>
-            
-            <div class="bg-white/60 p-4 rounded-xl shadow-sm border-2 border-white w-full md:w-80">
-                <div class="flex items-center mb-2">
-                    <span class="w-24 font-bold text-purple-800 text-sm">Kelompok</span>
-                    <span class="mr-2">:</span>
-                    <input type="text" class="dotted-input">
-                </div>
-                <div class="flex items-center mb-2">
-                    <span class="w-24 font-bold text-purple-800 text-sm">Anggota 1</span>
-                    <span class="mr-2">:</span>
-                    <input type="text" class="dotted-input">
-                </div>
-                <div class="flex items-center">
-                    <span class="w-24 font-bold text-purple-800 text-sm">Anggota 2</span>
-                    <span class="mr-2">:</span>
-                    <input type="text" class="dotted-input">
-                </div>
+                <div class="inline-block bg-purple-500 text-white px-3.5 py-1 rounded-full text-xs font-bold mb-2 shadow-sm">LKPD INFORMATIKA</div>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-purple-900">Bab: Berpikir Komputasional</h1>
+                <h2 class="text-xl font-bold text-pink-600 mt-1">&amp; Pseudocode</h2>
             </div>
         </div>
 
         <div class="p-6 md:p-8 space-y-8">
+
+            <!-- Identitas Kelompok & Pembagian Peran (DI AREA PUTIH) -->
+            <div class="bg-white p-5 md:p-6 rounded-2xl border-2 border-purple-200 shadow-[4px_4px_0px_#e9d5ff] w-full">
+                <!-- Baris Kelas & Nama Kelompok -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3.5">
+                    <div class="flex items-center">
+                        <span class="w-32 font-bold text-purple-900 text-xs sm:text-sm uppercase tracking-wide">Kelas</span>
+                        <span class="mr-2 font-bold text-purple-900">:</span>
+                        <input type="text" class="dotted-input text-xs sm:text-sm" placeholder="X - ...">
+                    </div>
+                    <div class="flex items-center">
+                        <span class="w-36 font-bold text-purple-900 text-xs sm:text-sm uppercase tracking-wide">Nama Kelompok</span>
+                        <span class="mr-2 font-bold text-purple-900">:</span>
+                        <input type="text" class="dotted-input text-xs sm:text-sm" placeholder="Contoh: Kelompok 1 / Algoritma">
+                    </div>
+                </div>
+
+                <!-- Tabel Anggota 4 Orang dengan No. Absen, Peran & Reaksi Awal Pembelajaran -->
+                <div class="border-t-2 border-purple-100 pt-3">
+                    <!-- Banner Check-in Emosi Awal -->
+                    <div class="flex items-center justify-between text-xs text-purple-950 bg-purple-50/80 p-2.5 px-3.5 rounded-xl border border-purple-200/80 mb-2.5">
+                        <div class="flex items-center gap-2">
+                            <span class="text-base">🎭</span>
+                            <span class="font-extrabold text-xs sm:text-sm text-purple-900">Check-in Emosi Awal Pembelajaran:</span>
+                            <span class="text-gray-600 text-[11px] hidden md:inline">Pilihlah salah satu emotikon yang menggambarkan perasaanmu hari ini sebelum belajar!</span>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="text-xs font-black text-purple-950 uppercase tracking-wider border-b-2 border-purple-100 bg-purple-50/50">
+                                    <th class="py-2 text-center w-10">No</th>
+                                    <th class="py-2 text-left px-3 min-w-[180px]">Nama Anggota</th>
+                                    <th class="py-2 text-center w-24 px-2 text-purple-800">No. Absen</th>
+                                    <th class="py-2 text-left w-48 px-2 text-purple-600">Peran Kelompok</th>
+                                    <th class="py-2 text-center w-56 px-2 text-amber-700">Reaksi Awal Pembelajaran</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-purple-50 text-xs sm:text-sm">
+                                <!-- Anggota 1 -->
+                                <tr class="hover:bg-purple-50/30">
+                                    <td class="py-2.5 text-center font-bold text-purple-700 align-middle">1.</td>
+                                    <td class="py-2.5 px-3 align-middle">
+                                        <input type="text" class="dotted-input text-xs sm:text-sm font-semibold" placeholder="Ketik nama anggota 1...">
+                                    </td>
+                                    <td class="py-2.5 px-2 text-center align-middle">
+                                        <input type="text" class="dotted-input text-xs sm:text-sm text-center font-mono" placeholder="Absen">
+                                    </td>
+                                    <td class="py-2.5 px-2 align-middle">
+                                        <select class="role-select text-xs font-bold bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-900 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-purple-500 w-full cursor-pointer">
+                                            <option value="" disabled selected>Pilih Peran...</option>
+                                            <option value="Menulis (Notulis)">✍️ Menulis</option>
+                                            <option value="Menjalankan Simulasi">💻 Menjalankan Simulasi</option>
+                                            <option value="Mencari Materi">🔍 Mencari Materi</option>
+                                            <option value="Menyimpulkan">💡 Menyimpulkan</option>
+                                        </select>
+                                    </td>
+                                    <td class="py-2.5 px-2 text-center align-middle">
+                                        <div class="flex items-center justify-center gap-1.5 flex-wrap">
+                                            <label class="cursor-pointer" title="Senang">
+                                                <input type="radio" name="reaksi_awal_1" value="😊 Senang" class="peer sr-only" onchange="updateMoodBadge(1, '😊 Senang')">
+                                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 peer-checked:border-emerald-500 peer-checked:bg-emerald-100 peer-checked:scale-110 hover:bg-slate-100 transition text-sm shadow-xs">😊</span>
+                                            </label>
+                                            <label class="cursor-pointer" title="Sedih">
+                                                <input type="radio" name="reaksi_awal_1" value="😢 Sedih" class="peer sr-only" onchange="updateMoodBadge(1, '😢 Sedih')">
+                                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 peer-checked:border-blue-500 peer-checked:bg-blue-100 peer-checked:scale-110 hover:bg-slate-100 transition text-sm shadow-xs">😢</span>
+                                            </label>
+                                            <label class="cursor-pointer" title="Marah / Kesal">
+                                                <input type="radio" name="reaksi_awal_1" value="😡 Marah" class="peer sr-only" onchange="updateMoodBadge(1, '😡 Marah')">
+                                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 peer-checked:border-rose-500 peer-checked:bg-rose-100 peer-checked:scale-110 hover:bg-slate-100 transition text-sm shadow-xs">😡</span>
+                                            </label>
+                                            <label class="cursor-pointer" title="Mengantuk / Lelah">
+                                                <input type="radio" name="reaksi_awal_1" value="😴 Mengantuk" class="peer sr-only" onchange="updateMoodBadge(1, '😴 Mengantuk')">
+                                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 peer-checked:border-amber-500 peer-checked:bg-amber-100 peer-checked:scale-110 hover:bg-slate-100 transition text-sm shadow-xs">😴</span>
+                                            </label>
+                                            <label class="cursor-pointer" title="Bersemangat">
+                                                <input type="radio" name="reaksi_awal_1" value="🤩 Semangat" class="peer sr-only" onchange="updateMoodBadge(1, '🤩 Semangat')">
+                                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 peer-checked:border-purple-500 peer-checked:bg-purple-100 peer-checked:scale-110 hover:bg-slate-100 transition text-sm shadow-xs">🤩</span>
+                                            </label>
+                                        </div>
+                                        <div id="mood-label-1" class="text-[10px] font-bold text-gray-400 mt-0.5 text-center">Pilih reaksi</div>
+                                    </td>
+                                </tr>
+
+                                <!-- Anggota 2 -->
+                                <tr class="hover:bg-purple-50/30">
+                                    <td class="py-2.5 text-center font-bold text-purple-700 align-middle">2.</td>
+                                    <td class="py-2.5 px-3 align-middle">
+                                        <input type="text" class="dotted-input text-xs sm:text-sm font-semibold" placeholder="Ketik nama anggota 2...">
+                                    </td>
+                                    <td class="py-2.5 px-2 text-center align-middle">
+                                        <input type="text" class="dotted-input text-xs sm:text-sm text-center font-mono" placeholder="Absen">
+                                    </td>
+                                    <td class="py-2.5 px-2 align-middle">
+                                        <select class="role-select text-xs font-bold bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-900 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-purple-500 w-full cursor-pointer">
+                                            <option value="" disabled selected>Pilih Peran...</option>
+                                            <option value="Menulis (Notulis)">✍️ Menulis</option>
+                                            <option value="Menjalankan Simulasi">💻 Menjalankan Simulasi</option>
+                                            <option value="Mencari Materi">🔍 Mencari Materi</option>
+                                            <option value="Menyimpulkan">💡 Menyimpulkan</option>
+                                        </select>
+                                    </td>
+                                    <td class="py-2.5 px-2 text-center align-middle">
+                                        <div class="flex items-center justify-center gap-1.5 flex-wrap">
+                                            <label class="cursor-pointer" title="Senang">
+                                                <input type="radio" name="reaksi_awal_2" value="😊 Senang" class="peer sr-only" onchange="updateMoodBadge(2, '😊 Senang')">
+                                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 peer-checked:border-emerald-500 peer-checked:bg-emerald-100 peer-checked:scale-110 hover:bg-slate-100 transition text-sm shadow-xs">😊</span>
+                                            </label>
+                                            <label class="cursor-pointer" title="Sedih">
+                                                <input type="radio" name="reaksi_awal_2" value="😢 Sedih" class="peer sr-only" onchange="updateMoodBadge(2, '😢 Sedih')">
+                                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 peer-checked:border-blue-500 peer-checked:bg-blue-100 peer-checked:scale-110 hover:bg-slate-100 transition text-sm shadow-xs">😢</span>
+                                            </label>
+                                            <label class="cursor-pointer" title="Marah / Kesal">
+                                                <input type="radio" name="reaksi_awal_2" value="😡 Marah" class="peer sr-only" onchange="updateMoodBadge(2, '😡 Marah')">
+                                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 peer-checked:border-rose-500 peer-checked:bg-rose-100 peer-checked:scale-110 hover:bg-slate-100 transition text-sm shadow-xs">😡</span>
+                                            </label>
+                                            <label class="cursor-pointer" title="Mengantuk / Lelah">
+                                                <input type="radio" name="reaksi_awal_2" value="😴 Mengantuk" class="peer sr-only" onchange="updateMoodBadge(2, '😴 Mengantuk')">
+                                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 peer-checked:border-amber-500 peer-checked:bg-amber-100 peer-checked:scale-110 hover:bg-slate-100 transition text-sm shadow-xs">😴</span>
+                                            </label>
+                                            <label class="cursor-pointer" title="Bersemangat">
+                                                <input type="radio" name="reaksi_awal_2" value="🤩 Semangat" class="peer sr-only" onchange="updateMoodBadge(2, '🤩 Semangat')">
+                                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 peer-checked:border-purple-500 peer-checked:bg-purple-100 peer-checked:scale-110 hover:bg-slate-100 transition text-sm shadow-xs">🤩</span>
+                                            </label>
+                                        </div>
+                                        <div id="mood-label-2" class="text-[10px] font-bold text-gray-400 mt-0.5 text-center">Pilih reaksi</div>
+                                    </td>
+                                </tr>
+
+                                <!-- Anggota 3 -->
+                                <tr class="hover:bg-purple-50/30">
+                                    <td class="py-2.5 text-center font-bold text-purple-700 align-middle">3.</td>
+                                    <td class="py-2.5 px-3 align-middle">
+                                        <input type="text" class="dotted-input text-xs sm:text-sm font-semibold" placeholder="Ketik nama anggota 3...">
+                                    </td>
+                                    <td class="py-2.5 px-2 text-center align-middle">
+                                        <input type="text" class="dotted-input text-xs sm:text-sm text-center font-mono" placeholder="Absen">
+                                    </td>
+                                    <td class="py-2.5 px-2 align-middle">
+                                        <select class="role-select text-xs font-bold bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-900 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-purple-500 w-full cursor-pointer">
+                                            <option value="" disabled selected>Pilih Peran...</option>
+                                            <option value="Menulis (Notulis)">✍️ Menulis</option>
+                                            <option value="Menjalankan Simulasi">💻 Menjalankan Simulasi</option>
+                                            <option value="Mencari Materi">🔍 Mencari Materi</option>
+                                            <option value="Menyimpulkan">💡 Menyimpulkan</option>
+                                        </select>
+                                    </td>
+                                    <td class="py-2.5 px-2 text-center align-middle">
+                                        <div class="flex items-center justify-center gap-1.5 flex-wrap">
+                                            <label class="cursor-pointer" title="Senang">
+                                                <input type="radio" name="reaksi_awal_3" value="😊 Senang" class="peer sr-only" onchange="updateMoodBadge(3, '😊 Senang')">
+                                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 peer-checked:border-emerald-500 peer-checked:bg-emerald-100 peer-checked:scale-110 hover:bg-slate-100 transition text-sm shadow-xs">😊</span>
+                                            </label>
+                                            <label class="cursor-pointer" title="Sedih">
+                                                <input type="radio" name="reaksi_awal_3" value="😢 Sedih" class="peer sr-only" onchange="updateMoodBadge(3, '😢 Sedih')">
+                                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 peer-checked:border-blue-500 peer-checked:bg-blue-100 peer-checked:scale-110 hover:bg-slate-100 transition text-sm shadow-xs">😢</span>
+                                            </label>
+                                            <label class="cursor-pointer" title="Marah / Kesal">
+                                                <input type="radio" name="reaksi_awal_3" value="😡 Marah" class="peer sr-only" onchange="updateMoodBadge(3, '😡 Marah')">
+                                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 peer-checked:border-rose-500 peer-checked:bg-rose-100 peer-checked:scale-110 hover:bg-slate-100 transition text-sm shadow-xs">😡</span>
+                                            </label>
+                                            <label class="cursor-pointer" title="Mengantuk / Lelah">
+                                                <input type="radio" name="reaksi_awal_3" value="😴 Mengantuk" class="peer sr-only" onchange="updateMoodBadge(3, '😴 Mengantuk')">
+                                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 peer-checked:border-amber-500 peer-checked:bg-amber-100 peer-checked:scale-110 hover:bg-slate-100 transition text-sm shadow-xs">😴</span>
+                                            </label>
+                                            <label class="cursor-pointer" title="Bersemangat">
+                                                <input type="radio" name="reaksi_awal_3" value="🤩 Semangat" class="peer sr-only" onchange="updateMoodBadge(3, '🤩 Semangat')">
+                                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 peer-checked:border-purple-500 peer-checked:bg-purple-100 peer-checked:scale-110 hover:bg-slate-100 transition text-sm shadow-xs">🤩</span>
+                                            </label>
+                                        </div>
+                                        <div id="mood-label-3" class="text-[10px] font-bold text-gray-400 mt-0.5 text-center">Pilih reaksi</div>
+                                    </td>
+                                </tr>
+
+                                <!-- Anggota 4 -->
+                                <tr class="hover:bg-purple-50/30">
+                                    <td class="py-2.5 text-center font-bold text-purple-700 align-middle">4.</td>
+                                    <td class="py-2.5 px-3 align-middle">
+                                        <input type="text" class="dotted-input text-xs sm:text-sm font-semibold" placeholder="Ketik nama anggota 4...">
+                                    </td>
+                                    <td class="py-2.5 px-2 text-center align-middle">
+                                        <input type="text" class="dotted-input text-xs sm:text-sm text-center font-mono" placeholder="Absen">
+                                    </td>
+                                    <td class="py-2.5 px-2 align-middle">
+                                        <select class="role-select text-xs font-bold bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-900 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-purple-500 w-full cursor-pointer">
+                                            <option value="" disabled selected>Pilih Peran...</option>
+                                            <option value="Menulis (Notulis)">✍️ Menulis</option>
+                                            <option value="Menjalankan Simulasi">💻 Menjalankan Simulasi</option>
+                                            <option value="Mencari Materi">🔍 Mencari Materi</option>
+                                            <option value="Menyimpulkan">💡 Menyimpulkan</option>
+                                        </select>
+                                    </td>
+                                    <td class="py-2.5 px-2 text-center align-middle">
+                                        <div class="flex items-center justify-center gap-1.5 flex-wrap">
+                                            <label class="cursor-pointer" title="Senang">
+                                                <input type="radio" name="reaksi_awal_4" value="😊 Senang" class="peer sr-only" onchange="updateMoodBadge(4, '😊 Senang')">
+                                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 peer-checked:border-emerald-500 peer-checked:bg-emerald-100 peer-checked:scale-110 hover:bg-slate-100 transition text-sm shadow-xs">😊</span>
+                                            </label>
+                                            <label class="cursor-pointer" title="Sedih">
+                                                <input type="radio" name="reaksi_awal_4" value="😢 Sedih" class="peer sr-only" onchange="updateMoodBadge(4, '😢 Sedih')">
+                                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 peer-checked:border-blue-500 peer-checked:bg-blue-100 peer-checked:scale-110 hover:bg-slate-100 transition text-sm shadow-xs">😢</span>
+                                            </label>
+                                            <label class="cursor-pointer" title="Marah / Kesal">
+                                                <input type="radio" name="reaksi_awal_4" value="😡 Marah" class="peer sr-only" onchange="updateMoodBadge(4, '😡 Marah')">
+                                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 peer-checked:border-rose-500 peer-checked:bg-rose-100 peer-checked:scale-110 hover:bg-slate-100 transition text-sm shadow-xs">😡</span>
+                                            </label>
+                                            <label class="cursor-pointer" title="Mengantuk / Lelah">
+                                                <input type="radio" name="reaksi_awal_4" value="😴 Mengantuk" class="peer sr-only" onchange="updateMoodBadge(4, '😴 Mengantuk')">
+                                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 peer-checked:border-amber-500 peer-checked:bg-amber-100 peer-checked:scale-110 hover:bg-slate-100 transition text-sm shadow-xs">😴</span>
+                                            </label>
+                                            <label class="cursor-pointer" title="Bersemangat">
+                                                <input type="radio" name="reaksi_awal_4" value="🤩 Semangat" class="peer sr-only" onchange="updateMoodBadge(4, '🤩 Semangat')">
+                                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 peer-checked:border-purple-500 peer-checked:bg-purple-100 peer-checked:scale-110 hover:bg-slate-100 transition text-sm shadow-xs">🤩</span>
+                                            </label>
+                                        </div>
+                                        <div id="mood-label-4" class="text-[10px] font-bold text-gray-400 mt-0.5 text-center">Pilih reaksi</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
             <!-- Petunjuk & K3 -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -372,10 +586,107 @@
                 </div>
             </div>
 
+            <!-- ==================== REAKSI & EMOTIKON BELAJAR ==================== -->
+            <div class="border-2 border-violet-300 rounded-2xl overflow-hidden shadow-[4px_4px_0px_#c4b5fd]">
+                <div class="bg-violet-600 text-white p-3 px-5 font-extrabold text-lg flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl">🎭</span> 
+                        <span>Bagaimana Perasaan & Pemahamanmu Hari Ini?</span>
+                    </div>
+                    <span class="bg-violet-800/80 text-violet-100 text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider">Refleksi Emosional</span>
+                </div>
+
+                <div class="bg-violet-50/60 p-5 space-y-4">
+                    <p class="text-xs text-violet-950 font-semibold bg-white/80 p-3 rounded-xl border border-violet-200">
+                        🌟 <b>Petunjuk:</b> Pilih salah satu reaksi yang paling menggambarkan perasaan atau tingkat pemahamanmu hari ini!
+                    </p>
+
+                    <!-- Pilihan Reaksi Emotikon -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                        <!-- 1. Senang -->
+                        <label class="cursor-pointer group">
+                            <input type="radio" name="learning_reaction" value="😄 Senang & Sangat Paham" class="peer sr-only">
+                            <div class="bg-white p-3.5 rounded-2xl border-2 border-slate-200 peer-checked:border-emerald-500 peer-checked:bg-emerald-50 peer-checked:shadow-[3px_3px_0px_#10b981] hover:border-emerald-300 hover:scale-[1.02] transition-all flex flex-col items-center text-center space-y-1.5 h-full">
+                                <span class="text-3xl group-hover:scale-110 transition-transform">😄</span>
+                                <span class="font-bold text-xs sm:text-sm text-gray-800 peer-checked:text-emerald-800">Senang</span>
+                                <span class="text-[10px] text-gray-500 leading-tight">Materi jelas & seru!</span>
+                                <span class="no-print mt-auto text-[11px] font-bold text-emerald-600 opacity-0 peer-checked:opacity-100">✓ Terpilih</span>
+                            </div>
+                        </label>
+
+                        <!-- 2. Biasa Saja -->
+                        <label class="cursor-pointer group">
+                            <input type="radio" name="learning_reaction" value="🙂 Biasa Saja / Cukup Paham" class="peer sr-only">
+                            <div class="bg-white p-3.5 rounded-2xl border-2 border-slate-200 peer-checked:border-blue-500 peer-checked:bg-blue-50 peer-checked:shadow-[3px_3px_0px_#3b82f6] hover:border-blue-300 hover:scale-[1.02] transition-all flex flex-col items-center text-center space-y-1.5 h-full">
+                                <span class="text-3xl group-hover:scale-110 transition-transform">🙂</span>
+                                <span class="font-bold text-xs sm:text-sm text-gray-800 peer-checked:text-blue-800">Biasa Saja</span>
+                                <span class="text-[10px] text-gray-500 leading-tight">Cukup paham & bisa ikut</span>
+                                <span class="no-print mt-auto text-[11px] font-bold text-blue-600 opacity-0 peer-checked:opacity-100">✓ Terpilih</span>
+                            </div>
+                        </label>
+
+                        <!-- 3. Bingung -->
+                        <label class="cursor-pointer group">
+                            <input type="radio" name="learning_reaction" value="😕 Bingung / Butuh Bimbingan" class="peer sr-only">
+                            <div class="bg-white p-3.5 rounded-2xl border-2 border-slate-200 peer-checked:border-amber-500 peer-checked:bg-amber-50 peer-checked:shadow-[3px_3px_0px_#f59e0b] hover:border-amber-300 hover:scale-[1.02] transition-all flex flex-col items-center text-center space-y-1.5 h-full">
+                                <span class="text-3xl group-hover:scale-110 transition-transform">😕</span>
+                                <span class="font-bold text-xs sm:text-sm text-gray-800 peer-checked:text-amber-800">Bingung</span>
+                                <span class="text-[10px] text-gray-500 leading-tight">Ada bagian belum jelas</span>
+                                <span class="no-print mt-auto text-[11px] font-bold text-amber-600 opacity-0 peer-checked:opacity-100">✓ Terpilih</span>
+                            </div>
+                        </label>
+
+                        <!-- 4. Seru Banget -->
+                        <label class="cursor-pointer group">
+                            <input type="radio" name="learning_reaction" value="🤩 Seru Banget / Antusias" class="peer sr-only">
+                            <div class="bg-white p-3.5 rounded-2xl border-2 border-slate-200 peer-checked:border-pink-500 peer-checked:bg-pink-50 peer-checked:shadow-[3px_3px_0px_#ec4899] hover:border-pink-300 hover:scale-[1.02] transition-all flex flex-col items-center text-center space-y-1.5 h-full">
+                                <span class="text-3xl group-hover:scale-110 transition-transform">🤩</span>
+                                <span class="font-bold text-xs sm:text-sm text-gray-800 peer-checked:text-pink-800">Seru Banget</span>
+                                <span class="text-[10px] text-gray-500 leading-tight">Asyik & menantang!</span>
+                                <span class="no-print mt-auto text-[11px] font-bold text-pink-600 opacity-0 peer-checked:opacity-100">✓ Terpilih</span>
+                            </div>
+                        </label>
+
+                        <!-- 5. Tertantang / Masih Pusing -->
+                        <label class="cursor-pointer group col-span-2 sm:col-span-1">
+                            <input type="radio" name="learning_reaction" value="🤯 Tertantang / Masih Pusing" class="peer sr-only">
+                            <div class="bg-white p-3.5 rounded-2xl border-2 border-slate-200 peer-checked:border-purple-500 peer-checked:bg-purple-50 peer-checked:shadow-[3px_3px_0px_#a855f7] hover:border-purple-300 hover:scale-[1.02] transition-all flex flex-col items-center text-center space-y-1.5 h-full">
+                                <span class="text-3xl group-hover:scale-110 transition-transform">🤯</span>
+                                <span class="font-bold text-xs sm:text-sm text-gray-800 peer-checked:text-purple-800">Tertantang</span>
+                                <span class="text-[10px] text-gray-500 leading-tight">Logikanya butuh waktu</span>
+                                <span class="no-print mt-auto text-[11px] font-bold text-purple-600 opacity-0 peer-checked:opacity-100">✓ Terpilih</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Catatan Singkat -->
+                    <div class="bg-white p-3.5 rounded-xl border border-violet-200">
+                        <label class="block font-bold text-gray-800 text-xs mb-1">
+                            💬 Alasan singkat atau pesan untuk guru (opsional):
+                        </label>
+                        <input type="text" class="dotted-input text-xs" placeholder="Tuliskan catatan atau unek-unek belajarmu di sini...">
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <script>
+        function updateMoodBadge(rowIdx, moodText) {
+            const label = document.getElementById(`mood-label-${rowIdx}`);
+            if (label) {
+                label.innerText = moodText;
+                let colorClass = 'text-gray-600';
+                if (moodText.includes('Senang')) colorClass = 'text-emerald-600';
+                else if (moodText.includes('Sedih')) colorClass = 'text-blue-600';
+                else if (moodText.includes('Marah')) colorClass = 'text-rose-600';
+                else if (moodText.includes('Mengantuk')) colorClass = 'text-amber-600';
+                else if (moodText.includes('Semangat')) colorClass = 'text-purple-600';
+                label.className = `text-[10px] font-black mt-0.5 text-center ${colorClass}`;
+            }
+        }
+
         // Create mirror elements for printing to prevent text clipping
         document.querySelectorAll('input.dotted-input, textarea').forEach(el => {
             const mirror = document.createElement('span');

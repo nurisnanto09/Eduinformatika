@@ -183,18 +183,85 @@
 
         <!-- ASESMEN -->
         <div id="view-asesmen" class="view-section hidden animate-fade-in">
-            <h2 class="text-3xl font-black text-gray-800 mb-2">Asesmen & Ujian</h2>
-            <p class="text-gray-500 font-medium mb-8">Kelola kuis dan evaluasi pemahaman siswa secara komprehensif.</p>
-            
-            <div class="bg-white p-12 rounded-3xl shadow-sm border border-dashed border-gray-300 text-center max-w-3xl mx-auto mt-10">
-                <div class="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <i class="fas fa-clipboard-list text-5xl text-gray-300"></i>
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                <div>
+                    <h2 class="text-3xl font-black text-gray-800 mb-2">Asesmen & Evaluasi Pembelajaran</h2>
+                    <p class="text-gray-500 font-medium">Kelola kuis, ujian formatif, dan pantau rekap skor siswa secara otomatis via Google Spreadsheet.</p>
                 </div>
-                <h3 class="text-2xl font-bold text-gray-800 mb-3">Belum ada jadwal Asesmen</h3>
-                <p class="text-gray-500 mb-8 max-w-md mx-auto">Anda dapat menambahkan Ujian Tengah Semester (UTS), Ujian Akhir, atau Kuis Harian di menu ini untuk menguji siswa.</p>
-                <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3.5 rounded-xl transition-all shadow-lg hover:shadow-blue-500/30 active:scale-95 text-sm uppercase tracking-wide">
-                    <i class="fas fa-plus mr-2"></i> Buat Asesmen Baru
-                </button>
+                <div class="flex items-center gap-3">
+                    <a href="asesmen_sistem_operasi.html" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2.5 rounded-xl transition-all shadow-md hover:shadow-blue-500/25 active:scale-95 text-sm flex items-center gap-2">
+                        <i class="fas fa-play text-xs"></i> Buka Asesmen Siswa
+                    </a>
+                </div>
+            </div>
+
+            <!-- Grid Kartu Asesmen -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Card 1: Asesmen Sistem Operasi -->
+                <div class="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold border border-green-200 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Aktif & Terbuka
+                            </span>
+                            <span class="text-xs font-semibold text-gray-600"><i class="far fa-clock mr-1"></i> Mandiri</span>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl mb-4 border border-blue-100">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <h3 class="text-lg font-black text-gray-800 mb-2">Asesmen: Sistem Operasi & Model Lapisan Bawang</h3>
+                        <p class="text-xs text-gray-500 mb-4 line-clamp-3">
+                            10 Soal Pilihan Ganda mencakup Pengertian OS, Model Lapisan Bawang, Hubungan Komponen, Pengelolaan Proses, Memori, I/O, Interaksi Pengguna, dan Utilitas.
+                        </p>
+                        <div class="flex items-center gap-4 text-xs font-bold text-gray-600 mb-6 bg-gray-50 p-3 rounded-xl border border-gray-100">
+                            <div><i class="fas fa-list-check text-blue-500 mr-1"></i> 10 Butir Soal</div>
+                            <div><i class="fas fa-database text-emerald-500 mr-1"></i> Sync GAS</div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <a href="asesmen_sistem_operasi.html" target="_blank" class="flex-1 text-center py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md transition-all">
+                            Mulai Kerjakan <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                        <a href="gas_asesmen_sistem_operasi.js" target="_blank" class="p-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold transition-colors" title="Lihat Skrip Google Apps Script">
+                            <i class="fas fa-code"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card Placeholder 2 -->
+                <div class="bg-white/60 rounded-3xl p-6 border border-dashed border-gray-300 flex flex-col items-center justify-center text-center">
+                    <div class="w-12 h-12 rounded-2xl bg-gray-100 text-gray-400 flex items-center justify-center text-xl mb-3">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-700 text-sm mb-1">Tambah Paket Asesmen Baru</h4>
+                    <p class="text-xs text-gray-400 mb-4 max-w-xs">Buat kuis untuk materi Berpikir Komputasional, Algoritma, atau Pemrograman.</p>
+                    <button onclick="alert('Fitur tambah paket asesmen kustom akan segera hadir!')" class="text-xs font-bold text-blue-600 hover:text-blue-800 bg-blue-50 px-4 py-2 rounded-lg">
+                        + Tambah Soal
+                    </button>
+                </div>
+            </div>
+
+            <!-- Petunjuk Integrasi Google Apps Script -->
+            <div class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-3xl p-6 md:p-8 shadow-md">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-2xl flex-shrink-0">
+                            <i class="fab fa-google-drive text-amber-300"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-black tracking-tight mb-1">Terintegrasi Otomatis dengan Google Sheets</h3>
+                            <p class="text-xs text-blue-200 max-w-xl">
+                                Setiap jawaban siswa akan langsung tersimpan di tab <b>Hasil_Asesmen</b> pada Google Spreadsheet Anda beserta rincian nama, kelas, durasi, skor akhir, dan kunci pembahasan.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <a href="gas_asesmen_sistem_operasi.js" target="_blank" class="px-5 py-2.5 rounded-xl bg-white text-blue-900 hover:bg-blue-50 font-bold text-xs shadow-md transition-all">
+                            <i class="fas fa-file-code mr-1"></i> Buka Kode Script GAS
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -504,15 +571,13 @@
                 openNewTab: false,
                 content: `<p><b>Sistem Operasi (Operating System / OS)</b> adalah perangkat lunak sistem yang bertugas mengelola perangkat keras komputer, mengalokasikan sumber daya (CPU, RAM, Hard Disk, I/O), dan menyediakan lingkungan bagi aplikasi untuk berjalan.</p>
                 <div class="mt-6 mb-6 bg-amber-50 p-6 rounded-2xl border border-amber-200">
-                    <h4 class="font-bold text-amber-900 text-lg mb-3 flex items-center gap-2"><i class="fas fa-layer-group"></i> Model Arsitektur Lapisan Bawang (The Onion Ring Model):</h4>
-                    <p class="text-gray-700 text-sm mb-4">Sistem komputer dibangun berlapis konsentris seperti mengupas bawang. Lapisan luar melindungi lapisan dalam, dan aplikasi dilarang menyentuh hardware secara langsung demi keamanan dan stabilitas:</p>
+                    <h4 class="font-bold text-amber-900 text-lg mb-3 flex items-center gap-2"><i class="fas fa-layer-group"></i> Model 4 Lapisan Bawang Sistem Operasi (The Onion Model):</h4>
+                    <p class="text-gray-700 text-sm mb-4">Sistem komputer dibangun dalam 4 lapisan konsentris utama dari inti terdalam hingga terluar:</p>
                     <div class="space-y-2.5 text-sm">
-                        <div class="bg-white p-3 rounded-xl border border-gray-200"><b class="text-red-600">Lapisan 0 (Inti):</b> <b>Perangkat Keras (Hardware)</b> — CPU, RAM, SSD/HDD, GPU, Motherboard, Keyboard.</div>
-                        <div class="bg-white p-3 rounded-xl border border-gray-200"><b class="text-emerald-600">Lapisan 1:</b> <b>Kernel Sistem Operasi (Ring 0)</b> — Jantung OS yang mengontrol CPU Scheduling, alokasi memori fisik, dan Device Driver.</div>
-                        <div class="bg-white p-3 rounded-xl border border-gray-200"><b class="text-amber-600">Lapisan 2:</b> <b>System Call Interface & API</b> — Pintu gerbang keamanan resmi perantara User Mode dan Kernel Mode (misal: open(), write(), malloc()).</div>
-                        <div class="bg-white p-3 rounded-xl border border-gray-200"><b class="text-pink-600">Lapisan 3:</b> <b>Software Sistem, Shell & Utilitas</b> — Antarmuka CLI (Bash/PowerShell), GUI Desktop, Task Manager, Antivirus.</div>
-                        <div class="bg-white p-3 rounded-xl border border-gray-200"><b class="text-purple-600">Lapisan 4:</b> <b>Perangkat Lunak Aplikasi (User Mode)</b> — Program produktivitas pengguna: Web Browser (Chrome), MS Word, Game, Photoshop.</div>
-                        <div class="bg-white p-3 rounded-xl border border-gray-200"><b class="text-blue-600">Lapisan 5 (Terluar):</b> <b>Pengguna (User / Brainware)</b> — Manusia yang berinteraksi dengan sistem komputer.</div>
+                        <div class="bg-white p-3 rounded-xl border border-gray-200"><b class="text-red-600">Lapisan 0 (Inti Fisik):</b> <b>Perangkat Keras (Hardware)</b> — CPU (Processor), Memori RAM, SSD/HDD, GPU, Motherboard, Port I/O.</div>
+                        <div class="bg-white p-3 rounded-xl border border-gray-200"><b class="text-emerald-600">Lapisan 1:</b> <b>Kernel Sistem Operasi (Ring 0)</b> — Jantung pengendali sistem: manajemen proses & CPU, virtual memory, driver hardware, dan subsistem window grafis (win32k.sys).</div>
+                        <div class="bg-white p-3 rounded-xl border border-gray-200"><b class="text-sky-600">Lapisan 2:</b> <b>Shell (Antarmuka CLI &amp; GUI)</b> — Penerjemah perintah pengguna: Windows Explorer Desktop GUI, PowerShell, CMD, Bash Terminal.</div>
+                        <div class="bg-white p-3 rounded-xl border border-gray-200"><b class="text-amber-600">Lapisan 3 (Terluar):</b> <b>Software Utiliti</b> — Program utilitas & aplikasi pengguna: Aplikasi Kalkulator, Microsoft Word, Notepad, Windows Defender Antivirus, Disk Defragmenter, Task Manager.</div>
                     </div>
                 </div>
                 <div class="mt-6 bg-slate-50 p-6 rounded-2xl border border-gray-200">
@@ -538,7 +603,11 @@
                         </div>
                     </div>
                 </div>`,
-                simulations: [{ name: 'Buka Simulasi Lapisan Bawang & Software 🧅', url: 'simulasi_lapisan_bawang.html' }]
+                simulations: [
+                    { name: 'Buka Simulasi Lapisan Bawang & Software 🧅', url: 'simulasi_lapisan_bawang.html' },
+                    { name: 'LKPD Di Balik Layar OS 📝', url: 'lkpd_sistem_operasi.html' },
+                    { name: 'Asesmen Formatif OS (10 Soal) 📝', url: 'asesmen_sistem_operasi.html' }
+                ]
             }
         ];
 
