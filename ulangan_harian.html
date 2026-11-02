@@ -564,13 +564,37 @@
                                 <span>Khusus Flowchart (Soal 1), gunakan simbol bangun datar standar yang rapi.</span>
                             </div>
                             <div class="flex items-start gap-2">
-                                <i class="fas fa-file-invoice text-emerald-300 mt-0.5"></i>
+                                <i class="fas fa-camera text-emerald-300 mt-0.5"></i>
                                 <span>Wajib mengunggah 1 foto lembar jawaban untuk masing-masing nomor soal (Total 3 foto terpisah untuk Soal 1, 2, dan 3).</span>
                             </div>
                         </div>
                     </div>
 
-                    
+                    <!-- ESSAY QUESTIONS LIST -->
+                    <div id="essay-questions-list" class="space-y-6">
+                        <!-- Rendered via JS -->
+                    </div>
+
+                    <!-- FINAL SUBMIT CARD -->
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 border-2 border-emerald-500 shadow-md">
+                        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                            <div>
+                                <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold">
+                                    Pengumpulan Akhir Seluruh Ulangan Harian
+                                </span>
+                                <h3 class="text-lg sm:text-xl font-black text-slate-900 font-display mt-2">
+                                    Sudah Mengunggah Seluruh Foto Jawaban Esai?
+                                </h3>
+                                <p id="final-submit-status-summary" class="text-xs sm:text-sm text-slate-600 mt-1">
+                                    Pastikan foto lembar jawaban untuk ketiga soal esai telah terunggah dan dapat dilihat pada pratinjau.
+                                </p>
+                            </div>
+                            <button id="btn-submit-final" onclick="submitFinalAssessment()" class="w-full md:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-sm sm:text-base shadow-lg shadow-emerald-500/25 transition-all transform active:scale-95 flex items-center justify-center gap-3">
+                                <i class="fas fa-paper-plane"></i>
+                                <span>Kumpulkan Seluruh Ulangan Harian</span>
+                            </button>
+                        </div>
+                    </div>
 
                 </div>
 
