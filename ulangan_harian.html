@@ -3425,7 +3425,7 @@ Saat menyalin rumus tarif pajak pada sel <code>E5</code> ke sel-sel di bawahnya 
             }
         }
 
-        function sendDataToGAS(payload) {
+        async function sendDataToGAS(payload) {
             if (!GAS_WEB_APP_URL) {
                 console.log("GAS_WEB_APP_URL belum diatur. Data tersimpan di perangkat lokal.");
                 return;
