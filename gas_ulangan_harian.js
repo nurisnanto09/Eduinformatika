@@ -26,6 +26,9 @@
  *    "Execute as: Me", "Who has access: Anyone").
  * 5. Salin URL Web App yang berakhiran "/exec", lalu masukkan ke file ulangan_harian.html 
  *    pada variabel GAS_WEB_APP_URL atau melalui menu pengaturan di halaman ujian.
+ * 
+ * ✅ URL Web App Aktif Anda:
+ *    https://script.google.com/macros/s/AKfycbyLQRe7B4zb4AFktOHxONI2qdxbtDQ66ksQELbBnFTTsNRf96ea10SPTEI01f_EkA4-/exec
  * =========================================================================================
  */
 
@@ -136,4 +139,48 @@ function doGet(e) {
     app: "Backend Ulangan Harian Informatika",
     timestamp: new Date().toISOString()
   })).setMimeType(ContentService.MimeType.JSON);
+}
+
+
+/**
+ * 🛠️ FUNGSI INTI / TES LANGSUNG DARI GOOGLE APPS SCRIPT
+ * Jika Anda ingin membuat Tab Sheet "Hasil_Ulhar_Informatika" secara instan sekarang juga
+ * tanpa menunggu siswa submit, pilih fungsi "inisialisasiSheetManual" di toolbar atas lalu klik "Jalankan / Run".
+ */
+function inisialisasiSheetManual() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheetName = "Hasil_Ulhar_Informatika";
+  var sheet = ss.getSheetByName(sheetName);
+
+  if (!sheet) {
+    sheet = ss.insertSheet(sheetName);
+    var headers = [
+      "Timestamp",
+      "Nama Lengkap Siswa",
+      "No. Absen",
+      "Kondisi Awal",
+      "Nilai PG (Maks 70)",
+      "Jml Benar PG",
+      "Reaksi Emot Nilai",
+      "Nilai Esai (Maks 30)",
+      "Total Nilai Akhir (100)",
+      "Foto Esai 1 (Flowchart)",
+      "Foto Esai 2 (Excel)",
+      "Foto Esai 3 (IPO)",
+      "Durasi",
+      "Kode Verifikasi"
+    ];
+    sheet.appendRow(headers);
+
+    var headerRange = sheet.getRange(1, 1, 1, headers.length);
+    headerRange.setBackground("#107c41"); // Hijau Excel
+    headerRange.setFontColor("#ffffff");
+    headerRange.setFontWeight("bold");
+    headerRange.setHorizontalAlignment("center");
+    sheet.setFrozenRows(1);
+    
+    Logger.log("✅ Tab Sheet 'Hasil_Ulhar_Informatika' berhasil dibuat!");
+  } else {
+    Logger.log("ℹ️ Tab Sheet 'Hasil_Ulhar_Informatika' sudah ada.");
+  }
 }

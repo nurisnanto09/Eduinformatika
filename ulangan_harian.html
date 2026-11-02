@@ -565,53 +565,12 @@
                             </div>
                             <div class="flex items-start gap-2">
                                 <i class="fas fa-file-invoice text-emerald-300 mt-0.5"></i>
-                                <span>Boleh upload per nomor atau gunakan tombol 1 foto sekaligus jika dalam satu lembar.</span>
+                                <span>Wajib mengunggah 1 foto lembar jawaban untuk masing-masing nomor soal (Total 3 foto terpisah untuk Soal 1, 2, dan 3).</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Shortcut 1 Sheet Upload (Optional convenience) -->
-                    <div class="bg-white rounded-2xl p-4 border border-emerald-200 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-                        <div class="flex items-center gap-3">
-                            <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
-                                <i class="fas fa-bolt"></i>
-                            </span>
-                            <span class="font-bold text-slate-700">
-                                Menulis ketiga jawaban esai dalam 1 lembar kertas penuh?
-                            </span>
-                        </div>
-                        <label class="cursor-pointer px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all flex items-center gap-2">
-                            <i class="fas fa-camera"></i>
-                            <span>Upload 1 Foto untuk Ketiga Soal Esai</span>
-                            <input type="file" accept="image/*" capture="environment" onchange="handleSingleSheetUpload(this.files)" class="hidden">
-                        </label>
-                    </div>
-
-                    <!-- ESSAY QUESTIONS LIST -->
-                    <div id="essay-questions-list" class="space-y-6">
-                        <!-- Rendered via JS -->
-                    </div>
-
-                    <!-- FINAL SUBMIT CARD -->
-                    <div class="bg-white rounded-3xl p-6 sm:p-8 border-2 border-emerald-500 shadow-md">
-                        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                            <div>
-                                <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold">
-                                    Pengumpulan Akhir Seluruh Ulangan Harian
-                                </span>
-                                <h3 class="text-lg sm:text-xl font-black text-slate-900 font-display mt-2">
-                                    Sudah Mengunggah Seluruh Foto Jawaban Esai?
-                                </h3>
-                                <p id="final-submit-status-summary" class="text-xs sm:text-sm text-slate-600 mt-1">
-                                    Pastikan foto lembar jawaban untuk ketiga soal esai telah terunggah dan dapat dilihat pada pratinjau.
-                                </p>
-                            </div>
-                            <button id="btn-submit-final" onclick="submitFinalAssessment()" class="w-full md:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-sm sm:text-base shadow-lg shadow-emerald-500/25 transition-all transform active:scale-95 flex items-center justify-center gap-3">
-                                <i class="fas fa-paper-plane"></i>
-                                <span>Kumpulkan Seluruh Ulangan Harian</span>
-                            </button>
-                        </div>
-                    </div>
+                    
 
                 </div>
 
@@ -974,15 +933,19 @@
                     <label class="block font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                         URL Web App Google Apps Script (Deployment URL):
                     </label>
-                    <input type="text" id="gas-url-input" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 font-mono text-xs text-slate-800">
+                    <input type="text" id="gas-url-input" value="https://script.google.com/macros/s/AKfycbyLQRe7B4zb4AFktOHxONI2qdxbtDQ66ksQELbBnFTTsNRf96ea10SPTEI01f_EkA4-/exec" placeholder="https://script.google.com/macros/s/AKfycbyLQRe7B4zb4AFktOHxONI2qdxbtDQ66ksQELbBnFTTsNRf96ea10SPTEI01f_EkA4-/exec" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 font-mono text-xs text-slate-800">
                     <p class="text-[11px] text-slate-400 mt-1">Salin dari Deploy > Manage deployments > Web app URL berakhiran <code>/exec</code>.</p>
                 </div>
 
-                <div class="flex items-center gap-2 pt-2">
-                    <a href="gas_ulangan_harian.js" target="_blank" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-colors flex items-center gap-1.5">
-                        <i class="fas fa-code text-emerald-600"></i> Buka Kode Script GAS
+                <div class="flex flex-col sm:flex-row items-center gap-2 pt-2">
+                    <button type="button" onclick="testKirimSampleGAS()" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition-all shadow-xs flex items-center justify-center gap-2">
+                        <i class="fas fa-paper-plane"></i> Tes Kirim Baris Sampel ke Spreadsheet
+                    </button>
+                    <a href="gas_ulangan_harian.js" target="_blank" class="w-full sm:w-auto px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-colors flex items-center justify-center gap-1.5">
+                        <i class="fas fa-code text-emerald-600"></i> Kode Script GAS
                     </a>
                 </div>
+                <div id="gas-test-result" class="text-xs font-semibold hidden"></div>
             </div>
 
             <div class="grid grid-cols-2 gap-3 pt-3 border-t border-slate-100">
@@ -1157,7 +1120,29 @@ Apabila pengguna memasukkan nilai <code class="bg-slate-100 px-1.5 py-0.5 rounde
             {
                 id: 9,
                 topic: "Solusi Komputasi Spreadsheet Excel",
-                question: "Seorang sekretaris kelas diminta merekap daftar nilai ujian dari 36 siswa untuk 4 mata pelajaran sekaligus. Jika dilakukan secara manual dengan kalkulator saku dan dicatat di kertas, proses tersebut rawan mengalami kesalahan pencet tombol dan harus dihitung ulang dari awal apabila ada revisi nilai dari guru. Untuk menghasilkan data yang bersih, benar, dan terpercaya secara efisien, solusi komputasi yang paling tepat adalah...",
+                question: `Seorang sekretaris kelas diminta merekap daftar nilai ujian dari 36 siswa untuk 4 mata pelajaran sekaligus:
+<div class="my-3 p-3 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl border border-emerald-200 text-xs text-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 max-w-lg mx-auto">
+  <div class="flex items-center gap-2.5">
+    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center font-bold text-base shrink-0">
+      <i class="fas fa-calculator"></i>
+    </div>
+    <div>
+      <div class="font-bold text-slate-700">Metode Manual & Kalkulator</div>
+      <div class="text-[11px] text-rose-600 font-semibold">Rawan salah pencet, hitung ulang saat ada revisi</div>
+    </div>
+  </div>
+  <i class="fas fa-arrow-right text-emerald-600 hidden sm:block"></i>
+  <div class="flex items-center gap-2.5">
+    <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-base shrink-0 shadow-xs">
+      <i class="fas fa-file-excel"></i>
+    </div>
+    <div>
+      <div class="font-bold text-emerald-950">Aplikasi Spreadsheet (Excel)</div>
+      <div class="text-[11px] text-emerald-700 font-semibold">Otomatisasi rumus SUM, AVERAGE, & MAX</div>
+    </div>
+  </div>
+</div>
+Jika dilakukan secara manual dengan kalkulator saku dan dicatat di kertas, proses tersebut rawan mengalami kesalahan dan harus dihitung ulang dari awal apabila ada revisi nilai dari guru. Untuk menghasilkan data yang bersih, benar, dan terpercaya secara efisien, solusi komputasi yang paling tepat adalah...`,
                 options: [
                     { key: "A", text: "Mengetik seluruh angka di aplikasi pengolah kata Microsoft Word dan menjumlahkannya secara manual" },
                     { key: "B", text: "Menerapkan rumus (<em>formula</em>) dan fungsi statistik otomatis pada aplikasi <em>spreadsheet</em> Microsoft Excel" },
@@ -1377,7 +1362,74 @@ Pasangan rumus fungsi statistik yang tepat untuk menghitung Rata-Rata Nilai mili
             {
                 id: 13,
                 topic: "Visualisasi Grafik & Pilar Abstraksi",
-                question: "Saat ingin membuat Grafik Batang (<em>Clustered Column Chart</em>) untuk membandingkan perolehan nilai 4 mata pelajaran dari setiap siswa, kita wajib menerapkan pilar Abstraksi (menyaring data yang relevan), yaitu dengan cara memblok kolom <em>Nama Siswa</em> dan keempat kolom <em>Nilai Mata Pelajaran</em>, namun mengabaikan/tidak ikut memblok kolom <em>Jumlah</em>. Alasan logis dari tindakan tersebut adalah...",
+                question: `Saat ingin membuat Grafik Batang (<em>Clustered Column Chart</em>) untuk membandingkan perolehan nilai 4 mata pelajaran dari setiap siswa, perhatikan tabel rekapitulasi nilai berikut:
+<div class="my-4 overflow-x-auto rounded-2xl border border-slate-300 shadow-sm bg-white max-w-lg mx-auto">
+  <div class="bg-emerald-700 text-white px-3 py-1.5 flex items-center justify-between text-xs font-semibold">
+    <span class="flex items-center gap-1.5"><i class="fas fa-chart-column text-emerald-200"></i> Insert Clustered Column Chart &bull; Pemilihan Data</span>
+    <span class="text-[11px] bg-emerald-800 px-2 py-0.5 rounded font-mono font-bold">Blok: B4:F7</span>
+  </div>
+  <table class="w-full text-xs font-sans border-collapse text-slate-800 text-center">
+    <thead>
+      <tr class="bg-slate-100 text-slate-600 font-bold font-mono">
+        <th class="w-8 border border-slate-300 py-1 bg-slate-200/80 text-[10px]"></th>
+        <th class="border border-slate-300 px-1 py-1 text-[10px]">A</th>
+        <th class="border-2 border-blue-600 bg-blue-100 px-2 py-1 text-blue-950 font-black">B</th>
+        <th class="border-2 border-blue-600 bg-blue-100 px-2 py-1 text-blue-950 font-black">C</th>
+        <th class="border-2 border-blue-600 bg-blue-100 px-2 py-1 text-blue-950 font-black">D</th>
+        <th class="border-2 border-blue-600 bg-blue-100 px-2 py-1 text-blue-950 font-black">E</th>
+        <th class="border-2 border-blue-600 bg-blue-100 px-2 py-1 text-blue-950 font-black">F</th>
+        <th class="border border-rose-300 bg-rose-50 px-2 py-1 text-rose-900 font-black">G</th>
+      </tr>
+      <tr class="bg-slate-50 font-bold text-[11px]">
+        <td class="bg-slate-200/80 border border-slate-300 py-0.5 font-mono text-slate-600">4</td>
+        <td class="border border-slate-300 px-1 py-0.5 text-slate-400">No</td>
+        <td class="border-x-2 border-t-2 border-blue-600 bg-blue-200/80 text-blue-950 font-black px-2 py-0.5">Nama Siswa</td>
+        <td class="border-y-2 border-blue-600 bg-blue-200/80 text-blue-950 font-black px-1 py-0.5">B.Indo</td>
+        <td class="border-y-2 border-blue-600 bg-blue-200/80 text-blue-950 font-black px-1 py-0.5">B.Inggris</td>
+        <td class="border-y-2 border-blue-600 bg-blue-200/80 text-blue-950 font-black px-1 py-0.5">MTK</td>
+        <td class="border-r-2 border-y-2 border-blue-600 bg-blue-200/80 text-blue-950 font-black px-1 py-0.5">Informatika</td>
+        <td class="border border-rose-400 bg-rose-100 text-rose-950 font-black px-1.5 py-0.5">Jumlah</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="bg-slate-200/80 border border-slate-300 py-0.5 font-mono text-slate-500 font-bold">5</td>
+        <td class="border border-slate-300 px-1 py-0.5 text-slate-400">1</td>
+        <td class="border-x-2 border-blue-600 bg-blue-50 text-blue-900 font-bold text-left px-2 py-0.5">Abiyyu</td>
+        <td class="border border-blue-200 bg-blue-50 font-mono">80</td>
+        <td class="border border-blue-200 bg-blue-50 font-mono">90</td>
+        <td class="border border-blue-200 bg-blue-50 font-mono">75</td>
+        <td class="border-r-2 border-blue-600 bg-blue-50 font-mono font-bold">78</td>
+        <td class="border border-rose-300 bg-rose-50/70 font-mono font-bold text-rose-700">323</td>
+      </tr>
+      <tr>
+        <td class="bg-slate-200/80 border border-slate-300 py-0.5 font-mono text-slate-500 font-bold">6</td>
+        <td class="border border-slate-300 px-1 py-0.5 text-slate-400">2</td>
+        <td class="border-x-2 border-blue-600 bg-blue-50 text-blue-900 font-bold text-left px-2 py-0.5">Bintang</td>
+        <td class="border border-blue-200 bg-blue-50 font-mono">75</td>
+        <td class="border border-blue-200 bg-blue-50 font-mono">85</td>
+        <td class="border border-blue-200 bg-blue-50 font-mono">80</td>
+        <td class="border-r-2 border-blue-600 bg-blue-50 font-mono font-bold">82</td>
+        <td class="border border-rose-300 bg-rose-50/70 font-mono font-bold text-rose-700">322</td>
+      </tr>
+      <tr>
+        <td class="bg-slate-200/80 border border-slate-300 py-0.5 font-mono text-slate-500 font-bold">7</td>
+        <td class="border border-slate-300 px-1 py-0.5 text-slate-400">3</td>
+        <td class="border-x-2 border-b-2 border-blue-600 bg-blue-50 text-blue-900 font-bold text-left px-2 py-0.5">Dhea</td>
+        <td class="border-b-2 border-blue-600 bg-blue-50 font-mono">81</td>
+        <td class="border-b-2 border-blue-600 bg-blue-50 font-mono">88</td>
+        <td class="border-b-2 border-blue-600 bg-blue-50 font-mono">79</td>
+        <td class="border-r-2 border-b-2 border-blue-600 bg-blue-50 font-mono font-bold">85</td>
+        <td class="border border-rose-300 bg-rose-50/70 font-mono font-bold text-rose-700">333</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="p-2.5 bg-slate-50 border-t border-slate-200 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5">
+    <span class="inline-flex items-center gap-1.5 text-blue-700 font-bold"><i class="fas fa-check-circle text-blue-600"></i> Area Diblok: Kolom B s.d. F (Skala Nilai 0–100)</span>
+    <span class="inline-flex items-center gap-1.5 text-rose-600 font-bold"><i class="fas fa-ban text-rose-500"></i> Kolom G Diabaikan (Total > 300)</span>
+  </div>
+</div>
+Kita wajib menerapkan pilar <strong>Abstraksi</strong> (menyaring data yang relevan), yaitu dengan cara memblok kolom <em>Nama Siswa</em> dan keempat kolom <em>Nilai Mata Pelajaran</em>, namun mengabaikan/tidak ikut memblok kolom <em>Jumlah</em>. Alasan logis dari tindakan tersebut adalah...`,
                 options: [
                     { key: "A", text: "Kolom Jumlah mengandung rumus =SUM() yang tidak dapat dibaca oleh fitur Insert Chart" },
                     { key: "B", text: "Grafik batang maksimal hanya mampu menampilkan 4 kategori warna dalam satu lembar kerja" },
@@ -1391,7 +1443,28 @@ Pasangan rumus fungsi statistik yang tepat untuk menghitung Rata-Rata Nilai mili
             {
                 id: 14,
                 topic: "Integrasi Antaraplikasi (OLE & Paste Link)",
-                question: "Seorang panitia menyusun laporan pertanggungjawaban di Microsoft Word yang memuat tabel dan grafik keuangan dari Microsoft Excel. Agar setiap kali angka di berkas sumber Excel direvisi, tabel dan grafik di dalam dokumen Word ikut berubah dan diperbarui secara otomatis (dinamis), teknik integrasi antaraplikasi yang harus digunakan adalah...",
+                question: `Seorang panitia menyusun laporan pertanggungjawaban di Microsoft Word yang memuat tabel dan grafik keuangan dari Microsoft Excel:
+<div class="my-3 p-3 bg-white rounded-2xl border border-slate-300 shadow-xs flex flex-col sm:flex-row items-center justify-center gap-4 text-xs max-w-lg mx-auto">
+  <div class="flex items-center gap-2 bg-emerald-50 border border-emerald-200 px-3 py-2 rounded-xl text-emerald-900 font-bold">
+    <i class="fas fa-file-excel text-emerald-700 text-base"></i>
+    <div>
+      <div>Sumber Data: Excel</div>
+      <div class="text-[10px] text-emerald-600 font-mono">Laporan_Keuangan.xlsx</div>
+    </div>
+  </div>
+  <div class="flex flex-col items-center text-blue-600 font-mono text-[10px] font-bold">
+    <i class="fas fa-link text-base animate-pulse"></i>
+    <span>Paste Link (OLE)</span>
+  </div>
+  <div class="flex items-center gap-2 bg-blue-50 border border-blue-200 px-3 py-2 rounded-xl text-blue-900 font-bold">
+    <i class="fas fa-file-word text-blue-700 text-base"></i>
+    <div>
+      <div>Tujuan Dokumen: Word</div>
+      <div class="text-[10px] text-blue-600 font-mono">Proposal_LPJ.docx</div>
+    </div>
+  </div>
+</div>
+Agar setiap kali angka di berkas sumber Excel direvisi, tabel dan grafik di dalam dokumen Word ikut berubah dan diperbarui secara otomatis (dinamis), teknik integrasi antaraplikasi yang harus digunakan adalah...`,
                 options: [
                     { key: "A", text: "Teknik Cut, Copy, dan Paste biasa melalui Clipboard (Ctrl + C lalu Ctrl + V)" },
                     { key: "B", text: "Mengambil tangkapan layar (screenshot) tabel Excel lalu menyisipkannya sebagai gambar .jpg" },
@@ -1537,7 +1610,70 @@ Karakteristik utama dari struktur perulangan di atas adalah...`,
             {
                 id: 24,
                 topic: "Fungsi Statistik Excel: COUNT",
-                question: "Seorang staf tata usaha ingin menghitung berapa banyak siswa yang telah memiliki nilai ujian berupa angka pada kolom nilai ujian (sel <code>D5:D30</code>), dengan mengabaikan sel yang kosong atau berisi teks 'Belum Ikut'. Rumus fungsi Excel yang paling tepat digunakan adalah...",
+                question: `Perhatikan cuplikan rekapitulasi data nilai ujian siswa pada lembar kerja Microsoft Excel berikut:
+<div class="my-4 overflow-x-auto rounded-2xl border border-slate-300 shadow-sm bg-white max-w-sm mx-auto">
+  <div class="bg-emerald-700 text-white px-3 py-1.5 flex items-center justify-between text-xs font-semibold">
+    <span class="flex items-center gap-1.5"><i class="fas fa-file-excel text-emerald-200"></i> Rekap Nilai Ujian Siswa</span>
+    <span class="text-[11px] bg-emerald-800 px-2 py-0.5 rounded font-mono font-bold">Target: D5:D10</span>
+  </div>
+  <table class="w-full text-xs font-sans border-collapse text-slate-800 text-center">
+    <thead>
+      <tr class="bg-slate-100 text-slate-600 font-bold font-mono">
+        <th class="w-10 border border-slate-300 py-1 bg-slate-200/80"></th>
+        <th class="border border-slate-300 px-2 py-1">A</th>
+        <th class="border border-slate-300 px-3 py-1">B</th>
+        <th class="border-2 border-emerald-600 px-4 py-1 bg-emerald-100 text-emerald-950 font-black">Kolom D (Nilai Ujian)</th>
+      </tr>
+      <tr class="bg-slate-50 font-bold text-[11px]">
+        <td class="bg-slate-200/80 border border-slate-300 py-0.5 font-mono text-slate-600">4</td>
+        <td class="border border-slate-300 px-2 py-0.5 text-slate-400">No</td>
+        <td class="border border-slate-300 px-3 py-0.5 text-left text-slate-700">Nama Siswa</td>
+        <td class="border-2 border-emerald-600 bg-emerald-100/70 text-emerald-950 font-black px-2 py-0.5">Nilai Ujian</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="bg-slate-200/80 border border-slate-300 py-0.5 font-mono text-slate-500 font-bold">5</td>
+        <td class="border border-slate-300 px-2 py-0.5 text-slate-400">1</td>
+        <td class="border border-slate-300 px-3 py-0.5 text-left font-semibold">Abiyyu</td>
+        <td class="border-x-2 border-emerald-600 bg-emerald-50/70 font-mono font-bold text-emerald-900">85 <span class="text-[10px] text-emerald-600 font-sans">(Angka)</span></td>
+      </tr>
+      <tr>
+        <td class="bg-slate-200/80 border border-slate-300 py-0.5 font-mono text-slate-500 font-bold">6</td>
+        <td class="border border-slate-300 px-2 py-0.5 text-slate-400">2</td>
+        <td class="border border-slate-300 px-3 py-0.5 text-left font-semibold">Bintang</td>
+        <td class="border-x-2 border-emerald-600 bg-emerald-50/70 font-mono font-bold text-emerald-900">90 <span class="text-[10px] text-emerald-600 font-sans">(Angka)</span></td>
+      </tr>
+      <tr class="bg-amber-50/60">
+        <td class="bg-slate-200/80 border border-slate-300 py-0.5 font-mono text-slate-500 font-bold">7</td>
+        <td class="border border-slate-300 px-2 py-0.5 text-slate-400">3</td>
+        <td class="border border-slate-300 px-3 py-0.5 text-left font-semibold">Citra</td>
+        <td class="border-x-2 border-emerald-600 bg-amber-100/90 font-bold text-amber-900 italic">Belum Ikut <span class="text-[10px] text-amber-700 font-sans font-normal">(Teks)</span></td>
+      </tr>
+      <tr>
+        <td class="bg-slate-200/80 border border-slate-300 py-0.5 font-mono text-slate-500 font-bold">8</td>
+        <td class="border border-slate-300 px-2 py-0.5 text-slate-400">4</td>
+        <td class="border border-slate-300 px-3 py-0.5 text-left font-semibold">Dhea</td>
+        <td class="border-x-2 border-emerald-600 bg-emerald-50/70 font-mono font-bold text-emerald-900">78 <span class="text-[10px] text-emerald-600 font-sans">(Angka)</span></td>
+      </tr>
+      <tr class="bg-slate-100/60">
+        <td class="bg-slate-200/80 border border-slate-300 py-0.5 font-mono text-slate-500 font-bold">9</td>
+        <td class="border border-slate-300 px-2 py-0.5 text-slate-400">5</td>
+        <td class="border border-slate-300 px-3 py-0.5 text-left font-semibold">Eko</td>
+        <td class="border-x-2 border-emerald-600 bg-slate-200/60 text-slate-400 italic text-[11px]">(Kosong)</td>
+      </tr>
+      <tr class="bg-blue-50/80 font-bold">
+        <td class="bg-slate-200/80 border border-slate-300 py-1 font-mono text-slate-700">11</td>
+        <td colspan="2" class="border border-slate-300 px-3 py-1 text-right text-blue-950 font-bold">Jumlah Siswa Berangka:</td>
+        <td class="border-2 border-blue-600 bg-blue-100 text-blue-950 px-2 py-1 font-mono font-black animate-pulse">? (Rumus Excel)</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="p-2 bg-slate-50 border-t border-slate-200 text-xs text-slate-600">
+    Mengabaikan sel yang kosong atau berisi teks 'Belum Ikut', dan hanya menghitung sel yang berisi angka numerik.
+  </div>
+</div>
+Seorang staf tata usaha ingin menghitung berapa banyak siswa yang telah memiliki nilai ujian berupa angka pada kolom nilai ujian (sel <code>D5:D30</code>), dengan mengabaikan sel yang kosong atau berisi teks 'Belum Ikut'. Rumus fungsi Excel yang paling tepat digunakan adalah...`,
                 options: [
                     { key: "A", text: "=SUM(D5:D30)" },
                     { key: "B", text: "=COUNT(D5:D30)" },
@@ -1551,7 +1687,45 @@ Karakteristik utama dari struktur perulangan di atas adalah...`,
             {
                 id: 25,
                 topic: "Operator Aritmatika Dasar Excel",
-                question: "Di lembar kerja Microsoft Excel, kita ingin mengalikan nilai pada sel <code>B2</code> dengan sel <code>C2</code> lalu membaginya dengan angka <code>2</code> untuk mencari luas segitiga. Penulisan simbol operator aritmatika perkalian dan pembagian yang benar di Excel adalah...",
+                question: `Perhatikan cuplikan lembar kerja Microsoft Excel perhitungan luas segitiga berikut:
+<div class="my-4 overflow-x-auto rounded-2xl border border-slate-300 shadow-sm bg-white max-w-md mx-auto">
+  <div class="bg-emerald-700 text-white px-3 py-1.5 flex items-center justify-between text-xs font-semibold">
+    <span class="flex items-center gap-1.5"><i class="fas fa-calculator text-emerald-200"></i> Operator Aritmatika Excel</span>
+    <span class="text-[11px] bg-emerald-800 px-2 py-0.5 rounded font-mono font-bold">Formula di Sel D2</span>
+  </div>
+  <table class="w-full text-xs font-sans border-collapse text-slate-800 text-center">
+    <thead>
+      <tr class="bg-slate-100 text-slate-600 font-bold font-mono">
+        <th class="w-10 border border-slate-300 py-1 bg-slate-200/80"></th>
+        <th class="border border-slate-300 px-3 py-1 font-mono">A</th>
+        <th class="border-2 border-blue-600 px-3 py-1 font-mono bg-blue-100 text-blue-950 font-black">B (Alas)</th>
+        <th class="border-2 border-indigo-600 px-3 py-1 font-mono bg-indigo-100 text-indigo-950 font-black">C (Tinggi)</th>
+        <th class="border-2 border-emerald-600 px-4 py-1 font-mono bg-emerald-100 text-emerald-950 font-black">D (Luas)</th>
+      </tr>
+      <tr class="bg-slate-50 font-bold text-[11px]">
+        <td class="bg-slate-200/80 border border-slate-300 py-0.5 font-mono text-slate-600">1</td>
+        <td class="border border-slate-300 px-3 py-0.5 text-slate-700">Bangun Datar</td>
+        <td class="border border-slate-300 px-3 py-0.5 bg-blue-50 text-blue-900">Alas (cm)</td>
+        <td class="border border-slate-300 px-3 py-0.5 bg-indigo-50 text-indigo-900">Tinggi (cm)</td>
+        <td class="border border-slate-300 px-3 py-0.5 bg-emerald-50 text-emerald-900">Luas Segitiga</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="bg-slate-200/80 border border-slate-300 py-1 font-mono text-slate-700 font-bold">2</td>
+        <td class="border border-slate-300 px-3 py-1 text-slate-700 font-semibold">Segitiga ABC</td>
+        <td class="border-2 border-blue-600 bg-blue-100 font-mono font-bold text-blue-950 text-sm">10</td>
+        <td class="border-2 border-indigo-600 bg-indigo-100 font-mono font-bold text-indigo-950 text-sm">6</td>
+        <td class="border-2 border-emerald-600 bg-emerald-100 font-mono font-black text-emerald-950 text-sm animate-pulse">? (Rumus di Sel D2)</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="p-2.5 bg-slate-50 border-t border-slate-200 text-xs text-slate-700 flex items-center justify-between">
+    <span>Rumus Matematis: <code class="bg-white px-1.5 py-0.5 rounded border border-slate-200 font-bold">(Alas x Tinggi) : 2</code></span>
+    <span class="font-bold text-emerald-700">Simbol di Excel: ?</span>
+  </div>
+</div>
+Di lembar kerja Microsoft Excel, kita ingin mengalikan nilai pada sel <code>B2</code> dengan sel <code>C2</code> lalu membaginya dengan angka <code>2</code> untuk mencari luas segitiga. Penulisan simbol operator aritmatika perkalian dan pembagian yang benar di Excel adalah...`,
                 options: [
                     { key: "A", text: "Menggunakan simbol silang (x) untuk kali dan titik dua (:) untuk bagi" },
                     { key: "B", text: "Menggunakan simbol tanda bintang (*) untuk kali dan garis miring (/) untuk bagi" },
@@ -1565,7 +1739,69 @@ Karakteristik utama dari struktur perulangan di atas adalah...`,
             {
                 id: 26,
                 topic: "Referensi Sel Absolut ($) Excel",
-                question: "Saat menyalin rumus tarif pajak pada sel <code>E5</code> ke sel-sel di bawahnya menggunakan fitur AutoFill, seorang akuntan menambahkan tanda dollar menjadi <code>$B$2</code> agar alamat sel yang berisi persentase pajak tidak ikut bergeser ke bawah. Jenis alamat sel tersebut dalam Microsoft Excel dikenal sebagai...",
+                question: `Perhatikan ilustrasi penguncian alamat sel menggunakan fitur AutoFill pada lembar kerja Microsoft Excel berikut:
+<div class="my-4 overflow-x-auto rounded-2xl border border-slate-300 shadow-sm bg-white max-w-md mx-auto">
+  <div class="bg-emerald-700 text-white px-3 py-1.5 flex items-center justify-between text-xs font-semibold">
+    <span class="flex items-center gap-1.5"><i class="fas fa-lock text-amber-300"></i> Penguncian Sel Absolut &bull; Perhitungan Pajak</span>
+    <span class="text-[11px] bg-emerald-800 px-2 py-0.5 rounded font-mono font-bold">$B$2</span>
+  </div>
+  <table class="w-full text-xs font-sans border-collapse text-slate-800 text-center">
+    <thead>
+      <tr class="bg-slate-100 text-slate-600 font-bold font-mono">
+        <th class="w-10 border border-slate-300 py-1 bg-slate-200/80"></th>
+        <th class="border border-slate-300 px-2 py-1 font-mono">A</th>
+        <th class="border-2 border-amber-500 px-3 py-1 font-mono bg-amber-100 text-amber-950 font-black">B</th>
+        <th class="border border-slate-300 px-3 py-1 font-mono">C</th>
+        <th class="border border-slate-300 px-3 py-1 font-mono">D (Harga)</th>
+        <th class="border-2 border-emerald-600 px-3 py-1 font-mono bg-emerald-100 text-emerald-950 font-black">E (Pajak)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="bg-amber-50">
+        <td class="bg-slate-200/80 border border-slate-300 py-1 font-mono text-slate-700 font-bold">2</td>
+        <td class="border border-slate-300 px-2 py-1 text-slate-500 font-semibold">Tarif PPN:</td>
+        <td class="border-2 border-amber-600 bg-amber-200 font-mono font-black text-amber-950">🔒 11% <span class="text-[10px] block font-sans font-bold text-amber-800">(Sel B2 Terkunci)</span></td>
+        <td colspan="3" class="border border-slate-300 text-slate-400 bg-slate-50 text-[10px] italic">...</td>
+      </tr>
+      <tr class="bg-slate-50 font-bold text-[11px]">
+        <td class="bg-slate-200/80 border border-slate-300 py-0.5 font-mono text-slate-600">4</td>
+        <td class="border border-slate-300 px-2 py-0.5 text-slate-500">No</td>
+        <td class="border border-slate-300 px-3 py-0.5 text-slate-500">Kode</td>
+        <td class="border border-slate-300 px-3 py-0.5 text-slate-700">Nama Barang</td>
+        <td class="border border-slate-300 px-3 py-0.5 text-slate-700">Harga Barang</td>
+        <td class="border-2 border-emerald-600 bg-emerald-100 text-emerald-950 font-black px-3 py-0.5">Besar Pajak</td>
+      </tr>
+      <tr>
+        <td class="bg-slate-200/80 border border-slate-300 py-0.5 font-mono text-slate-500 font-bold">5</td>
+        <td class="border border-slate-300 px-2 py-0.5 text-slate-400">1</td>
+        <td class="border border-slate-300 px-3 py-0.5 text-slate-400 font-mono">BRG01</td>
+        <td class="border border-slate-300 px-3 py-0.5 text-left font-semibold">Mouse Optik</td>
+        <td class="border border-slate-300 px-3 py-0.5 font-mono">100.000</td>
+        <td class="border-2 border-emerald-600 bg-emerald-100 font-mono font-bold text-emerald-950 text-xs">=$B$2*D5 <span class="inline-block w-2.5 h-2.5 bg-slate-900 ml-1 rounded-2xs align-middle" title="AutoFill Handle"></span></td>
+      </tr>
+      <tr class="text-slate-500">
+        <td class="bg-slate-200/80 border border-slate-300 py-0.5 font-mono text-slate-500 font-bold">6</td>
+        <td class="border border-slate-300 px-2 py-0.5 text-slate-400">2</td>
+        <td class="border border-slate-300 px-3 py-0.5 text-slate-400 font-mono">BRG02</td>
+        <td class="border border-slate-300 px-3 py-0.5 text-left">Keyboard</td>
+        <td class="border border-slate-300 px-3 py-0.5 font-mono">250.000</td>
+        <td class="border-x-2 border-emerald-600 border-dashed border-b border-slate-200 bg-emerald-50/50 font-mono text-xs">=$B$2*D6 ⬇️</td>
+      </tr>
+      <tr class="text-slate-500">
+        <td class="bg-slate-200/80 border border-slate-300 py-0.5 font-mono text-slate-500 font-bold">7</td>
+        <td class="border border-slate-300 px-2 py-0.5 text-slate-400">3</td>
+        <td class="border border-slate-300 px-3 py-0.5 text-slate-400 font-mono">BRG03</td>
+        <td class="border border-slate-300 px-3 py-0.5 text-left">Headset</td>
+        <td class="border border-slate-300 px-3 py-0.5 font-mono">350.000</td>
+        <td class="border-x-2 border-b-2 border-emerald-600 border-dashed bg-emerald-50/50 font-mono text-xs">=$B$2*D7 ⬇️</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="p-2 bg-amber-50 border-t border-slate-200 text-xs text-amber-900 flex items-center justify-between">
+    <span class="flex items-center gap-1.5"><i class="fas fa-thumbtack text-amber-600"></i> Saat ditarik ke bawah (AutoFill), sel <b>$B$2</b> tetap terkunci dan tidak berubah.</span>
+  </div>
+</div>
+Saat menyalin rumus tarif pajak pada sel <code>E5</code> ke sel-sel di bawahnya menggunakan fitur AutoFill, seorang akuntan menambahkan tanda dollar menjadi <code>$B$2</code> agar alamat sel yang berisi persentase pajak tidak ikut bergeser ke bawah. Jenis alamat sel tersebut dalam Microsoft Excel dikenal sebagai...`,
                 options: [
                     { key: "A", text: "Referensi Sel Relatif (Relative Reference)" },
                     { key: "B", text: "Referensi Sel Campuran (Mixed Reference)" },
@@ -2046,7 +2282,7 @@ Karakteristik utama dari struktur perulangan di atas adalah...`,
                     <!-- UPLOAD FOTO DROPZONE AREA -->
                     <div class="space-y-3">
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                            Foto Lembar Jawaban Siswa (Kamera / Berkas) <span class="text-rose-500">*</span>
+                            Foto Lembar Jawaban Soal ${item.id} (${item.title.split(':')[1]?.trim() || ''}) <span class="text-rose-500">*</span>
                         </label>
 
                         <!-- Empty Upload State -->
@@ -2061,13 +2297,13 @@ Karakteristik utama dari struktur perulangan di atas adalah...`,
                                 <i class="fas fa-camera"></i>
                             </div>
                             <h4 class="text-sm font-bold text-slate-800">
-                                Klik untuk Ambil Foto / Pilih Berkas Gambar
+                                Klik untuk Ambil Foto / Berkas Jawaban Soal ${item.id}
                             </h4>
                             <p class="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
                                 Di ponsel, kamera akan langsung aktif. Format JPG, PNG, atau HEIC didukung otomatis.
                             </p>
                             <div class="mt-3 inline-flex items-center gap-1.5 px-3 py-1 bg-white rounded-xl border border-slate-200 text-slate-600 text-xs font-bold">
-                                <i class="fas fa-arrow-up-from-bracket text-emerald-600"></i> Ambil Foto Lembar Jawaban
+                                <i class="fas fa-arrow-up-from-bracket text-emerald-600"></i> Ambil Foto Jawaban Soal ${item.id}
                             </div>
                         </div>
 
@@ -2745,18 +2981,25 @@ Karakteristik utama dari struktur perulangan di atas adalah...`,
         // 11. TAHAP 2 SUBMISSION LOGIC (FINAL SUBMISSION)
         // =========================================================================
         function submitFinalAssessment() {
-            let uploadedCount = 0;
+            const missing = [];
             for (let i = 1; i <= 3; i++) {
-                if (appState.essayPhotos[i]) uploadedCount++;
+                if (!appState.essayPhotos[i]) missing.push(i);
+            }
+
+            if (missing.length > 0) {
+                const missingText = missing.map(m => 'Soal Esai ' + m).join(', ');
+                alert('⚠️ Perhatian: Foto lembar jawaban untuk ' + missingText + ' belum diunggah!\n\nSesuai instruksi ujian, siswa wajib mengunggah 1 foto lembar jawaban untuk masing-masing dari 3 nomor soal esai (total 3 foto) sebelum dapat mengumpulkan.');
+                const firstCard = document.getElementById('essay-card-' + missing[0]);
+                if (firstCard) {
+                    firstCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstCard.classList.add('ring-4', 'ring-rose-400');
+                    setTimeout(() => firstCard.classList.remove('ring-4', 'ring-rose-400'), 3500);
+                }
+                return;
             }
 
             const desc = document.getElementById('modal-final-desc');
-            if (uploadedCount < 3) {
-                desc.innerHTML = `Peringatan: Anda baru mengunggah <b>${uploadedCount} dari 3 foto jawaban esai</b>. Apakah Anda tetap ingin mengumpulkan seluruh lembar ujian sekarang?`;
-            } else {
-                desc.innerHTML = `Hebat! Seluruh <b>3 lembar jawaban esai</b> telah terunggah. Nilai PG dan foto lembar jawaban Anda akan direkapitulasi secara resmi.`;
-            }
-
+            desc.innerHTML = 'Lengkap! Seluruh <b>3 foto lembar jawaban esai</b> (1 foto untuk setiap nomor soal) telah terunggah dengan baik. Nilai PG dan berkas lembar jawaban Anda siap dikirim secara resmi.';
             document.getElementById('modal-confirm-final').classList.remove('hidden');
         }
 
@@ -3099,7 +3342,14 @@ Karakteristik utama dari struktur perulangan di atas adalah...`,
         // =========================================================================
         // 12B. GOOGLE APPS SCRIPT (GAS) INTEGRATION LOGIC
         // =========================================================================
-        let GAS_WEB_APP_URL = localStorage.getItem("GAS_ULHAR_URL") || "";
+        const DEFAULT_GAS_ULHAR_URL = "https://script.google.com/macros/s/AKfycbyLQRe7B4zb4AFktOHxONI2qdxbtDQ66ksQELbBnFTTsNRf96ea10SPTEI01f_EkA4-/exec";
+        let savedGasUrl = localStorage.getItem("GAS_ULHAR_URL");
+        // If empty or old URL from previous assessment, migrate to the new dedicated ulhar URL
+        if (!savedGasUrl || savedGasUrl === "https://script.google.com/macros/s/AKfycbypyCxR1n4yj7Dhi7LgJ8mQYXMDpOp7V4IDxRDU4kP03h6QdgBS5tRElQXrl64msVjYvA/exec") {
+            savedGasUrl = DEFAULT_GAS_ULHAR_URL;
+            localStorage.setItem("GAS_ULHAR_URL", DEFAULT_GAS_ULHAR_URL);
+        }
+        let GAS_WEB_APP_URL = savedGasUrl;
 
         function openGasModal() {
             const input = document.getElementById('gas-url-input');
@@ -3131,7 +3381,51 @@ Karakteristik utama dari struktur perulangan di atas adalah...`,
             }
         }
 
-        async function sendDataToGAS(payload) {
+        async 
+        async function testKirimSampleGAS() {
+            const statusDiv = document.getElementById('gas-test-result');
+            if (statusDiv) {
+                statusDiv.className = "p-3 rounded-xl text-xs font-bold bg-blue-50 text-blue-800 border border-blue-200 block";
+                statusDiv.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Sedang mengirim baris uji coba ke Google Spreadsheet...';
+            }
+
+            const testPayload = {
+                action: "submit_ulangan_harian",
+                timestamp: new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }),
+                nama: "Uji Coba Sistem Guru",
+                absen: "00",
+                kondisi_awal: "Senang (Tes)",
+                nilai_pg: 70,
+                benar_pg: 20,
+                reaksi_nilai: "Sangat Puas (Tes Sistem)",
+                foto_esai_1: true,
+                foto_esai_2: true,
+                foto_esai_3: true,
+                durasi: "00:01",
+                kode_verifikasi: "TEST-KONEKSI-BERHASIL"
+            };
+
+            try {
+                await fetch(GAS_WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(testPayload)
+                });
+                if (statusDiv) {
+                    statusDiv.className = "p-3 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 block";
+                    statusDiv.innerHTML = '<i class="fas fa-check-circle text-emerald-600 mr-1"></i> <b>Sinyal Uji Coba Terkirim!</b> Silakan refresh halaman Google Spreadsheet Anda. Tab <b>Hasil_Ulhar_Informatika</b> akan langsung muncul dengan 1 baris uji coba.';
+                }
+                showToast("Sinyal uji coba berhasil dikirim ke Google Sheets!");
+            } catch (err) {
+                if (statusDiv) {
+                    statusDiv.className = "p-3 rounded-xl text-xs font-bold bg-rose-50 text-rose-800 border border-rose-200 block";
+                    statusDiv.innerHTML = '<i class="fas fa-times-circle text-rose-600 mr-1"></i> Gagal terhubung ke URL Google Apps Script. Pastikan URL berakhiran <code>/exec</code> dan izin akses diset <b>Anyone</b>.';
+                }
+            }
+        }
+
+        function sendDataToGAS(payload) {
             if (!GAS_WEB_APP_URL) {
                 console.log("GAS_WEB_APP_URL belum diatur. Data tersimpan di perangkat lokal.");
                 return;
@@ -3141,10 +3435,13 @@ Karakteristik utama dari struktur perulangan di atas adalah...`,
                 await fetch(GAS_WEB_APP_URL, {
                     method: 'POST',
                     mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8'
+                    },
                     body: JSON.stringify(payload)
                 });
                 console.log("Data berhasil disinkronkan ke Google Spreadsheet via GAS.");
+                showToast("Data pengerjaan terkirim ke Google Sheets!");
             } catch (err) {
                 console.warn("Sinkronisasi GAS offline / gagal:", err);
             }
